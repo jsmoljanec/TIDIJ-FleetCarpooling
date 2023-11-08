@@ -1,6 +1,6 @@
 import 'package:fleetcarpooling/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:fleetcarpooling/ui_elements/button.dart';
+import 'package:fleetcarpooling/ui_elements/buttons.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,10 +22,16 @@ class MyApp extends StatelessWidget {
               MyTextField(
                 controller: myController,
               ),
-              MyButton(
+              MyElevatedButton(
                 label: "REGISTER USER",
                 onPressed: () {},
-              )
+              ),
+              MyRadioButton(
+                  title: "Employee", onChanged: (newValue) {}, value: true),
+              MyRadioButton(
+                  title: "Administrator",
+                  onChanged: (newValue) {},
+                  value: false)
             ],
           ),
         ),
