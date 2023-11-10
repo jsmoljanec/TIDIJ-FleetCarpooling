@@ -110,6 +110,13 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
                 },
                 value: _selectedUserType == UserType.Administrator,
               ),
+              SizedBox(height: 30.0),
+              MyElevatedButton(
+                  onPressed: () {
+                    print(
+                        "Selected role: ${_selectedUserType.name.toString()}");
+                  },
+                  label: "ADD NEW USER"),
             ],
           ),
         ),
