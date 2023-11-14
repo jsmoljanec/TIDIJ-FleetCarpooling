@@ -20,3 +20,10 @@ String generateUsername(String firstName, String lastName) {
 
   return userName;
 }
+
+String generateRandomPassword() {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  final random = Random();
+  return List.generate(8, (index) => chars[random.nextInt(chars.length)])
+      .join();
+}
