@@ -15,8 +15,8 @@ String generateUsername(String firstName, String lastName) {
   change.forEach((key, value) {
     newLastName = newLastName.replaceAll(key, value);
   });
-
-  String userName = '$firstLetter$newLastName';
+  int year = DateTime.now().year % 100;
+  String userName = '$firstLetter$newLastName$year';
 
   return userName;
 }
