@@ -4,8 +4,13 @@ import 'colors' as my_defined_colors;
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;
   final RegExp regex;
+  final bool isPassword;
 
-  const MyTextField({super.key, required this.controller, required this.regex});
+  const MyTextField({
+    Key? key,
+    required this.controller, required this.regex,
+    this.isPassword = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +18,7 @@ class MyTextField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: TextField(
         controller: controller,
+        obscureText: isPassword, 
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(24.0),
