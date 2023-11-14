@@ -4,6 +4,9 @@ import 'package:fleetcarpooling/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
 
 class LoginForm extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +36,40 @@ class LoginForm extends StatelessWidget {
                       TextStyle(color: AppColors.mainTextColor, fontSize: 25.0),
                 ),
                 const SizedBox(height: 20.0),
+                const Padding(
+                  padding: EdgeInsets.only(left: 24.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Email",
+                      style: TextStyle(color: AppColors.textColor),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 3.0),
+                MyTextField(controller: emailController),
+                const SizedBox(height: 15.0),
+                const Padding(
+                  padding: EdgeInsets.only(left: 24.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Password",
+                      style: TextStyle(color: AppColors.textColor),
+                    ),
+                  ),
+                ),
+                MyTextField(
+                  controller: passwordController,
+                  isPassword: true,
+                ),
+                const SizedBox(height: 3.0),
+                MyElevatedButton(
+                    onPressed: () {
+                      print(
+                          "${emailController.text} ${passwordController.text}");
+                    },
+                    label: "Login"),
               ],
             ),
           ),
