@@ -22,7 +22,7 @@ class MyTextField extends StatelessWidget {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(24.0),
             borderSide: const BorderSide(
-              color: Color.fromARGB(255, 23, 116, 255),
+              color: my_defined_colors.AppColors.buttonColor,
             ),
           ),
         ),

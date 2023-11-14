@@ -5,26 +5,35 @@ class MyElevatedButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String label;
 
-  MyElevatedButton({required this.onPressed, required this.label});
+  const MyElevatedButton(
+      {super.key, required this.onPressed, required this.label});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: my_defined_colors
-              .AppColors.buttonColor, // Koristi definiranu boju
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24.0),
+      padding: const EdgeInsets.all(24.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: SizedBox(
+              height: 54,
+              child: ElevatedButton(
+                onPressed: onPressed,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: my_defined_colors.AppColors.buttonColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24.0),
+                  ),
+                ),
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                      color: my_defined_colors.AppColors.primaryColor),
+                ),
+              ),
+            ),
           ),
-        ),
-        child: Text(
-          label,
-          style:
-              const TextStyle(color: my_defined_colors.AppColors.primaryColor),
-        ),
+        ],
       ),
     );
   }
@@ -35,8 +44,11 @@ class MyRadioButton extends StatefulWidget {
   final ValueChanged<bool?> onChanged;
   final bool value;
 
-  MyRadioButton(
-      {required this.title, required this.onChanged, required this.value});
+  const MyRadioButton(
+      {super.key,
+      required this.title,
+      required this.onChanged,
+      required this.value});
 
   @override
   _MyRadioButtonState createState() => _MyRadioButtonState();
