@@ -1,3 +1,4 @@
+import 'package:fleetcarpooling/authLogin.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/ui_elements/text_field.dart';
@@ -66,8 +67,10 @@ class LoginForm extends StatelessWidget {
                 const SizedBox(height: 3.0),
                 MyElevatedButton(
                   onPressed: () {
-                    print(
-                          "${emailController.text} ${passwordController.text}");
+                    AuthLogin().login(
+                      email: emailController.text,
+                      password: passwordController.text,
+                    );
                   },
                   label: "Login",
                 ),
