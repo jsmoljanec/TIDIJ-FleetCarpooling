@@ -1,7 +1,9 @@
+import 'package:fleetcarpooling/AuthRegistrationService.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:fleetcarpooling/UserRegistrationForm.dart';
 
 enum UserType { Administrator, Employee }
 
@@ -15,6 +17,8 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   UserType _selectedUserType = UserType.Employee;
+  final AuthRegistrationService _authRegistrationService =
+      new AuthRegistrationService();
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +117,11 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
               SizedBox(height: 30.0),
               MyElevatedButton(
                   onPressed: () {
+                    _authRegistrationService.registerUser(
+                        emailController.text,
+                        firstNameController.text,
+                        lastNameController.text,
+                        _selectedUserType.name.toString());
                     print(
                         "Selected role: ${_selectedUserType.name.toString()}");
                   },
