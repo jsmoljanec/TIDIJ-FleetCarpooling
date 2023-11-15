@@ -65,11 +65,22 @@ class LoginForm extends StatelessWidget {
                 ),
                 const SizedBox(height: 3.0),
                 MyElevatedButton(
-                    onPressed: () {
-                      print(
+                  onPressed: () {
+                    print(
                           "${emailController.text} ${passwordController.text}");
-                    },
-                    label: "Login"),
+                  },
+                  label: "Login",
+                ),
+                const SizedBox(height: 10.0),
+                TextButton(
+                  onPressed: () {
+                    //navigacija za zaslon za zaboravljenu lozinku
+                  },
+                  child: const Text(
+                    "Forgot Password?",
+                    style: TextStyle(color: AppColors.textColor),
+                  ),
+                ),
               ],
             ),
           ),
