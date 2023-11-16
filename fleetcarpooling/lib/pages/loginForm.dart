@@ -43,7 +43,7 @@ class LoginForm extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Email",
+                      "Email or Username",
                       style: TextStyle(color: AppColors.textColor),
                     ),
                   ),
