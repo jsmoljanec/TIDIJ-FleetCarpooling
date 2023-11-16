@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
             children: [
               MyTextField(
                 controller: myController,
+                regex: RegExp(r'^[a-zA-Z0-9]+$'),
               ),
               MyElevatedButton(
                 label: "REGISTER USER",

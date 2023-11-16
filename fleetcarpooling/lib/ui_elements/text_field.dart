@@ -3,8 +3,9 @@ import 'colors' as my_defined_colors;
 
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;
+  final RegExp regex;
 
-  const MyTextField({super.key, required this.controller});
+  const MyTextField({super.key, required this.controller, required this.regex});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class MyTextField extends StatelessWidget {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(24.0),
             borderSide: const BorderSide(
-              color: Color.fromARGB(255, 23, 116, 255),
+              color: my_defined_colors.AppColors.buttonColor,
             ),
           ),
         ),

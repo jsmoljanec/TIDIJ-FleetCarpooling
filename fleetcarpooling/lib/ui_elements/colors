@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primaryColor = Color.fromARGB(255,255,255,255);
-  static const Color buttonColor = Color.fromARGB(255, 23, 116, 255);
-  static const Color unavailableButtonColor = Color(0x74ACFF);
-  static const Color backgroundColor = Color(0xE8F1FF);
-  static const Color mainTextColor = Color(0x1774FF);
-  static const Color textColor = Color(0x74ACFF);
-  static const Color reservedInCalendar = Color(0xFCA1A1);
-  static const Color thisDayInCalendar = Color(0x8BB9FF);
-  static const Color freeInCalendar = Color(0x92FC8F);
+  static const Color primaryColor = Color(0xFFFFFFFF);
+  static const Color buttonColor = Color(0xFF1774FF);
+  static const Color unavailableColor = Color(0x661774FF);
+  static const Color backgroundColor = Color(0xFFE8F1FF);
+  static const Color mainTextColor = Color(0xFF1774FF);
+  static const Color reservedInCalendar = Color(0x66FA4343);
+  static const Color activeDays = Color(0xFF1774FF);
+  static const Color selectedDays = Color(0xFF1774FF4D);
 }
