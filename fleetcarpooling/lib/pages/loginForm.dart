@@ -1,4 +1,4 @@
-import 'package:fleetcarpooling/authLogin.dart';
+import 'package:fleetcarpooling/auth/authLogin.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/ui_elements/text_field.dart';
