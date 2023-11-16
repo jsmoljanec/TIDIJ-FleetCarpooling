@@ -1,4 +1,5 @@
 import 'package:fleetcarpooling/auth/authLogin.dart';
+import 'package:fleetcarpooling/pages/reset_password_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/ui_elements/text_field.dart';
@@ -77,7 +78,10 @@ class LoginForm extends StatelessWidget {
                 const SizedBox(height: 10.0),
                 TextButton(
                   onPressed: () {
-                    //navigacija za zaslon za zaboravljenu lozinku
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ResetPasswordForm();
+                    }));
                   },
                   child: const Text(
                     "Forgot Password?",
