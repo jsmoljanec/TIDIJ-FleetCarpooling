@@ -33,7 +33,7 @@ class AuthRegistrationService {
       String userId = userCredential.user!.uid;
       String username = await generateUsername(firstName, lastName);
       writeDataToDatabase(userId, username, email, firstName, lastName, role);
-      sendEmail(email);
+      sendEmail(email, _auth);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
