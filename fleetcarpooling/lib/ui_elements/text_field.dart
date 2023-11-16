@@ -3,8 +3,9 @@ import 'colors' as my_defined_colors;
 
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;
+  final RegExp regex;
 
-  const MyTextField({super.key, required this.controller});
+  const MyTextField({super.key, required this.controller, required this.regex});
 
   @override
   Widget build(BuildContext context) {

@@ -57,13 +57,22 @@ class MyRadioButton extends StatefulWidget {
 class _MyRadioButtonState extends State<MyRadioButton> {
   @override
   Widget build(BuildContext context) {
-    return RadioListTile(
-      activeColor: my_defined_colors.AppColors.buttonColor,
-      title: Text(widget.title),
-      value: widget.value,
-      onChanged: widget.onChanged,
-      groupValue: widget.value ? true : null,
-      controlAffinity: ListTileControlAffinity.leading,
+    return ListTile(
+      title: Text(
+        widget.title,
+        style:
+            const TextStyle(color: my_defined_colors.AppColors.mainTextColor),
+      ),
+      leading: Radio<bool>(
+        fillColor: MaterialStateColor.resolveWith(
+          (Set<MaterialState> states) {
+            return my_defined_colors.AppColors.buttonColor;
+          },
+        ),
+        value: widget.value,
+        groupValue: true,
+        onChanged: widget.onChanged,
+      ),
     );
   }
 }
