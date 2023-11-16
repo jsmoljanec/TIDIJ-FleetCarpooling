@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/GenerateUsernameAndPassword.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:fleetcarpooling/SendEmail.dart';
 import 'UserModel.dart' as model;
 
 class AuthRegistrationService {
@@ -32,6 +33,7 @@ class AuthRegistrationService {
       String userId = userCredential.user!.uid;
       String username = await generateUsername(firstName, lastName);
       writeDataToDatabase(userId, username, email, firstName, lastName, role);
+      sendEmail(email);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
