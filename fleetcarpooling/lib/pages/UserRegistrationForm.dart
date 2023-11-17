@@ -52,7 +52,7 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Email",
-                      style: TextStyle(color: AppColors.textColor),
+                      style: TextStyle(color: AppColors.mainTextColor),
                     ),
                   )),
               const SizedBox(height: 3.0),
@@ -64,7 +64,7 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "First name",
-                    style: TextStyle(color: AppColors.textColor),
+                    style: TextStyle(color: AppColors.mainTextColor),
                   ),
                 ),
               ),
@@ -77,7 +77,7 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Last name",
-                    style: TextStyle(color: AppColors.textColor),
+                    style: TextStyle(color: AppColors.mainTextColor),
                   ),
                 ),
               ),
@@ -90,8 +90,8 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Select role:",
-                    style:
-                        TextStyle(color: AppColors.textColor, fontSize: 15.0),
+                    style: TextStyle(
+                        color: AppColors.mainTextColor, fontSize: 15.0),
                   ),
                 ),
               ),
