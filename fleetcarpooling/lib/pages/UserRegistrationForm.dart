@@ -1,9 +1,8 @@
-import 'package:fleetcarpooling/AuthRegistrationService.dart';
+import 'package:fleetcarpooling/auth/AuthRegistrationService.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:fleetcarpooling/UserRegistrationForm.dart';
 
 enum UserType { Administrator, Employee }
 
