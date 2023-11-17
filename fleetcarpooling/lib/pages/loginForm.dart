@@ -44,7 +44,7 @@ class LoginForm extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Email or Username",
-                      style: TextStyle(color: AppColors.textColor),
+                      style: TextStyle(color: AppColors.mainTextColor),
                     ),
                   ),
                 ),
@@ -57,13 +57,14 @@ class LoginForm extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Password",
-                      style: TextStyle(color: AppColors.textColor),
+                      style: TextStyle(color: AppColors.mainTextColor),
                     ),
                   ),
                 ),
                 MyTextField(
                   controller: passwordController,
                   isPassword: true,
+
                 ),
                 const SizedBox(height: 3.0),
                 MyElevatedButton(
@@ -85,7 +86,7 @@ class LoginForm extends StatelessWidget {
                   },
                   child: const Text(
                     "Forgot Password?",
-                    style: TextStyle(color: AppColors.textColor),
+                    style: TextStyle(color: AppColors.mainTextColor),
                   ),
                 ),
               ],

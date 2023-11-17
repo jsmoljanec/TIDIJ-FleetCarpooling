@@ -3,12 +3,13 @@ import 'colors' as my_defined_colors;
 
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;
-  final RegExp regex;
+  final RegExp? regex;
   final bool isPassword;
 
   const MyTextField({
     Key? key,
-    required this.controller, required this.regex,
+    required this.controller, 
+    this.regex,
     this.isPassword = false,
   }) : super(key: key);
 
