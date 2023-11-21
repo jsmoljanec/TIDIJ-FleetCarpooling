@@ -4,6 +4,7 @@ import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:fleetcarpooling/pages/home_page.dart';
 
 class LoginForm extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -64,7 +65,6 @@ class LoginForm extends StatelessWidget {
                 MyTextField(
                   controller: passwordController,
                   isPassword: true,
-
                 ),
                 const SizedBox(height: 3.0),
                 MyElevatedButton(
@@ -72,6 +72,10 @@ class LoginForm extends StatelessWidget {
                     AuthLogin().login(
                       email: emailController.text,
                       password: passwordController.text,
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
                     );
                   },
                   label: "Login",
