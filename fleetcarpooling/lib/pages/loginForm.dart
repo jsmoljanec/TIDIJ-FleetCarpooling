@@ -80,7 +80,7 @@ class LoginForm extends StatelessWidget {
                       password: passwordController.text,
                     );
                     if (logged == true) {
-                      adminIsLogged = await AuthLogin().isAdmin(id: uid);
+                      adminIsLogged = await AuthLogin().isAdmin();
                       if (adminIsLogged == true) {
                         //implementirati zaslon za admina
                       } else {

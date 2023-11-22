@@ -47,11 +47,13 @@ class AuthLogin {
     }
   }
 
-  Future<bool> isAdmin({required String? id}) async {
+  Future<bool> isAdmin() async {
     final DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
+    final User? user = _auth.currentUser;
+    final uid = user?.uid;
     var query = await databaseReference
         .child("Users")
-        .child(id!)
+        .child(uid!)
         .limitToFirst(1)
         .once();
 
