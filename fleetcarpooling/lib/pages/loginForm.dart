@@ -1,10 +1,12 @@
+import 'dart:html';
+
 import 'package:fleetcarpooling/auth/authLogin.dart';
 import 'package:fleetcarpooling/pages/reset_password_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:fleetcarpooling/pages/home_page.dart';
+import 'package:fleetcarpooling/pages/navigation.dart';
 
 class LoginForm extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -75,7 +77,8 @@ class LoginForm extends StatelessWidget {
                     );
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
+                      MaterialPageRoute(
+                          builder: (context) => const NavigationPage()),
                     );
                   },
                   label: "Login",
