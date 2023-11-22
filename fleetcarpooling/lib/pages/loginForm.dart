@@ -66,7 +66,15 @@ class LoginForm extends StatelessWidget {
                   isPassword: true,
                 ),
                 const SizedBox(height: 3.0),
-                CircularIconButton(onPressed: () {}),
+                MyElevatedButton(
+                  onPressed: () {
+                    AuthLogin().login(
+                      email: emailController.text,
+                      password: passwordController.text,
+                    );
+                  },
+                  label: "Login",
+                ),
                 const SizedBox(height: 10.0),
                 TextButton(
                   onPressed: () {
