@@ -8,10 +8,6 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  List<StatefulWidget> pages = [
-    const MapPage(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return const Scaffold(

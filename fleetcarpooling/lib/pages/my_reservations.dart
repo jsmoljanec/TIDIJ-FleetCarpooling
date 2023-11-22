@@ -8,9 +8,6 @@ class MyReservationsPage extends StatefulWidget {
 }
 
 class _MyReservationsPageState extends State<MyReservationsPage> {
-  List<StatefulWidget> pages = [
-    const MyReservationsPage(),
-  ];
 
   @override
   Widget build(BuildContext context) {

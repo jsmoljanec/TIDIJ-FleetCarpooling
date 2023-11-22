@@ -26,7 +26,7 @@ class _NavigationPageState extends State<NavigationPage> {
         body: pages[pressed],
         resizeToAvoidBottomInset: true,
         bottomNavigationBar: Container(
-          height: 40,
+          height: 80,
           decoration: const BoxDecoration(
               border: Border(top: BorderSide(color: AppColors.buttonColor))),
           child: Row(
@@ -40,12 +40,12 @@ class _NavigationPageState extends State<NavigationPage> {
                   },
                   icon: pressed == 0
                       ? Image.asset(
-                          'icons/home_active.png',
+                          'assets/icons/home_active.png',
                           height: 28,
                           width: 33,
                         )
                       : Image.asset(
-                          'icons/home.png',
+                          'assets/icons/home.png',
                           height: 28,
                           width: 33,
                         )),
@@ -57,12 +57,12 @@ class _NavigationPageState extends State<NavigationPage> {
                   },
                   icon: pressed == 1
                       ? Image.asset(
-                          'icons/notification_active.png',
+                          'assets/icons/notification_active.png',
                           height: 27.5,
                           width: 24,
                         )
                       : Image.asset(
-                          'icons/notification.png',
+                          'assets/icons/notification.png',
                           height: 27.5,
                           width: 24,
                         )),
@@ -74,12 +74,12 @@ class _NavigationPageState extends State<NavigationPage> {
                   },
                   icon: pressed == 2
                       ? Image.asset(
-                          'icons/map_active.png',
+                          'assets/icons/map_active.png',
                           height: 33,
                           width: 27,
                         )
                       : Image.asset(
-                          'icons/map.png',
+                          'assets/icons/map.png',
                           height: 33,
                           width: 27,
                         )),
@@ -91,12 +91,12 @@ class _NavigationPageState extends State<NavigationPage> {
                   },
                   icon: pressed == 3
                       ? Image.asset(
-                          'icons/key_active.png',
+                          'assets/icons/key_active.png',
                           height: 25,
                           width: 24,
                         )
                       : Image.asset(
-                          'icons/key.png',
+                          'assets/icons/key.png',
                           height: 25,
                           width: 24,
                         ))

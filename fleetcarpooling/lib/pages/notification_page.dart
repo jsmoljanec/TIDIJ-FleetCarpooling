@@ -8,9 +8,6 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  List<StatefulWidget> pages = [
-    const NotificationPage(),
-  ];
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:fleetcarpooling/auth/authLogin.dart';
 import 'package:fleetcarpooling/pages/reset_password_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
@@ -14,6 +12,8 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool logged;
+    bool adminIsLogged;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.backgroundColor,
@@ -70,16 +70,24 @@ class LoginForm extends StatelessWidget {
                 ),
                 const SizedBox(height: 3.0),
                 MyElevatedButton(
-                  onPressed: () {
-                    AuthLogin().login(
+                  onPressed: () async {
+                    logged = await AuthLogin().login(
                       email: emailController.text,
                       password: passwordController.text,
                     );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const NavigationPage()),
-                    );
+                    if (logged == true) {
+                      adminIsLogged = await AuthLogin()
+                          .isAdmin(email: emailController.text);
+                      if (adminIsLogged == true) {
+                        //implementirati zaslon za admina
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const NavigationPage()),
+                        );
+                      }
+                    }
                   },
                   label: "Login",
                 ),
