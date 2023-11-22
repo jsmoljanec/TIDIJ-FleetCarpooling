@@ -5,6 +5,7 @@ import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/pages/navigation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginForm extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -14,6 +15,9 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     bool logged;
     bool adminIsLogged;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.backgroundColor,
@@ -76,8 +80,7 @@ class LoginForm extends StatelessWidget {
                       password: passwordController.text,
                     );
                     if (logged == true) {
-                      adminIsLogged = await AuthLogin()
-                          .isAdmin(email: emailController.text);
+                      adminIsLogged = await AuthLogin().isAdmin(id: uid);
                       if (adminIsLogged == true) {
                         //implementirati zaslon za admina
                       } else {

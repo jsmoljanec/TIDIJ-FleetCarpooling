@@ -47,12 +47,11 @@ class AuthLogin {
     }
   }
 
-  Future<bool> isAdmin({required String email}) async {
+  Future<bool> isAdmin({required String? id}) async {
     final DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
     var query = await databaseReference
         .child("Users")
-        .orderByChild('email')
-        .equalTo(email)
+        .child(id!)
         .limitToFirst(1)
         .once();
 
