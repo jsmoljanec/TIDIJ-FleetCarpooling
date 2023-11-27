@@ -114,10 +114,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   MyElevatedButton(
-                    onPressed: () {
-                      //implement
-                    },
-                    label: "Log Out",
+                    onPressed: () {},
+                    label: "LOG OUT",
+                    backgroundColor: AppColors.backgroundColor,
+                    textColor: AppColors.buttonColor,
                   ),
                 ],
               ),
