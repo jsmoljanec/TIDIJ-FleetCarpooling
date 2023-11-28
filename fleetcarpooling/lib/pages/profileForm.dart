@@ -1,19 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:fleetcarpooling/auth/UserModel.dart' as usermod;
 import 'package:fleetcarpooling/pages/changePasswordForm.dart';
+import 'package:fleetcarpooling/pages/loginForm.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
-
-class UserProfile {
-  final String firstName;
-  final String lastName;
-  final String email;
-
-  UserProfile({
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-  });
-}
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -23,17 +15,45 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late UserProfile userProfile;
+  late usermod.User userProfile = usermod.User(
+    firstName: '',
+    lastName: '',
+    email: '',
+    username: '',
+    role: '',
+  );
 
   @override
   void initState() {
     super.initState();
-    //mock podaci koji služe za prikaz
-    userProfile = UserProfile(
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-    );
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        String uid = user.uid;
+
+        DatabaseReference ref = FirebaseDatabase.instance.ref("Users/$uid");
+
+        DatabaseEvent event = await ref.once();
+
+        Map<dynamic, dynamic>? userData =
+            event.snapshot.value as Map<dynamic, dynamic>?;
+        setState(() {
+          userProfile = usermod.User(
+            firstName: userData?['firstName'] ?? '',
+            lastName: userData?['lastName'] ?? '',
+            email: userData?['email'] ?? '',
+            username: userData?['username'] ?? '',
+            role: userData?['role'] ?? '',
+          );
+        });
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
   }
 
   @override
@@ -51,11 +71,12 @@ class _ProfilePageState extends State<ProfilePage> {
           },
         ),
         bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(1.0),
-            child: Container(
-              color: Colors.black,
-              height: 1.0,
-            )),
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: Colors.black,
+            height: 1.0,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -117,7 +138,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   MyElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginForm()),
+                      );
+                    },
                     label: "LOG OUT",
                     backgroundColor: AppColors.backgroundColor,
                     textColor: AppColors.buttonColor,
