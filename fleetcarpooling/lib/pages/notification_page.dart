@@ -19,6 +19,7 @@ class _NotificationPageState extends State<NotificationPage> {
       body:  Column(
           children: [
             Container(
+              margin: EdgeInsets.only(bottom: 27.5),
               width: screenWidth,
               decoration: const BoxDecoration(
                 border: Border(bottom: BorderSide(color: AppColors.buttonColor))
@@ -29,6 +30,21 @@ class _NotificationPageState extends State<NotificationPage> {
                 style: TextStyle(color: AppColors.mainTextColor,fontSize: 24,),
                 ),
               )
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 28,right: 29,bottom: 12),
+              child: Card(
+                  margin: EdgeInsets.only(left: 28,right: 29,bottom: 12),
+                    color: AppColors.backgroundColor,
+                    child:  Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text("Ovdje ide opis",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                                fontSize: 20
+                              ),),
+                    ),
+                    ),
             )
           ],
         ),
