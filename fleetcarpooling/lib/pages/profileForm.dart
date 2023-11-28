@@ -61,12 +61,17 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text("My Profile"),
         toolbarHeight: 70,
+        title: const Padding(
+          padding: EdgeInsets.only(top: 15.0),
+          child: Text(
+            "MY PROFILE",
+            style: TextStyle(color: AppColors.mainTextColor),
+          ),
+        ),
         centerTitle: true,
         leading: Padding(
-          padding: const EdgeInsets.only(
-              left: 8.0),
+          padding: const EdgeInsets.only(left: 8.0),
           child: CircularIconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -129,9 +134,26 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 24),
             MyElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ChangePasswordForm();
-                }));
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        ChangePasswordForm(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.easeInOut;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+                      return SlideTransition(
+                        position: offsetAnimation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
               },
               label: "Change password",
             ),

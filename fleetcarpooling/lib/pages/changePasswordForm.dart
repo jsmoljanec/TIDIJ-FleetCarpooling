@@ -19,7 +19,15 @@ class _ChangePasswordFormState extends State<StatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Change password'),
+        toolbarHeight: 70,
+        centerTitle: true,
+        title: const Padding(
+          padding: EdgeInsets.only(top: 15.0),
+          child: Text(
+            "CHANGE PASSWORD",
+            style: TextStyle(color: AppColors.mainTextColor),
+          ),
+        ),
         leading: Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: CircularIconButton(
