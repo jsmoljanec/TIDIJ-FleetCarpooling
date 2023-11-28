@@ -66,7 +66,8 @@ class _ProfilePageState extends State<ProfilePage> {
           padding: EdgeInsets.only(top: 15.0),
           child: Text(
             "MY PROFILE",
-            style: TextStyle(color: AppColors.mainTextColor),
+            style: TextStyle(
+                color: AppColors.mainTextColor, fontWeight: FontWeight.w400),
           ),
         ),
         centerTitle: true,
@@ -82,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
           preferredSize: const Size.fromHeight(1.0),
           child: Container(
             color: Colors.black,
-            height: 1.0,
+            height: 0.5,
           ),
         ),
       ),
@@ -99,7 +100,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: AppColors.mainTextColor,
               ),
             ),
-            const SizedBox(height: 8),
             Text(
               "${userProfile.firstName} ${userProfile.lastName}",
               style: const TextStyle(
@@ -116,7 +116,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: AppColors.mainTextColor,
               ),
             ),
-            const SizedBox(height: 8),
             Text(
               userProfile.email,
               style: const TextStyle(
@@ -126,12 +125,12 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 24),
             Container(
-              width: double.infinity,
+              margin: const EdgeInsets.symmetric(horizontal: 0.0),
               child: const Divider(
                 color: AppColors.backgroundColor,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             MyElevatedButton(
               onPressed: () {
                 Navigator.push(

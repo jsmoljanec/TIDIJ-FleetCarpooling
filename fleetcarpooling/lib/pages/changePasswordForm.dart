@@ -40,7 +40,7 @@ class _ChangePasswordFormState extends State<StatefulWidget> {
             preferredSize: const Size.fromHeight(1.0),
             child: Container(
               color: Colors.black,
-              height: 1.0,
+              height: 0.5,
             )),
       ),
       body: Padding(
@@ -94,10 +94,16 @@ class _ChangePasswordFormState extends State<StatefulWidget> {
               isPassword: true,
             ),
             const SizedBox(height: 20),
-            MyElevatedButton(
-              onPressed: () {},
-              label: 'Change password',
-            ),
+            Expanded(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                MyElevatedButton(
+                  onPressed: () {},
+                  label: 'Change password',
+                ),
+              ],
+            )),
           ],
         ),
       ),
