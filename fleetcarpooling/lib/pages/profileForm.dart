@@ -1,3 +1,4 @@
+import 'package:fleetcarpooling/pages/changePasswordForm.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
@@ -104,7 +105,9 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 24),
             MyElevatedButton(
               onPressed: () {
-                //implement
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return ChangePasswordForm();
+                }));
               },
               label: "Change password",
             ),
