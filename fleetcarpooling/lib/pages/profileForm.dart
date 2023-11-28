@@ -64,11 +64,14 @@ class _ProfilePageState extends State<ProfilePage> {
         title: const Text("My Profile"),
         toolbarHeight: 70,
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        leading: Padding(
+          padding: const EdgeInsets.only(
+              left: 8.0),
+          child: CircularIconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),

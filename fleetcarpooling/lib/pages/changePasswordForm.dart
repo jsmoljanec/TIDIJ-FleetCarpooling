@@ -20,6 +20,14 @@ class _ChangePasswordFormState extends State<StatefulWidget> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Change password'),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: CircularIconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1.0),
             child: Container(
