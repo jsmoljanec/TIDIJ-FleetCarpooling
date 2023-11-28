@@ -1,3 +1,5 @@
+import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_QR_form.dart';
+import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_manually_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
@@ -29,8 +31,23 @@ class AddVehicleForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           SizedBox(height: 50),
-          MyElevatedButton(onPressed: () {}, label: 'Add vehicle manually'),
-          MyElevatedButton(onPressed: () {}, label: 'Add vehicle with QR code'),
+          MyElevatedButton(
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddVehicleManuallyForm()),
+                );
+              },
+              label: 'Add vehicle manually'),
+          MyElevatedButton(
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddVehicleQRForm()),
+                );
+              },
+              label: 'Add vehicle with QR code'),
           Expanded(
             child: Image.asset(
               'assets/images/logo.png',
