@@ -76,3 +76,23 @@ class _MyRadioButtonState extends State<MyRadioButton> {
     );
   }
 }
+
+class CircularIconButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const CircularIconButton({super.key, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {},
+      style: ElevatedButton.styleFrom(
+        shape: const CircleBorder(),
+        padding: const EdgeInsets.all(20),
+        backgroundColor: my_defined_colors.AppColors.buttonColor,
+      ),
+      child: const Icon(Icons.arrow_back,
+          color: my_defined_colors.AppColors.primaryColor),
+    );
+  }
+}
