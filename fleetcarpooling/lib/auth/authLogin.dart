@@ -27,7 +27,7 @@ class AuthLogin {
     return "";
   }
 
-  Future<void> login({required String email, required String password}) async {
+  Future<bool> login({required String email, required String password}) async {
     if (email.contains('@')) {
       email = email;
     } else {
@@ -40,8 +40,21 @@ class AuthLogin {
         password: password,
       );
       print("Login successful: ${userCredential.user?.email}");
+      return true;
     } catch (e) {
       print("Login failed: $e");
+      return false;
     }
+  }
+
+  Future<bool> isAdmin() async {
+    final User? user = _auth.currentUser;
+    final uid = user?.uid;
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Users/$uid");
+    DatabaseEvent event = await ref.once();
+    Map<dynamic, dynamic>? userData =
+        event.snapshot.value as Map<dynamic, dynamic>?;
+    if (userData?['role'] == 'Administrator') return true;
+    return false;
   }
 }
