@@ -59,7 +59,8 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                   ),
                 )),
             const SizedBox(height: 3.0),
-            MyTextField(controller: vinController),
+            Container(
+                height: 50, child: MyTextField(controller: vinController)),
             const SizedBox(height: 10),
             const Padding(
                 padding: EdgeInsets.only(left: 24.0),
@@ -71,7 +72,8 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                   ),
                 )),
             const SizedBox(height: 3.0),
-            MyTextField(controller: modelController),
+            Container(
+                height: 50, child: MyTextField(controller: modelController)),
             const SizedBox(height: 10),
             const Padding(
                 padding: EdgeInsets.only(left: 24.0),
@@ -83,7 +85,8 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                   ),
                 )),
             const SizedBox(height: 3.0),
-            MyTextField(controller: brandController),
+            Container(
+                height: 50, child: MyTextField(controller: brandController)),
             const SizedBox(height: 20),
             const Row(children: [
               Padding(
@@ -110,6 +113,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
               children: [
                 SizedBox(width: 24),
                 Container(
+                  height: 50,
                   width: 110,
                   decoration: BoxDecoration(
                     border: Border.all(color: AppColors.buttonColor, width: 1),
@@ -145,7 +149,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                         });
                       },
                       buttonStyleData: const ButtonStyleData(
-                        height: 50,
+                        height: 40,
                         width: 160,
                         padding: EdgeInsets.only(left: 14, right: 14),
                       ),
@@ -166,6 +170,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                 ),
                 const SizedBox(width: 50),
                 Container(
+                  height: 50,
                   width: 200,
                   decoration: BoxDecoration(
                     border: Border.all(color: AppColors.buttonColor, width: 1),
@@ -247,8 +252,11 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
             Row(
               children: [
                 Container(
-                    width: 160, child: MyTextField(controller: yearController)),
+                    height: 50,
+                    width: 160,
+                    child: MyTextField(controller: yearController)),
                 Container(
+                    height: 50,
                     width: 245,
                     child: MyTextField(controller: fuelConsumptionController)),
               ],
@@ -267,6 +275,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
             Row(
               children: [
                 Container(
+                    height: 50,
                     width: 300,
                     padding: EdgeInsets.only(left: 0.0),
                     child: MyTextField(controller: registrationController)),
