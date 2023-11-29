@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/auth/UserModel.dart' as usermod;
+import 'package:fleetcarpooling/auth/user_repository.dart';
 import 'package:fleetcarpooling/pages/changePasswordForm.dart';
 import 'package:fleetcarpooling/pages/loginForm.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
@@ -23,6 +23,8 @@ class _ProfilePageState extends State<ProfilePage> {
     role: '',
   );
 
+  final UserRepository userRepository = UserRepository();
+
   @override
   void initState() {
     super.initState();
@@ -31,28 +33,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> fetchUserData() async {
     try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        String uid = user.uid;
-
-        DatabaseReference ref = FirebaseDatabase.instance.ref("Users/$uid");
-
-        DatabaseEvent event = await ref.once();
-
-        Map<dynamic, dynamic>? userData =
-            event.snapshot.value as Map<dynamic, dynamic>?;
-        setState(() {
-          userProfile = usermod.User(
-            firstName: userData?['firstName'] ?? '',
-            lastName: userData?['lastName'] ?? '',
-            email: userData?['email'] ?? '',
-            username: userData?['username'] ?? '',
-            role: userData?['role'] ?? '',
-          );
-        });
-      }
+      usermod.User user = await userRepository.fetchUserData();
+      setState(() {
+        userProfile = user;
+      });
     } catch (e) {
-      print("Error: $e");
+      print("Error fetching user data: $e");
     }
   }
 
