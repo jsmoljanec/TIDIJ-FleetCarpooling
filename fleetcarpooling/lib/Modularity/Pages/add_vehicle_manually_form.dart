@@ -445,7 +445,9 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                         child: Container(
                           height: 43,
                           child: MyTextField(
-                              controller: fuelConsumptionController),
+                              controller: fuelConsumptionController,
+                              onlyDigits: true,
+                              keyboardType: TextInputType.number),
                         ),
                       ),
                     ),

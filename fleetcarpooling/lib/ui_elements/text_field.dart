@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'colors' as my_defined_colors;
 
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;
   final RegExp? regex;
   final bool isPassword;
+  final bool onlyDigits;
+  final TextInputType keyboardType;
 
   const MyTextField({
     Key? key,
-    required this.controller, 
+    required this.controller,
     this.regex,
     this.isPassword = false,
+    this.onlyDigits = false,
+    this.keyboardType = TextInputType.text,
   }) : super(key: key);
 
   @override
@@ -19,7 +24,10 @@ class MyTextField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: TextField(
         controller: controller,
-        obscureText: isPassword, 
+        obscureText: isPassword,
+        keyboardType: keyboardType,
+        inputFormatters:
+            onlyDigits ? [FilteringTextInputFormatter.digitsOnly] : [],
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(24.0),
