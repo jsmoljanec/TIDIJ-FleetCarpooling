@@ -2,6 +2,7 @@ import 'package:fleetcarpooling/Modularity/bloc/vehicle_bloc.dart';
 import 'package:fleetcarpooling/Modularity/event/vehicle_event.dart';
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/Modularity/service/image_service.dart';
+import 'package:fleetcarpooling/Modularity/state/vehicle_state.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
   final TextEditingController fuelConsumptionController =
       TextEditingController();
   late String imageUrlCar = "";
+  List<String> years = new List.empty();
   bool isImageUploaded = false;
   final List<String> capacity = ['1', '2', '3', '4', '5', '6', '7'];
   final UploadImage _repository = new UploadImage();
@@ -41,7 +43,59 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> years = generateYearsList();
+    return BlocBuilder<VehicleBloc, VehicleState>(
+      builder: (context, state) {
+        if (state is VehicleLoadingState) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (state is VehicleErrorState) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: AlertDialog(
+                title: const Text('Message'),
+                content: Text(state.errorMessage),
+                actions: <Widget>[
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else if (state is VehicleLoadedState) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: AlertDialog(
+                title: const Text('Message'),
+                content: Text(state.successMessage),
+                actions: <Widget>[
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return _buildUI(context);
+        }
+      },
+    );
+  }
+
+  Widget _buildUI(BuildContext context) {
+    if (years.isEmpty == true) years = generateYearsList();
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
