@@ -52,7 +52,12 @@ class AddVehicleForm extends StatelessWidget {
               onPressed: () async {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddVehicleQRForm()),
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) => VehicleBloc(_vehicleRepository),
+                      child: AddVehicleQRForm(),
+                    ),
+                  ),
                 );
               },
               label: 'Add vehicle with QR code'),
