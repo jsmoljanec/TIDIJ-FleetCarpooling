@@ -1,5 +1,5 @@
-import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_QR_form.dart';
-import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_manually_form.dart';
+import 'package:fleetcarpooling/Modularity/pages/add_vehicle_QR_form.dart';
+import 'package:fleetcarpooling/Modularity/pages/add_vehicle_manually_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
