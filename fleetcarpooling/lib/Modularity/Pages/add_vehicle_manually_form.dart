@@ -1,3 +1,4 @@
+import 'package:fleetcarpooling/Modularity/service/image_service.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
@@ -17,8 +18,10 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
   final TextEditingController registrationController = TextEditingController();
   final TextEditingController fuelConsumptionController =
       TextEditingController();
+  String? imageUrlCar;
+  bool isImageUploaded = false;
   final List<String> capacity = ['1', '2', '3', '4', '5', '6', '7'];
-
+  final UploadImage _repository = new UploadImage();
   final List<String> transmissionType = ['Automatic', 'Manual'];
   String? selectedCapacity;
   String? selectedTransType;
@@ -446,16 +449,32 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                           child: Row(
                             children: <Widget>[
                               IconButton(
-                                icon: Icon(Icons.camera_alt),
-                                onPressed: () {
-                                  // Add the logic you want to execute when the first icon is clicked
+                                icon: Icon(Icons.camera_alt,
+                                    color:
+                                        isImageUploaded ? Colors.green : null),
+                                onPressed: () async {
+                                  imageUrlCar =
+                                      await _repository.uploadImageCamera();
+                                  if (imageUrlCar != null) {
+                                    setState(() {
+                                      isImageUploaded = true;
+                                    });
+                                  }
                                 },
                               ),
                               SizedBox(width: 20),
                               IconButton(
-                                icon: Icon(Icons.upload),
-                                onPressed: () {
-                                  // Add the logic you want to execute when the second icon is clicked
+                                icon: Icon(Icons.upload,
+                                    color:
+                                        isImageUploaded ? Colors.green : null),
+                                onPressed: () async {
+                                  imageUrlCar =
+                                      await _repository.uploadImageGallery();
+                                  if (imageUrlCar != null) {
+                                    setState(() {
+                                      isImageUploaded = true;
+                                    });
+                                  }
                                 },
                               ),
                             ],
