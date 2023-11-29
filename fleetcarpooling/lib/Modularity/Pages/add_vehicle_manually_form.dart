@@ -1,7 +1,11 @@
+import 'package:fleetcarpooling/Modularity/bloc/vehicle_bloc.dart';
+import 'package:fleetcarpooling/Modularity/event/vehicle_event.dart';
+import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/Modularity/service/image_service.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fleetcarpooling/ui_elements/text_field.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -18,7 +22,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
   final TextEditingController registrationController = TextEditingController();
   final TextEditingController fuelConsumptionController =
       TextEditingController();
-  String? imageUrlCar;
+  late String imageUrlCar = "";
   bool isImageUploaded = false;
   final List<String> capacity = ['1', '2', '3', '4', '5', '6', '7'];
   final UploadImage _repository = new UploadImage();
@@ -455,7 +459,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                                 onPressed: () async {
                                   imageUrlCar =
                                       await _repository.uploadImageCamera();
-                                  if (imageUrlCar != null) {
+                                  if (imageUrlCar != "") {
                                     setState(() {
                                       isImageUploaded = true;
                                     });
@@ -470,7 +474,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                                 onPressed: () async {
                                   imageUrlCar =
                                       await _repository.uploadImageGallery();
-                                  if (imageUrlCar != null) {
+                                  if (imageUrlCar != "") {
                                     setState(() {
                                       isImageUploaded = true;
                                     });
@@ -487,7 +491,32 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
               ),
               SizedBox(height: 40.0),
               MyElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  String vin = vinController.text;
+                  String model = modelController.text;
+                  String brand = brandController.text;
+                  int capacity = int.parse(selectedCapacity.toString());
+                  String trans = selectedTransType.toString();
+                  int fuel = int.parse(fuelConsumptionController.text);
+                  String registration = registrationController.text;
+                  int year = int.parse(selectedYear.toString());
+                  bool active = true;
+
+                  Vehicle newVehicle = Vehicle(
+                      vin: vin,
+                      model: model,
+                      brand: brand,
+                      capacity: capacity,
+                      transType: trans,
+                      fuelConsumption: fuel,
+                      registration: registration,
+                      year: year,
+                      active: active,
+                      imageUrl: imageUrlCar);
+
+                  BlocProvider.of<VehicleBloc>(context)
+                      .add(AddVehicleEvent(vehicle: newVehicle));
+                },
                 label: 'ADD NEW CAR',
               ),
             ],

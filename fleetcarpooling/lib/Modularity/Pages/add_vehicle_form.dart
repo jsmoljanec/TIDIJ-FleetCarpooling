@@ -1,10 +1,14 @@
+import 'package:fleetcarpooling/Modularity/bloc/vehicle_bloc.dart';
 import 'package:fleetcarpooling/Modularity/pages/add_vehicle_QR_form.dart';
 import 'package:fleetcarpooling/Modularity/pages/add_vehicle_manually_form.dart';
+import 'package:fleetcarpooling/Modularity/service/vehicle_service.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddVehicleForm extends StatelessWidget {
+  final VehicleRepository _vehicleRepository = VehicleService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +40,11 @@ class AddVehicleForm extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AddVehicleManuallyForm()),
+                    builder: (context) => BlocProvider(
+                      create: (context) => VehicleBloc(_vehicleRepository),
+                      child: AddVehicleManuallyForm(),
+                    ),
+                  ),
                 );
               },
               label: 'Add vehicle manually'),
