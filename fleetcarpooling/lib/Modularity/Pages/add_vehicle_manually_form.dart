@@ -136,7 +136,8 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
               const SizedBox(height: 3.0),
               Container(
                 height: 43,
-                child: MyTextField(controller: vinController),
+                child: MyTextField(
+                    controller: vinController, regex: RegExp(r'^.{17}$')),
               ),
               const SizedBox(height: 10),
               const Padding(
@@ -548,17 +549,31 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
               SizedBox(height: 40.0),
               MyElevatedButton(
                 onPressed: () {
-                  String vin = vinController.text;
-                  String model = modelController.text;
-                  String brand = brandController.text;
-                  int capacity = int.parse(selectedCapacity.toString());
-                  String trans = selectedTransType.toString();
-                  int fuel = int.parse(fuelConsumptionController.text);
-                  String registration = registrationController.text;
-                  int year = int.parse(selectedYear.toString());
-                  bool active = true;
+                  // Check if VIN satisfies the regex condition
+                  bool isVinValid =
+                      RegExp(r'^.{17}$').hasMatch(vinController.text);
 
-                  Vehicle newVehicle = Vehicle(
+                  if (isVinValid &&
+                      modelController.text.isEmpty == false &&
+                      brandController.text.isEmpty == false &&
+                      fuelConsumptionController.text.isEmpty == false &&
+                      registrationController.text.isEmpty == false &&
+                      selectedCapacity.toString().isEmpty == false &&
+                      selectedYear.toString().isEmpty == false &&
+                      selectedTransType.toString().isEmpty == false &&
+                      imageUrlCar.isEmpty == false) {
+                    // VIN is valid, proceed with adding the new vehicle
+                    String vin = vinController.text;
+                    String model = modelController.text;
+                    String brand = brandController.text;
+                    int capacity = int.parse(selectedCapacity.toString());
+                    String trans = selectedTransType.toString();
+                    int fuel = int.parse(fuelConsumptionController.text);
+                    String registration = registrationController.text;
+                    int year = int.parse(selectedYear.toString());
+                    bool active = true;
+
+                    Vehicle newVehicle = Vehicle(
                       vin: vin,
                       model: model,
                       brand: brand,
@@ -568,10 +583,32 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                       registration: registration,
                       year: year,
                       active: active,
-                      imageUrl: imageUrlCar);
+                      imageUrl: imageUrlCar,
+                    );
 
-                  BlocProvider.of<VehicleBloc>(context)
-                      .add(AddVehicleEvent(vehicle: newVehicle));
+                    BlocProvider.of<VehicleBloc>(context)
+                        .add(AddVehicleEvent(vehicle: newVehicle));
+                  } else {
+                    // VIN is not valid, show an error or take appropriate action
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Error'),
+                          content: Text(
+                              'Incorrect entry, VIN must contain 17 characters and all data must be entered.'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
                 label: 'ADD NEW CAR',
               ),
