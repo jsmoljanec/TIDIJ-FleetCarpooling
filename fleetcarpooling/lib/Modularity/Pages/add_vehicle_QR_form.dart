@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:fleetcarpooling/Modularity/bloc/vehicle_bloc.dart';
 import 'package:fleetcarpooling/Modularity/event/vehicle_event.dart';
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
+import 'package:fleetcarpooling/Modularity/state/vehicle_state.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,10 +18,61 @@ class _AddVehicleQRForm extends State<AddVehicleQRForm> {
   late final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   late QRViewController controller;
   late String qrText = '';
-  bool isCameraPaused = false;
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<VehicleBloc, VehicleState>(
+      builder: (context, state) {
+        if (state is VehicleLoadingState) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (state is VehicleErrorState) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: AlertDialog(
+                title: const Text('Message'),
+                content: Text(state.errorMessage),
+                actions: <Widget>[
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else if (state is VehicleLoadedState) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: AlertDialog(
+                title: const Text('Message'),
+                content: Text(state.successMessage),
+                actions: <Widget>[
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return _buildUI(context);
+        }
+      },
+    );
+  }
+
+  Widget _buildUI(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
