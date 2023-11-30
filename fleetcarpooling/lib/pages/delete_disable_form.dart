@@ -98,7 +98,33 @@ class CardWidget extends StatelessWidget {
               IconButton(
                 icon: Icon(vehicle.active ? Icons.do_not_disturb_on : Icons.add,
                     color: Colors.blue),
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Disable Car'),
+                        content:
+                            Text('Are you sure you want to disable this car?'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Cancel'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: Text('Yes'),
+                            onPressed: () {
+                              disableCar(vehicle.vin, vehicle.active);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
               ),
             ],
           ),

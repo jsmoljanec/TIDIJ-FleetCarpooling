@@ -6,7 +6,6 @@ Stream<List<Vehicle>> getVehicles() {
   DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles");
   final StreamController<List<Vehicle>> controller =
       StreamController<List<Vehicle>>();
-
   ref.onValue.listen((DatabaseEvent event) {
     List<Vehicle> allVehicles = [];
 
@@ -31,4 +30,13 @@ Stream<List<Vehicle>> getVehicles() {
   });
 
   return controller.stream;
+}
+
+Future<void> disableCar(String vin, bool active) async {
+  DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles/${vin}");
+
+  await ref.update({
+    if (active == true) "active": false,
+    if (active == false) "active": true,
+  });
 }
