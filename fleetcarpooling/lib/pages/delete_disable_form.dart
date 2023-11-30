@@ -93,7 +93,33 @@ class CardWidget extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(Icons.delete, color: Colors.blue),
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Delete Car'),
+                        content:
+                            Text('Are you sure you want to delete this car?'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Cancel'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: Text('Yes'),
+                            onPressed: () {
+                              deleteCar(vehicle.vin);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
               ),
               IconButton(
                 icon: Icon(vehicle.active ? Icons.do_not_disturb_on : Icons.add,

@@ -40,3 +40,9 @@ Future<void> disableCar(String vin, bool active) async {
     if (active == false) "active": true,
   });
 }
+
+Future<void> deleteCar(String vin) async {
+  DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles/${vin}");
+
+  await ref.remove();
+}
