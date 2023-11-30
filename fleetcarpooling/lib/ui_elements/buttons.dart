@@ -4,9 +4,16 @@ import 'colors' as my_defined_colors;
 class MyElevatedButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String label;
+  final Color? backgroundColor;
+  final Color? textColor;
 
-  const MyElevatedButton(
-      {super.key, required this.onPressed, required this.label});
+  const MyElevatedButton({
+    super.key,
+    required this.onPressed,
+    required this.label,
+    this.backgroundColor,
+    this.textColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +27,18 @@ class MyElevatedButton extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: onPressed,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: my_defined_colors.AppColors.buttonColor,
+                  backgroundColor: backgroundColor ??
+                      my_defined_colors.AppColors.buttonColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24.0),
                   ),
                 ),
                 child: Text(
                   label,
-                  style: const TextStyle(
-                      color: my_defined_colors.AppColors.primaryColor),
+                  style: TextStyle(
+                    color:
+                        textColor ?? my_defined_colors.AppColors.primaryColor,
+                  ),
                 ),
               ),
             ),
@@ -85,10 +95,10 @@ class CircularIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(0),
         backgroundColor: my_defined_colors.AppColors.buttonColor,
       ),
       child: const Icon(Icons.arrow_back,
