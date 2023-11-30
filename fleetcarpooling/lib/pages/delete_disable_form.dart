@@ -1,4 +1,5 @@
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
+import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,7 @@ class VehicleList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Vehicle>>(
-      stream: null,
+      stream: getVehicles(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
