@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fleetcarpooling/pages/UserRegistrationForm.dart';
 import 'package:fleetcarpooling/pages/loginForm.dart';
 import 'package:fleetcarpooling/pages/navigation.dart';
 
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: NavigationPage(),
+      home: LoginForm(),
       debugShowCheckedModeBanner: false,
     );
   }
