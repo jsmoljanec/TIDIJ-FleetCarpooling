@@ -1,4 +1,3 @@
-import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {

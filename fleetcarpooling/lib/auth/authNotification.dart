@@ -14,8 +14,6 @@ class AuthNotification {
       String userEmail) async {
     try {
       DateTime now = DateTime.now();
-      print('User Email: $userEmail');
-      print('Datum: $now');
 
       DatabaseEvent snapshot = await _databaseReference
           .child('Reservation')
@@ -44,19 +42,34 @@ class AuthNotification {
               }
             }
           });
-
-          print('Snapshot: $snapshot');
-          print('Reservations: $reservations');
-          print('Notifications: $notifications');
-
           return notifications;
         }
       }
-
       return [];
     } catch (e) {
-      print('Greška prilikom dohvaćanja rezervacija: $e');
       return [];
+    }
+  }
+
+  Future<Map<String, dynamic>?> getCarDetails(String vinCar) async {
+    try {
+      DatabaseEvent snapshot =
+          await _databaseReference.child('Vehicles').child(vinCar).once();
+
+      if (snapshot.snapshot.value != null) {
+        Map<Object?, Object?>? carDetails =
+            snapshot.snapshot.value as Map<Object?, Object?>?;
+
+        if (carDetails != null) {
+          Map<String, dynamic> carDetailsMap =
+              Map<String, dynamic>.from(carDetails);
+          return carDetailsMap;
+        }
+      }
+
+      throw Exception('Car details not found');
+    } catch (e) {
+      throw Exception('Error fetching car details');
     }
   }
 }
