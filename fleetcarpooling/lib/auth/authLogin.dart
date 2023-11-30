@@ -48,29 +48,13 @@ class AuthLogin {
   }
 
   Future<bool> isAdmin() async {
-    final DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
     final User? user = _auth.currentUser;
     final uid = user?.uid;
-    var query = await databaseReference
-        .child("Users")
-        .child(uid!)
-        .limitToFirst(1)
-        .once();
-
-    if (query.snapshot.value != null) {
-      Map<dynamic, dynamic>? userMap =
-          query.snapshot.value as Map<dynamic, dynamic>?;
-
-      if (userMap != null && userMap.isNotEmpty) {
-        String userID = userMap.keys.first;
-        String userRole = userMap[userID]['role'];
-
-        if (userRole == 'administrator') {
-          return true;
-        }
-      }
-    }
-
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Users/$uid");
+    DatabaseEvent event = await ref.once();
+    Map<dynamic, dynamic>? userData =
+        event.snapshot.value as Map<dynamic, dynamic>?;
+    if (userData?['role'] == 'Administrator') return true;
     return false;
   }
 }
