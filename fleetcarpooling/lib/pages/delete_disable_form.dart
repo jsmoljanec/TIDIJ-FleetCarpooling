@@ -7,29 +7,33 @@ class DeleteDisableForm extends StatelessWidget {
   List<Vehicle> cars = List.empty();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        resizeToAvoidBottomInset: true,
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        toolbarHeight: 80,
+        elevation: 0,
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          toolbarHeight: 80,
-          elevation: 0,
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: AppColors.mainTextColor),
-          title: const Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(""),
-              Text("Delete/disable car",
-                  style: TextStyle(
-                      color: AppColors.mainTextColor, fontSize: 25.0)),
-            ],
-          ),
-          centerTitle: true,
+        iconTheme: IconThemeData(color: AppColors.mainTextColor),
+        title: const Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(""),
+            Text("Delete/disable car",
+                style:
+                    TextStyle(color: AppColors.mainTextColor, fontSize: 25.0)),
+          ],
         ),
-        body: Container(
-          color: Colors.white,
-          child: VehicleList(),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding:
+              const EdgeInsets.only(right: 10, left: 10, top: 20, bottom: 20),
+          child: Container(
+            color: Colors.white,
+            child: VehicleList(),
+          ),
         ),
       ),
     );
@@ -71,6 +75,15 @@ class CardWidget extends StatelessWidget {
     return Card(
       color: AppColors.backgroundColor,
       child: ListTile(
+        leading: Image.network(vehicle.imageUrl),
+        title: Text(
+          '${vehicle.brand} ${vehicle.model}',
+          style: TextStyle(color: AppColors.mainTextColor),
+        ),
+        subtitle: Text(
+          'Year: ${vehicle.year}',
+          style: TextStyle(color: AppColors.mainTextColor),
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
