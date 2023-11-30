@@ -31,4 +31,28 @@ class UserRepository {
       throw e;
     }
   }
+
+  Future<void> changePassword(
+      String currentPassword, String newPassword) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: currentPassword,
+        );
+
+        await user.reauthenticateWithCredential(credential);
+        await user.updatePassword(newPassword);
+
+        print("Password changed successfully");
+      } else {
+        throw Exception('User is null');
+      }
+    } catch (e) {
+      print("Error changing password: $e");
+      throw e;
+    }
+  }
 }
