@@ -69,7 +69,22 @@ class CardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: AppColors.backgroundColor,
-      child: ListTile(),
+      child: ListTile(
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.blue),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(vehicle.active ? Icons.do_not_disturb_on : Icons.add,
+                  color: Colors.blue),
+              onPressed: () {},
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
