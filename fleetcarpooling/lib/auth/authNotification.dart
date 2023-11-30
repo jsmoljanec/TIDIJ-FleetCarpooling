@@ -30,15 +30,21 @@ class AuthNotification {
           reservations.forEach((key, value) {
             if (value['pickupDate'] != null) {
               DateTime pickupDate = DateTime.parse(value['pickupDate']);
-              if (pickupDate.difference(now).inDays <= 2) {
-                notifications.add({
-                  'key': key,
-                  'VinCar': value['VinCar'],
-                  'pickupDate': value['pickupDate'],
-                  'pickupTime': value['pickupTime'],
-                  'returnDate': value['returnDate'],
-                  'returnTime': value['returnTime'],
-                });
+              DateTime pickupDateTime = DateTime.parse(
+                  '${value['pickupDate']} ${value['pickupTime']}');
+              if (pickupDate.isAfter(now) &&
+                  pickupDate.difference(now).inDays <= 2) {
+                if (!(pickupDate.isAtSameMomentAs(now) &&
+                    pickupDateTime.isBefore(now))) {
+                  notifications.add({
+                    'key': key,
+                    'VinCar': value['VinCar'],
+                    'pickupDate': value['pickupDate'],
+                    'pickupTime': value['pickupTime'],
+                    'returnDate': value['returnDate'],
+                    'returnTime': value['returnTime'],
+                  });
+                }
               }
             }
           });
