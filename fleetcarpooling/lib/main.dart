@@ -12,6 +12,7 @@ Future<void> main() async {
         appId: '1:956285703635:android:1faaaa1cfb6be0d4d58b26',
         messagingSenderId: '956285703635',
         projectId: 'fleetcarpooling-cd243',
+        storageBucket: 'gs://fleetcarpooling-cd243.appspot.com',
         databaseURL:
             'https://fleetcarpooling-cd243-default-rtdb.europe-west1.firebasedatabase.app/'),
   );
