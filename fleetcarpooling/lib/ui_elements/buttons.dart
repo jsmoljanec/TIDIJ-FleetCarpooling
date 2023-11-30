@@ -95,10 +95,10 @@ class CircularIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(0),
         backgroundColor: my_defined_colors.AppColors.buttonColor,
       ),
       child: const Icon(Icons.arrow_back,
