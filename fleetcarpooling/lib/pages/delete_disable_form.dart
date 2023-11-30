@@ -1,5 +1,6 @@
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
+import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
@@ -14,11 +15,17 @@ class DeleteDisableForm extends StatelessWidget {
         toolbarHeight: 80,
         elevation: 0,
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: AppColors.mainTextColor),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: CircularIconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         title: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(""),
             Text("Delete/disable car",
                 style:
                     TextStyle(color: AppColors.mainTextColor, fontSize: 25.0)),

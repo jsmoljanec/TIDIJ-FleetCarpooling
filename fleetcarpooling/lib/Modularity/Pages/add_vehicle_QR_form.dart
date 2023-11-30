@@ -4,6 +4,7 @@ import 'package:fleetcarpooling/Modularity/bloc/vehicle_bloc.dart';
 import 'package:fleetcarpooling/Modularity/event/vehicle_event.dart';
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/Modularity/state/vehicle_state.dart';
+import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,12 +81,18 @@ class _AddVehicleQRForm extends State<AddVehicleQRForm> {
         toolbarHeight: 80,
         elevation: 0,
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: AppColors.mainTextColor),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: CircularIconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         title: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(""),
-            Text("ADD NEW CAR MANUALLY",
+            Text("ADD NEW CAR ",
                 style:
                     TextStyle(color: AppColors.mainTextColor, fontSize: 18.0)),
           ],

@@ -103,11 +103,17 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
         toolbarHeight: 80,
         elevation: 0,
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: AppColors.mainTextColor),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: CircularIconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         title: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(""),
             Text("ADD NEW CAR MANUALLY",
                 style:
                     TextStyle(color: AppColors.mainTextColor, fontSize: 18.0)),

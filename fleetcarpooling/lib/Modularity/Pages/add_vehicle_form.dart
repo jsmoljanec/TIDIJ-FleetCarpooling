@@ -18,11 +18,17 @@ class AddVehicleForm extends StatelessWidget {
         toolbarHeight: 80,
         elevation: 0,
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: AppColors.mainTextColor),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: CircularIconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         title: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(""),
             Text("ADD NEW CAR",
                 style:
                     TextStyle(color: AppColors.mainTextColor, fontSize: 25.0)),
