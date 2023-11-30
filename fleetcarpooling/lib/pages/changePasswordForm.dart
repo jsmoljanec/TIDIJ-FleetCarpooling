@@ -47,70 +47,75 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 20),
-              const Padding(
-                padding: EdgeInsets.only(left: 24.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Current password",
-                    style: TextStyle(color: AppColors.mainTextColor),
-                  ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 24.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Current password",
+                          style: TextStyle(color: AppColors.mainTextColor),
+                        ),
+                      ),
+                    ),
+                    MyTextField(
+                      controller: _currentPasswordController,
+                      isPassword: true,
+                    ),
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 24.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "New password",
+                          style: TextStyle(color: AppColors.mainTextColor),
+                        ),
+                      ),
+                    ),
+                    MyTextField(
+                      controller: _newPasswordController,
+                      isPassword: true,
+                    ),
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 24.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Confirm password",
+                          style: TextStyle(color: AppColors.mainTextColor),
+                        ),
+                      ),
+                    ),
+                    MyTextField(
+                      controller: _confirmPasswordController,
+                      isPassword: true,
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ),
-              MyTextField(
-                controller: _currentPasswordController,
-                isPassword: true,
-              ),
-              const SizedBox(height: 20),
-              const Padding(
-                padding: EdgeInsets.only(left: 24.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "New password",
-                    style: TextStyle(color: AppColors.mainTextColor),
-                  ),
-                ),
-              ),
-              MyTextField(
-                controller: _newPasswordController,
-                isPassword: true,
-              ),
-              const SizedBox(height: 20),
-              const Padding(
-                padding: EdgeInsets.only(left: 24.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Confirm password",
-                    style: TextStyle(color: AppColors.mainTextColor),
-                  ),
-                ),
-              ),
-              MyTextField(
-                controller: _confirmPasswordController,
-                isPassword: true,
-              ),
-              const SizedBox(height: 20),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  MyElevatedButton(
-                    onPressed: _changePassword,
-                    label: 'Change password',
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: MyElevatedButton(
+              onPressed: _changePassword,
+              label: 'Change password',
+            ),
+          ),
+        ],
       ),
     );
   }
