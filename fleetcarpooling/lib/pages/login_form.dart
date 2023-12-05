@@ -21,6 +21,12 @@ class _LoginFormState extends State<LoginForm> {
   bool isLoading = false;
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
