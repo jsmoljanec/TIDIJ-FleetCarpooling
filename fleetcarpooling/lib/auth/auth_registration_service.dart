@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fleetcarpooling/auth/GenerateUsernameAndPassword.dart';
+import 'package:fleetcarpooling/auth/generate_username_and_password.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:fleetcarpooling/auth/SendEmail.dart';
-import 'UserModel.dart' as model;
+import 'package:fleetcarpooling/auth/send_email.dart';
+import 'user_model.dart' as model;
 
 class AuthRegistrationService {
   final FirebaseAuth _auth = FirebaseAuth.instance;

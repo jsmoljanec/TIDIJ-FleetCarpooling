@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fleetcarpooling/auth/UserModel.dart' as usermod;
+import 'package:fleetcarpooling/auth/user_model.dart' as usermod;
 import 'package:fleetcarpooling/auth/user_repository.dart';
 import 'package:fleetcarpooling/pages/changePasswordForm.dart';
 import 'package:fleetcarpooling/pages/loginForm.dart';
