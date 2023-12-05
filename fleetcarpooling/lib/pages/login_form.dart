@@ -1,11 +1,10 @@
-import 'package:fleetcarpooling/auth/authLogin.dart';
+import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/pages/reset_password_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/pages/navigation.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginForm extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -15,9 +14,6 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     bool logged;
     bool adminIsLogged;
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    final uid = user?.uid;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.backgroundColor,
