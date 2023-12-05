@@ -152,9 +152,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   MyElevatedButton(
                     onPressed: () {
                       FirebaseAuth.instance.signOut();
-                      Navigator.push(
+                      Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => LoginForm()),
+                        (route) => false,
                       );
                     },
                     label: "LOG OUT",
