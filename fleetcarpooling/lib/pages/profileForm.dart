@@ -21,6 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
     email: '',
     username: '',
     role: '',
+    profileImage: '',
   );
 
   final UserRepository userRepository = UserRepository();

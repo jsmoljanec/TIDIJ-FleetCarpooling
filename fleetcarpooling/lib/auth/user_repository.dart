@@ -22,6 +22,7 @@ class UserRepository {
           email: userData?['email'] ?? '',
           username: userData?['username'] ?? '',
           role: userData?['role'] ?? '',
+          profileImage: userData?['profileImage'] ?? '',
         );
       } else {
         throw Exception('User is null');

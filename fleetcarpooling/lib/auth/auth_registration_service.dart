@@ -10,12 +10,14 @@ class AuthRegistrationService {
 
   void writeDataToDatabase(String uid, String userName, String email,
       String firstName, String lastName, String role) {
+    String profileImage = "";
     model.User _user = model.User(
         username: userName,
         email: email,
         firstName: firstName,
         lastName: lastName,
-        role: role);
+        role: role,
+        profileImage: profileImage);
 
     DatabaseReference usersRef = _database.child("Users");
     DatabaseReference newUserRef = usersRef.child(uid);

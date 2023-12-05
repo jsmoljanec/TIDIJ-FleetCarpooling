@@ -4,6 +4,7 @@ class User {
   late String firstName;
   late String lastName;
   late String role;
+  late String profileImage;
 
   User({
     required this.username,
@@ -11,6 +12,7 @@ class User {
     required this.firstName,
     required this.lastName,
     required this.role,
+    required this.profileImage,
   });
 
   factory User.fromMap(Map<String, dynamic> map) {
@@ -19,7 +21,8 @@ class User {
         email: map['email'],
         firstName: map['firstName'],
         lastName: map['lastName'],
-        role: map['role']);
+        role: map['role'],
+        profileImage: map['profileImage']);
   }
 
   Map<String, dynamic> toMap() {
@@ -29,6 +32,7 @@ class User {
       'firstName': firstName,
       'lastName': lastName,
       'role': role,
+      'profileImage': profileImage,
     };
   }
 }
