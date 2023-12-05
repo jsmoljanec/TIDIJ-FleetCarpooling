@@ -80,7 +80,7 @@ class LoginForm extends StatelessWidget {
                       if (adminIsLogged == true) {
                         //implementirati zaslon za admina
                       } else {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const NavigationPage()),

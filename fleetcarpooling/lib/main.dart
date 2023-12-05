@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fleetcarpooling/pages/login_form.dart';
+import 'package:fleetcarpooling/pages/navigation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -17,18 +19,24 @@ Future<void> main() async {
             'https://fleetcarpooling-cd243-default-rtdb.europe-west1.firebasedatabase.app/'),
   );
   await dotenv.load(fileName: ".env");
-  runApp(MyApp());
+
+  User? user = FirebaseAuth.instance.currentUser;
+  Widget initialScreen = user != null ? NavigationPage() : LoginForm();
+
+  runApp(MyApp(initialScreen: initialScreen));
+
 }
 
 class MyApp extends StatelessWidget {
   final TextEditingController myController = TextEditingController();
+    final Widget initialScreen;
 
-  MyApp({super.key});
+  MyApp({required this.initialScreen, super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginForm(),
+      home: initialScreen,
       debugShowCheckedModeBanner: false,
     );
   }
