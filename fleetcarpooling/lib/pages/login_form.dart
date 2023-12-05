@@ -6,14 +6,22 @@ import 'package:fleetcarpooling/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/pages/navigation.dart';
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  bool? logged;
+  bool? adminIsLogged;
+  String? errorMessage;
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
-    bool logged;
-    bool adminIsLogged;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.backgroundColor,
@@ -25,7 +33,7 @@ class LoginForm extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Image.asset(
-                  'assets/images/logo.png',
+                  'assets/images/logo_login.png',
                   height: 180,
                 ),
                 const SizedBox(height: 20.0),
@@ -70,11 +78,23 @@ class LoginForm extends StatelessWidget {
                 ),
                 const SizedBox(height: 3.0),
                 MyElevatedButton(
+                  key: UniqueKey(),
                   onPressed: () async {
+                    setState(() {
+                      logged = null;
+                      errorMessage = null;
+                      isLoading = true;
+                    });
+
                     logged = await AuthLogin().login(
                       email: emailController.text,
                       password: passwordController.text,
                     );
+
+                    setState(() {
+                      isLoading = false;
+                    });
+
                     if (logged == true) {
                       adminIsLogged = await AuthLogin().isAdmin();
                       if (adminIsLogged == true) {
@@ -83,12 +103,19 @@ class LoginForm extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const NavigationPage()),
+                            builder: (context) => const NavigationPage(),
+                          ),
                         );
                       }
+                    } else {
+                      setState(() {
+                        errorMessage =
+                            'Login failed. Please check your credentials.';
+                      });
                     }
                   },
                   label: "Login",
+                  isLoading: isLoading,
                 ),
                 const SizedBox(height: 10.0),
                 TextButton(
@@ -103,6 +130,14 @@ class LoginForm extends StatelessWidget {
                     style: TextStyle(color: AppColors.mainTextColor),
                   ),
                 ),
+                if (logged == false && errorMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Text(
+                      errorMessage!,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
               ],
             ),
           ),

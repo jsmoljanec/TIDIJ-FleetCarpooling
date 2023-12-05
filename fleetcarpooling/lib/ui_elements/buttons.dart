@@ -6,6 +6,7 @@ class MyElevatedButton extends StatelessWidget {
   final String label;
   final Color? backgroundColor;
   final Color? textColor;
+  final bool isLoading;
 
   const MyElevatedButton({
     super.key,
@@ -13,6 +14,7 @@ class MyElevatedButton extends StatelessWidget {
     required this.label,
     this.backgroundColor,
     this.textColor,
+    this.isLoading = false,
   });
 
   @override
@@ -25,7 +27,7 @@ class MyElevatedButton extends StatelessWidget {
             child: SizedBox(
               height: 54,
               child: ElevatedButton(
-                onPressed: onPressed,
+                onPressed: isLoading ? null : onPressed,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: backgroundColor ??
                       my_defined_colors.AppColors.buttonColor,
@@ -33,13 +35,24 @@ class MyElevatedButton extends StatelessWidget {
                     borderRadius: BorderRadius.circular(24.0),
                   ),
                 ),
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    color:
-                        textColor ?? my_defined_colors.AppColors.primaryColor,
-                  ),
-                ),
+                child: isLoading
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            textColor ??
+                                my_defined_colors.AppColors.primaryColor,
+                          ),
+                        ),
+                      )
+                    : Text(
+                        label,
+                        style: TextStyle(
+                          color: textColor ??
+                              my_defined_colors.AppColors.primaryColor,
+                        ),
+                      ),
               ),
             ),
           ),
