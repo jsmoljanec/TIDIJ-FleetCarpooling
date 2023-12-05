@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: Column(
           children: [
-            Container(
+            SizedBox(
                 width: screenWidth,
                 child: Padding(
                   padding: EdgeInsets.only(
@@ -83,10 +83,53 @@ class _HomePageState extends State<HomePage> {
                           alignment: Alignment.centerRight,
                           child: SizedBox(
                             child: Image.asset("icons/profile.png"),
-                          ))
+                          )),
                     ],
                   ),
-                ))
+                )),
+            Container(
+              width: screenWidth,
+              padding: const EdgeInsets.only(left: 24, right: 24),
+              child: SizedBox(
+                height: 43,
+                child: TextField(
+                  // textAlignVertical: TextAlignVertical.center,
+                  style: const TextStyle(
+                      color: AppColors.mainTextColor, fontSize: 16),
+                  // onChanged: ,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
+                    filled: false,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide:
+                          const BorderSide(color: AppColors.mainTextColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: const BorderSide(
+                        color: AppColors.buttonColor,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: const BorderSide(
+                        color: AppColors.buttonColor,
+                      ),
+                    ),
+                    hintText: "Search..",
+                    hintStyle: const TextStyle(
+                      color: AppColors.unavailableColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w100,
+                      letterSpacing: 0.5,
+                    ),
+                    prefixIcon: const Icon(Icons.search),
+                    prefixIconColor: AppColors.mainTextColor,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
