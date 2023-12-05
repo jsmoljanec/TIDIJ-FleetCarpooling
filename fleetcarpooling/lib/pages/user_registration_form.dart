@@ -28,12 +28,17 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
         toolbarHeight: 80,
         elevation: 0,
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: AppColors.mainTextColor),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: CircularIconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         title: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(""),
-            Text(""),
             Text("ADD NEW USER",
                 style:
                     TextStyle(color: AppColors.mainTextColor, fontSize: 25.0)),
@@ -41,11 +46,14 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
         ),
         centerTitle: true,
       ),
-      body: Center(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              const SizedBox(height: 30),
               const Padding(
                   padding: EdgeInsets.only(left: 24.0),
                   child: Align(
@@ -89,42 +97,67 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Select role:",
+                    "Role",
                     style: TextStyle(
                         color: AppColors.mainTextColor, fontSize: 15.0),
                   ),
                 ),
               ),
-              MyRadioButton(
-                title: "Employee",
-                onChanged: (value) {
-                  setState(() {
-                    _selectedUserType = UserType.Employee;
-                  });
-                },
-                value: _selectedUserType == UserType.Employee,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: MyRadioButton(
+                            title: "Employee",
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedUserType = UserType.Employee;
+                              });
+                            },
+                            value: _selectedUserType == UserType.Employee,
+                          ),
+                        ),
+                      ],
+                    ),
+                    flex: 1,
+                  ),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: MyRadioButton(
+                            title: "Administrator",
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedUserType = UserType.Administrator;
+                              });
+                            },
+                            value: _selectedUserType == UserType.Administrator,
+                          ),
+                        ),
+                      ],
+                    ),
+                    flex: 1,
+                  ),
+                ],
               ),
-              MyRadioButton(
-                title: "Administrator",
-                onChanged: (value) {
-                  setState(() {
-                    _selectedUserType = UserType.Administrator;
-                  });
-                },
-                value: _selectedUserType == UserType.Administrator,
+              Padding(
+                padding: const EdgeInsets.only(top: 80, bottom: 10),
+                child: MyElevatedButton(
+                    onPressed: () {
+                      _authRegistrationService.registerUser(
+                          emailController.text,
+                          firstNameController.text,
+                          lastNameController.text,
+                          _selectedUserType.name.toString());
+                      print(
+                          "Selected role: ${_selectedUserType.name.toString()}");
+                    },
+                    label: "ADD NEW USER"),
               ),
-              SizedBox(height: 30.0),
-              MyElevatedButton(
-                  onPressed: () {
-                    _authRegistrationService.registerUser(
-                        emailController.text,
-                        firstNameController.text,
-                        lastNameController.text,
-                        _selectedUserType.name.toString());
-                    print(
-                        "Selected role: ${_selectedUserType.name.toString()}");
-                  },
-                  label: "ADD NEW USER"),
             ],
           ),
         ),
