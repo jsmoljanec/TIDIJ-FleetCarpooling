@@ -135,6 +135,15 @@ class _NotificationPageState extends State<NotificationPage> {
                   }
                 },
               ),
+              Expanded(
+                child: Align(
+                  alignment: const FractionalOffset(0.5, 1.6),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ],
           ),
         ],
