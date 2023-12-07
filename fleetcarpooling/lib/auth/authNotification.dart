@@ -1,13 +1,60 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class AuthNotification {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
-  Function(String) onNotificationReceived = (message) {};
+  final StreamController<List<Map<String, dynamic>>> _reservationStreamController =
+      StreamController<List<Map<String, dynamic>>>.broadcast();
+
+  Stream<List<Map<String, dynamic>>> get reservationStream =>
+      _reservationStreamController.stream;
 
   User? getCurrentUser() {
     return _auth.currentUser;
+  }
+
+  AuthNotification() {
+    _subscribeToReservationChanges();
+  }
+
+  void _subscribeToReservationChanges() {
+    _databaseReference.child('Reservation').onValue.listen((event) {
+      if (event.snapshot.value != null) {
+        Map<dynamic, dynamic>? reservations =
+            event.snapshot.value as Map<dynamic, dynamic>?;
+
+        if (reservations != null) {
+          List<Map<String, dynamic>> notifications = [];
+          DateTime now = DateTime.now();
+
+          reservations.forEach((key, value) {
+            if (value['pickupDate'] != null) {
+              DateTime pickupDate = DateTime.parse(value['pickupDate']);
+              DateTime pickupDateTime = DateTime.parse(
+                  '${value['pickupDate']} ${value['pickupTime']}');
+              if (pickupDate.isAfter(now) &&
+                  pickupDate.difference(now).inDays <= 2) {
+                if (!(pickupDate.isAtSameMomentAs(now) &&
+                    pickupDateTime.isBefore(now))) {
+                  notifications.add({
+                    'key': key,
+                    'VinCar': value['VinCar'],
+                    'pickupDate': value['pickupDate'],
+                    'pickupTime': value['pickupTime'],
+                    'returnDate': value['returnDate'],
+                    'returnTime': value['returnTime'],
+                  });
+                }
+              }
+            }
+          });
+
+          _reservationStreamController.add(notifications);
+        }
+      }
+    });
   }
 
   Future<List<Map<String, dynamic>>> getReservationsNotifications(

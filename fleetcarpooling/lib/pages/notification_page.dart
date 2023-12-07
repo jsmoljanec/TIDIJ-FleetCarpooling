@@ -1,9 +1,9 @@
-import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/auth/authNotification.dart';
+import 'package:fleetcarpooling/ui_elements/colors';
 
 class NotificationPage extends StatefulWidget {
-  const NotificationPage({super.key});
+  const NotificationPage({Key? key}) : super(key: key);
 
   @override
   State<NotificationPage> createState() => _NotificationPageState();
@@ -40,69 +40,49 @@ class _NotificationPageState extends State<NotificationPage> {
     double padding2 = screenHeight * 0.02;
 
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: [
-          Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 27.5),
-                width: screenWidth,
-                decoration: const BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(color: AppColors.buttonColor))),
-                child: Padding(
-                  padding: EdgeInsets.only(top: padding2, bottom: padding2),
-                  child: const Text(
-                    "NOTIFICATIONS",
-                    textAlign: TextAlign.center,
-                    style:
-                        TextStyle(color: AppColors.mainTextColor, fontSize: 24),
-                  ),
-                ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 27.5),
+            width: screenWidth,
+            decoration: const BoxDecoration(
+                border:
+                    Border(bottom: BorderSide(color: AppColors.buttonColor))),
+            child: Padding(
+              padding: EdgeInsets.only(top: padding2, bottom: padding2),
+              child: const Text(
+                "NOTIFICATIONS",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: AppColors.mainTextColor, fontSize: 24),
               ),
-              FutureBuilder<List<Map<String, dynamic>>>(
-                future: () {
-                  var user = authNotification.getCurrentUser();
-                  if (user != null) {
-                    return authNotification
-                        .getReservationsNotifications(user.email!);
-                  } else {
-                    throw Exception("User not found");
-                  }
-                }(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    notificationMessage = 'Error: ${snapshot.error}';
-                    return Text(notificationMessage);
-                  } else {
-                    List<Map<String, dynamic>> notifications =
-                        snapshot.data ?? [];
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder<List<Map<String, dynamic>>>(
+              stream: authNotification.reservationStream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  notificationMessage = 'Error: ${snapshot.error}';
+                  return Text(notificationMessage);
+                } else {
+                  List<Map<String, dynamic>> notifications =
+                      snapshot.data ?? [];
 
-                    notificationMessage =
-                        'Notifications received: ${notifications.length}';
+                  notificationMessage =
+                      'Notifications received: ${notifications.length}';
 
-                    if (notifications.isEmpty) {
-                      return const Padding(
-                        padding:
-                            EdgeInsets.only(left: 28, right: 29, bottom: 12),
-                        child: Card(
-                          margin:
-                              EdgeInsets.only(left: 28, right: 29, bottom: 12),
-                          color: AppColors.backgroundColor,
-                          child: Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Text(
-                              "No notifications",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return Column(
+                  if (notifications.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        "No notifications",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    );
+                  } else {
+                    return Expanded(
+                      child: ListView(
                         children: notifications.map((notification) {
                           String message =
                               "You have a reservation for '${notification['pickupDate']}' from '${notification['pickupTime']}' until '${notification['returnDate']}' '${notification['returnTime']}'.";
@@ -130,21 +110,19 @@ class _NotificationPageState extends State<NotificationPage> {
                             ),
                           );
                         }).toList(),
-                      );
-                    }
+                      ),
+                    );
                   }
-                },
-              ),
-              Expanded(
-                child: Align(
-                  alignment: const FractionalOffset(0.5, 1.6),
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ],
+                }
+              },
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Image.asset(
+              'assets/images/logo.png',
+              fit: BoxFit.cover,
+            ),
           ),
         ],
       ),
@@ -159,7 +137,6 @@ class _NotificationPageState extends State<NotificationPage> {
           await authNotification.getCarDetails(vinCar);
 
       if (carDetails != null) {
-        // Get reservation details
         String pickupDate = reservationDetails['pickupDate'];
         String pickupTime = reservationDetails['pickupTime'];
         String returnDate = reservationDetails['returnDate'];
@@ -198,11 +175,13 @@ class _NotificationPageState extends State<NotificationPage> {
         );
       } else {
         // ignore: use_build_context_synchronously
-        _showErrorMessage(context, 'Car details not found for VinCar: $vinCar');
+        _showErrorMessage(
+            context, 'Car details not found for VinCar: $vinCar');
       }
     } catch (e) {
       // ignore: use_build_context_synchronously
-      _showErrorMessage(context, 'Error showing reservation details: $e');
+      _showErrorMessage(
+          context, 'Error showing reservation details: $e');
     }
   }
 
