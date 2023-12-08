@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:fleetcarpooling/auth/UserModel.dart' as usermod;
+import 'package:fleetcarpooling/auth/user_model.dart' as usermod;
 
 class UserRepository {
   Future<usermod.User> fetchUserData() async {
@@ -22,6 +22,8 @@ class UserRepository {
           email: userData?['email'] ?? '',
           username: userData?['username'] ?? '',
           role: userData?['role'] ?? '',
+          profileImage: userData?['profileImage'] ?? '',
+          statusActivity: userData?['isOnline'] ?? '',
         );
       } else {
         throw Exception('User is null');

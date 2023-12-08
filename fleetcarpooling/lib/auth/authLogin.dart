@@ -4,6 +4,12 @@ import 'package:firebase_database/firebase_database.dart';
 class AuthLogin {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  Future<void> updateOnlineStatus(String uid) async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Users/${uid}");
+
+    await ref.update({"statusActivity": "online"});
+  }
+
   Future<String> findEmail(String username) async {
     final DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
     var query = await databaseReference
@@ -40,6 +46,7 @@ class AuthLogin {
         password: password,
       );
       print("Login successful: ${userCredential.user?.email}");
+      updateOnlineStatus(userCredential.user!.uid);
       return true;
     } catch (e) {
       print("Login failed: $e");
