@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Container(
                 width: screenWidth,
-                padding: const EdgeInsets.only(left: 24, right: 24),
+                padding: const EdgeInsets.only(left: 24, right: 24, bottom: 20),
                 child: SizedBox(
                   height: 43,
                   child: TextField(
@@ -136,12 +136,12 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Container(
-                // decoration: const BoxDecoration(
-                //   image: DecorationImage(
-                //     image: AssetImage('images/logo.png'),
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('images/logo.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
                 child: StreamBuilder<List<Vehicle>>(
                   stream: getVehicles(),
                   builder: (context, snapshot) {
@@ -159,17 +159,58 @@ class _HomePageState extends State<HomePage> {
                       physics: const BouncingScrollPhysics(),
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        return Text(snapshot.data![index].model);
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryColor,
+                              borderRadius: BorderRadius.circular(30.0),
+                              border: Border.all(
+                                color: AppColors.mainTextColor,
+                                width: 0.5,
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 12),
+                                  child: Image.network(
+                                    snapshot.data![index].imageUrl,
+                                    fit: BoxFit.cover,
+                                    height: 122,
+                                    width: 209,
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(24, 20, 24, 20),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        snapshot.data![index].model,
+                                        style: const TextStyle(
+                                            color: AppColors.mainTextColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24),
+                                      ),
+                                      Text(
+                                        snapshot.data![index].transType,
+                                        style: const TextStyle(
+                                            color: AppColors.mainTextColor,
+                                            fontSize: 18),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
                       },
                     );
                   },
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  fit: BoxFit.cover,
                 ),
               ),
             ],
