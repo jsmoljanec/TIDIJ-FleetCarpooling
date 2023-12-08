@@ -166,13 +166,12 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SizedBox(
-                height: 400,
                 width: double.infinity,
                 child: Image.asset(
                   'assets/images/logo.png',
                   fit: BoxFit.cover,
                 ),
-              )
+              ),
             ],
           ),
         ),
