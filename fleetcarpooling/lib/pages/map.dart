@@ -21,6 +21,8 @@ class _MapPageState extends State<MapPage> {
   late String locationInfo = 'Waiting for location data...';
   
   Set<Marker> markers = {};
+  bool showController = false;
+  Marker? tappedMarker;
 
   @override
   void initState() {
@@ -44,6 +46,12 @@ class _MapPageState extends State<MapPage> {
                   target: _center,
                   zoom: 11.0,
                 ),
+                onTap: (_) {
+                  setState(() {
+                    showController = false;
+                    tappedMarker = null;
+                  });
+              },
                 markers: markers,
               ),
               Positioned(
@@ -54,11 +62,12 @@ class _MapPageState extends State<MapPage> {
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
-              VehicleController(
-                onCommand: (command) {
-                  sendCommand(command);
-                },
-              ),
+              if (showController)
+                VehicleController(
+                  onCommand: (command) {
+                    sendCommand(command);
+                  },
+                ),
             ],
           ),
       ),
@@ -95,6 +104,17 @@ class _MapPageState extends State<MapPage> {
                 position: LatLng(latitude, longitude),
                 infoWindow: const InfoWindow(title: 'Vehicle Location'),
                 icon: markerIcon,
+                onTap: () {
+                  setState(() {
+                    if (tappedMarker != null && tappedMarker == markers.first) {
+                      showController = false;
+                      tappedMarker = null;
+                    } else {
+                      showController = true;
+                      tappedMarker = markers.first;
+                    }
+                  });
+                },
               ),
             };
           });
