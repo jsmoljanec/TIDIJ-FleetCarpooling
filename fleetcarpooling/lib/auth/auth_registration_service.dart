@@ -28,15 +28,15 @@ class AuthRegistrationService {
 
   Future<void> registerUser(
       String email, String firstName, String lastName, String role) async {
+    String password = generateRandomPassword();
     try {
       UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: email, password: generateRandomPassword());
+          .createUserWithEmailAndPassword(email: email, password: password);
 
       String userId = userCredential.user!.uid;
       String username = await generateUsername(firstName, lastName);
       writeDataToDatabase(userId, username, email, firstName, lastName, role);
-      sendEmail(email, _auth);
+      sendEmail(email, _auth, username, password);
     } on FirebaseAuthException catch (e) {
       if (e.message == "The email address is badly formatted.")
         throw FirebaseAuthException(code: 'wrong-format');
