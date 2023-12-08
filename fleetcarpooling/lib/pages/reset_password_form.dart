@@ -34,9 +34,17 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
       appBar: AppBar(
         title: const Text("Reset Password"),
         elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: CircularIconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
       ),
       body: Container(
-          color: AppColors.backgroundColor, 
+          color: AppColors.backgroundColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -58,8 +66,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
                 label: "Reset Password",
               ),
             ],
-          )
-        ),
+          )),
     );
   }
 }
