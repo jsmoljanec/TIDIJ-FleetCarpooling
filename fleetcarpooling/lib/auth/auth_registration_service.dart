@@ -17,7 +17,8 @@ class AuthRegistrationService {
         firstName: firstName,
         lastName: lastName,
         role: role,
-        profileImage: profileImage);
+        profileImage: profileImage,
+        statusActivity: "offline");
 
     DatabaseReference usersRef = _database.child("Users");
     DatabaseReference newUserRef = usersRef.child(uid);

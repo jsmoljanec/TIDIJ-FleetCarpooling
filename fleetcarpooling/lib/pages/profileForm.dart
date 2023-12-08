@@ -22,6 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
     username: '',
     role: '',
     profileImage: '',
+    statusActivity: '',
   );
 
   final UserRepository userRepository = UserRepository();

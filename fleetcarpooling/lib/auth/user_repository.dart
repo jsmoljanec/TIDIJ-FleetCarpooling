@@ -23,6 +23,7 @@ class UserRepository {
           username: userData?['username'] ?? '',
           role: userData?['role'] ?? '',
           profileImage: userData?['profileImage'] ?? '',
+          statusActivity: userData?['isOnline'] ?? '',
         );
       } else {
         throw Exception('User is null');

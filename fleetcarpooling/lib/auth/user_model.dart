@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class User {
   late String username;
   late String email;
@@ -5,6 +7,7 @@ class User {
   late String lastName;
   late String role;
   late String profileImage;
+  late String statusActivity;
 
   User({
     required this.username,
@@ -13,6 +16,7 @@ class User {
     required this.lastName,
     required this.role,
     required this.profileImage,
+    required this.statusActivity,
   });
 
   factory User.fromMap(Map<String, dynamic> map) {
@@ -22,7 +26,8 @@ class User {
         firstName: map['firstName'],
         lastName: map['lastName'],
         role: map['role'],
-        profileImage: map['profileImage']);
+        profileImage: map['profileImage'],
+        statusActivity: map['statusActivity']);
   }
 
   Map<String, dynamic> toMap() {
@@ -33,6 +38,7 @@ class User {
       'lastName': lastName,
       'role': role,
       'profileImage': profileImage,
+      'statusActivity': statusActivity,
     };
   }
 }
