@@ -57,4 +57,13 @@ class UserRepository {
       throw e;
     }
   }
+
+  Future<void> passwordReset(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email.trim());
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      throw e;
+    }
+  }
 }

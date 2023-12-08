@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fleetcarpooling/auth/user_repository.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
@@ -12,28 +12,26 @@ class ResetPasswordForm extends StatefulWidget {
 
 class _ResetPasswordFormState extends State<ResetPasswordForm> {
   final TextEditingController emailController = TextEditingController();
-
   @override
   void dispose() {
     emailController.dispose();
     super.dispose();
   }
 
-  Future passwordReset() async {
-    try {
-      await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: emailController.text.trim());
-    } on FirebaseAuthException catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Reset Password"),
-        elevation: 0,
+        backgroundColor: AppColors.backgroundColor,
+        toolbarHeight: 70,
+        centerTitle: true,
+        title: const Padding(
+          padding: EdgeInsets.only(top: 15.0),
+          child: Text(
+            "RESET PASSWORD",
+            style: TextStyle(color: AppColors.mainTextColor),
+          ),
+        ),
         leading: Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: CircularIconButton(
@@ -42,14 +40,21 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
             },
           ),
         ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: Colors.black,
+            height: 0.5,
+          ),
+        ),
       ),
       body: Container(
           color: AppColors.backgroundColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.0),
                 child: Text(
                   "Enter your email to reset your password",
                   textAlign: TextAlign.center,
@@ -57,11 +62,25 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
                 ),
               ),
               const SizedBox(height: 10.0),
-              MyTextField(controller: emailController),
+              MyTextField(
+                controller: emailController,
+                backgroundColor: Colors.white,
+              ),
               const SizedBox(height: 10.0),
               MyElevatedButton(
-                onPressed: () {
-                  passwordReset();
+                onPressed: () async {
+                  try {
+                    await UserRepository().passwordReset(emailController.text);
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Password reset email sent successfully'),
+                    ));
+                  } catch (e) {
+                    print("Error sending password reset email: $e");
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                          'Error sending password reset email. Please try again later.'),
+                    ));
+                  }
                 },
                 label: "Reset Password",
               ),
