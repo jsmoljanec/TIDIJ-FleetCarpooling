@@ -40,19 +40,20 @@ class _LoginFormState extends State<LoginForm> {
               children: <Widget>[
                 Image.asset(
                   'assets/images/logo_login.png',
-                  height: 180,
+                  width: 320,
+                  height: 220,
                 ),
                 const SizedBox(height: 20.0),
                 const Text(
-                  "Fleet Carpooling",
+                  "FLEET CARPOOLING",
                   style:
-                      TextStyle(color: AppColors.mainTextColor, fontSize: 25.0),
+                      TextStyle(color: AppColors.mainTextColor, fontSize: 32.0),
                 ),
                 const SizedBox(height: 20.0),
                 const Text(
                   "SIGN IN TO CONTINUE",
                   style:
-                      TextStyle(color: AppColors.mainTextColor, fontSize: 25.0),
+                      TextStyle(color: AppColors.mainTextColor, fontSize: 24.0),
                 ),
                 const SizedBox(height: 20.0),
                 const Padding(
@@ -66,7 +67,10 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                 ),
                 const SizedBox(height: 3.0),
-                MyTextField(controller: emailController),
+                MyTextField(
+                  controller: emailController,
+                  backgroundColor: Colors.white,
+                ),
                 const SizedBox(height: 15.0),
                 const Padding(
                   padding: EdgeInsets.only(left: 24.0),
@@ -81,6 +85,7 @@ class _LoginFormState extends State<LoginForm> {
                 MyTextField(
                   controller: passwordController,
                   isPassword: true,
+                  backgroundColor: Colors.white,
                 ),
                 const SizedBox(height: 3.0),
                 MyElevatedButton(

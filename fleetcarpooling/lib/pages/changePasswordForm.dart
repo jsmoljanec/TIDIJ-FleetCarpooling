@@ -71,6 +71,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                     MyTextField(
                       controller: _currentPasswordController,
                       isPassword: true,
+                      backgroundColor: Colors.white,
                     ),
                     const SizedBox(height: 20),
                     const Padding(
