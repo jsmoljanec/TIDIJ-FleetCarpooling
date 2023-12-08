@@ -8,6 +8,7 @@ class MyTextField extends StatelessWidget {
   final bool isPassword;
   final bool onlyDigits;
   final TextInputType keyboardType;
+  final Color backgroundColor;
 
   const MyTextField({
     Key? key,
@@ -16,6 +17,7 @@ class MyTextField extends StatelessWidget {
     this.isPassword = false,
     this.onlyDigits = false,
     this.keyboardType = TextInputType.text,
+    this.backgroundColor = Colors.transparent,
   }) : super(key: key);
 
   @override
@@ -29,6 +31,8 @@ class MyTextField extends StatelessWidget {
         inputFormatters:
             onlyDigits ? [FilteringTextInputFormatter.digitsOnly] : [],
         decoration: InputDecoration(
+          filled: true,
+          fillColor: backgroundColor,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(24.0),
             borderSide: const BorderSide(

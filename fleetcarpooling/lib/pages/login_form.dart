@@ -1,23 +1,33 @@
-import 'package:fleetcarpooling/auth/authLogin.dart';
+import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/pages/reset_password_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/pages/navigation.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  bool? logged;
+  bool? adminIsLogged;
+  String? errorMessage;
+  bool isLoading = false;
+
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
-    bool logged;
-    bool adminIsLogged;
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    final uid = user?.uid;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.backgroundColor,
@@ -29,20 +39,21 @@ class LoginForm extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Image.asset(
-                  'assets/images/logo.png',
-                  height: 180,
+                  'assets/images/logo_login.png',
+                  width: 320,
+                  height: 220,
                 ),
                 const SizedBox(height: 20.0),
                 const Text(
-                  "Fleet Carpooling",
+                  "FLEET CARPOOLING",
                   style:
-                      TextStyle(color: AppColors.mainTextColor, fontSize: 25.0),
+                      TextStyle(color: AppColors.mainTextColor, fontSize: 32.0),
                 ),
                 const SizedBox(height: 20.0),
                 const Text(
                   "SIGN IN TO CONTINUE",
                   style:
-                      TextStyle(color: AppColors.mainTextColor, fontSize: 25.0),
+                      TextStyle(color: AppColors.mainTextColor, fontSize: 24.0),
                 ),
                 const SizedBox(height: 20.0),
                 const Padding(
@@ -56,7 +67,10 @@ class LoginForm extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 3.0),
-                MyTextField(controller: emailController),
+                MyTextField(
+                  controller: emailController,
+                  backgroundColor: Colors.white,
+                ),
                 const SizedBox(height: 15.0),
                 const Padding(
                   padding: EdgeInsets.only(left: 24.0),
@@ -71,28 +85,48 @@ class LoginForm extends StatelessWidget {
                 MyTextField(
                   controller: passwordController,
                   isPassword: true,
+                  backgroundColor: Colors.white,
                 ),
                 const SizedBox(height: 3.0),
                 MyElevatedButton(
+                  key: UniqueKey(),
                   onPressed: () async {
+                    setState(() {
+                      logged = null;
+                      errorMessage = null;
+                      isLoading = true;
+                    });
+
                     logged = await AuthLogin().login(
                       email: emailController.text,
                       password: passwordController.text,
                     );
+
+                    setState(() {
+                      isLoading = false;
+                    });
+
                     if (logged == true) {
                       adminIsLogged = await AuthLogin().isAdmin();
                       if (adminIsLogged == true) {
                         //implementirati zaslon za admina
                       } else {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const NavigationPage()),
+                            builder: (context) => const NavigationPage(),
+                          ),
                         );
                       }
+                    } else {
+                      setState(() {
+                        errorMessage =
+                            'Login failed. Please check your credentials.';
+                      });
                     }
                   },
                   label: "Login",
+                  isLoading: isLoading,
                 ),
                 const SizedBox(height: 10.0),
                 TextButton(
@@ -107,6 +141,14 @@ class LoginForm extends StatelessWidget {
                     style: TextStyle(color: AppColors.mainTextColor),
                   ),
                 ),
+                if (logged == false && errorMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Text(
+                      errorMessage!,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
               ],
             ),
           ),
