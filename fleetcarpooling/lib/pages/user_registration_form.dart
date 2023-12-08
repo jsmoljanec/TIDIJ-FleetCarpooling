@@ -105,20 +105,27 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Row(
                       children: [
                         Expanded(
-                          child: MyRadioButton(
-                            title: "Employee",
-                            onChanged: (value) {
+                          child: GestureDetector(
+                            onTap: () {
                               setState(() {
                                 _selectedUserType = UserType.Employee;
                               });
                             },
-                            value: _selectedUserType == UserType.Employee,
+                            child: MyRadioButton(
+                              title: "Employee",
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedUserType = UserType.Employee;
+                                });
+                              },
+                              value: _selectedUserType == UserType.Employee,
+                            ),
                           ),
                         ),
                       ],
@@ -129,14 +136,22 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: MyRadioButton(
-                            title: "Administrator",
-                            onChanged: (value) {
+                          child: GestureDetector(
+                            onTap: () {
                               setState(() {
                                 _selectedUserType = UserType.Administrator;
                               });
                             },
-                            value: _selectedUserType == UserType.Administrator,
+                            child: MyRadioButton(
+                              title: "Admin",
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedUserType = UserType.Administrator;
+                                });
+                              },
+                              value:
+                                  _selectedUserType == UserType.Administrator,
+                            ),
                           ),
                         ),
                       ],
