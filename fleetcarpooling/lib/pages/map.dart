@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:fleetcarpooling/ui_elements/vehicle_controller.dart';
 import 'dart:io';
 
 class MapPage extends StatefulWidget {
@@ -35,14 +36,31 @@ class _MapPageState extends State<MapPage> {
         colorSchemeSeed: Colors.green[700],
       ),
       home: Scaffold(
-        body: GoogleMap(
-          onMapCreated: onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0,
+        body: Stack(
+            children: [
+              GoogleMap(
+                onMapCreated: onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: _center,
+                  zoom: 11.0,
+                ),
+                markers: markers,
+              ),
+              Positioned(
+                top: 16.0,
+                left: 16.0,
+                child: Text(
+                  locationInfo,
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+              VehicleController(
+                onCommand: (command) {
+                  sendCommand(command);
+                },
+              ),
+            ],
           ),
-          markers: markers,
-        ),
       ),
     );
   }
