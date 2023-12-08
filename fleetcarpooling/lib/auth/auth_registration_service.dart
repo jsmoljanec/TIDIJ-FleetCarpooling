@@ -37,11 +37,12 @@ class AuthRegistrationService {
       writeDataToDatabase(userId, username, email, firstName, lastName, role);
       sendEmail(email, _auth);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
+      if (e.message == "The email address is badly formatted.")
+        throw FirebaseAuthException(code: 'wrong-format');
+      else
+        throw FirebaseAuthException(code: 'email-already-in-use');
     } catch (e) {
-      print(e);
+      throw FirebaseAuthException(code: 'user-not-added');
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/auth/auth_registration_service.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
@@ -147,14 +148,37 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
               Padding(
                 padding: const EdgeInsets.only(top: 80, bottom: 10),
                 child: MyElevatedButton(
-                    onPressed: () {
-                      _authRegistrationService.registerUser(
-                          emailController.text,
-                          firstNameController.text,
-                          lastNameController.text,
-                          _selectedUserType.name.toString());
-                      print(
-                          "Selected role: ${_selectedUserType.name.toString()}");
+                    onPressed: () async {
+                      try {
+                        await _authRegistrationService.registerUser(
+                            emailController.text,
+                            firstNameController.text,
+                            lastNameController.text,
+                            _selectedUserType.name.toString());
+                        ScaffoldMessenger.of(context as BuildContext)
+                            .showSnackBar(const SnackBar(
+                          content: Text('User added and message sent'),
+                        ));
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'email-already-in-use') {
+                          ScaffoldMessenger.of(context as BuildContext)
+                              .showSnackBar(const SnackBar(
+                            content:
+                                Text('User not added! Email already in use'),
+                          ));
+                        } else if (e.code == 'wrong-format') {
+                          ScaffoldMessenger.of(context as BuildContext)
+                              .showSnackBar(const SnackBar(
+                            content:
+                                Text('User not added! Wrong email format!'),
+                          ));
+                        } else {
+                          ScaffoldMessenger.of(context as BuildContext)
+                              .showSnackBar(const SnackBar(
+                            content: Text('User not added!'),
+                          ));
+                        }
+                      }
                     },
                     label: "ADD NEW USER"),
               ),
