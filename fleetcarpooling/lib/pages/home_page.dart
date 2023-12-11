@@ -1,5 +1,6 @@
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
+import 'package:fleetcarpooling/pages/profileForm.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
@@ -115,11 +116,21 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Align(
-                            alignment: Alignment.centerRight,
-                            child: SizedBox(
-                              child: Image.asset("assets/icons/profile.png"),
-                            ),
-                          ),
+                              alignment: Alignment.centerRight,
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ProfilePage()),
+                                  );
+                                },
+                                child: SizedBox(
+                                  child:
+                                      Image.asset("assets/icons/profile.png"),
+                                ),
+                              )),
                         ],
                       ),
                     ),
