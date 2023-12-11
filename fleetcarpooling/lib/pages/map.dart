@@ -1,3 +1,4 @@
+import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -23,7 +24,6 @@ class _MapPageState extends State<MapPage> {
   
   Set<Marker> markers = {};
   bool showController = false;
-  Marker? tappedMarker;
   late MarkerId selectedMarkerId;
 
   @override
@@ -53,7 +53,7 @@ class _MapPageState extends State<MapPage> {
                 onTap: (_) {
                   setState(() {
                     showController = false;
-                    tappedMarker = null;
+                    selectedMarkerId = MarkerId('');
                   });
               },
                 markers: markers,
@@ -127,37 +127,39 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
-  void updateMapWithVehicleMarkers(){
-    // print vehicles in console
-    getVehicles().listen((vehicles) {
-      for (var vehicle in vehicles) {
-        if(vehicle.active == true){
-          setState(() {
-            print("evo promjena: ${vehicle.brand}");
-            markers.removeWhere((existingMarker) => existingMarker.markerId == MarkerId(vehicle.vin));
-            markers.add(
-              Marker(
-                markerId: MarkerId(vehicle.vin),
-                position: LatLng(vehicle.latitude, vehicle.longitude),
-                infoWindow: InfoWindow(title: "${vehicle.brand} ${vehicle.model}"),
-                onTap: () {
-                  setState(() {
-                    if (selectedMarkerId.value == vehicle.vin) {
-                      showController = false;
-                      selectedMarkerId = MarkerId('');
-                    } else {
-                      showController = true;
-                      selectedMarkerId = MarkerId(vehicle.vin);
-                    }
-                  });
-                },
-              ),
-            );
-          });
+  Marker createVehicleMarker(Vehicle vehicle) {
+  return Marker(
+    markerId: MarkerId(vehicle.vin),
+    position: LatLng(vehicle.latitude, vehicle.longitude),
+    infoWindow: InfoWindow(title: "${vehicle.brand} ${vehicle.model}"),
+    onTap: () {
+      setState(() {
+        if (selectedMarkerId.value == vehicle.vin) {
+          showController = false;
+          selectedMarkerId = MarkerId('');
+        } else {
+          showController = true;
+          selectedMarkerId = MarkerId(vehicle.vin);
         }
-      }
-    });
-  }
+      });
+    },
+  );
+}
+
+void updateMapWithVehicleMarkers() {
+  getVehicles().listen((vehicles) {
+    final newMarkers = vehicles
+      .where((vehicle) => vehicle.active == true)
+      .map(createVehicleMarker)
+      .toSet();
+
+    if (newMarkers.isNotEmpty) {
+      setState(() {
+        markers = newMarkers;
+      });
+    }
+  });
+}
 
   void sendCommand(String command) {
     _clientSocket.send(command.codeUnits, destinationIPAddress, port);
