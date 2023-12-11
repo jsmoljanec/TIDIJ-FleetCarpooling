@@ -1,3 +1,4 @@
+import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fleetcarpooling/ui_elements/vehicle_controller.dart';
@@ -23,10 +24,13 @@ class _MapPageState extends State<MapPage> {
   Set<Marker> markers = {};
   bool showController = false;
   Marker? tappedMarker;
+  late MarkerId selectedMarkerId;
 
   @override
   void initState() {
     connectUDP();
+    updateMapWithVehicleMarkers();
+    selectedMarkerId = MarkerId('');
     super.initState();
   }
 
@@ -96,27 +100,59 @@ class _MapPageState extends State<MapPage> {
           var longitude = double.parse(match.group(2)!);
           print('$latitude, $longitude');
 
+          // setState(() {
+          //   locationInfo = 'Latitude: $latitude, Longitude: $longitude';
+          //   markers = {
+          //     Marker(
+          //       markerId: const MarkerId('vehicle'),
+          //       position: LatLng(latitude, longitude),
+          //       infoWindow: const InfoWindow(title: 'Vehicle Location'),
+          //       icon: markerIcon,
+          //       onTap: () {
+          //         setState(() {
+          //           if (tappedMarker != null && tappedMarker == markers.first) {
+          //             showController = false;
+          //             tappedMarker = null;
+          //           } else {
+          //             showController = true;
+          //             tappedMarker = markers.first;
+          //           }
+          //         });
+          //       },
+          //     ),
+          //   };
+          // });
+        }
+      }
+    });
+  }
+
+  void updateMapWithVehicleMarkers(){
+    // print vehicles in console
+    getVehicles().listen((vehicles) {
+      for (var vehicle in vehicles) {
+        if(vehicle.active == true){
           setState(() {
-            locationInfo = 'Latitude: $latitude, Longitude: $longitude';
-            markers = {
+            print("evo promjena: ${vehicle.brand}");
+            markers.removeWhere((existingMarker) => existingMarker.markerId == MarkerId(vehicle.vin));
+            markers.add(
               Marker(
-                markerId: const MarkerId('vehicle'),
-                position: LatLng(latitude, longitude),
-                infoWindow: const InfoWindow(title: 'Vehicle Location'),
-                icon: markerIcon,
+                markerId: MarkerId(vehicle.vin),
+                position: LatLng(vehicle.latitude, vehicle.longitude),
+                infoWindow: InfoWindow(title: "${vehicle.brand} ${vehicle.model}"),
                 onTap: () {
                   setState(() {
-                    if (tappedMarker != null && tappedMarker == markers.first) {
+                    if (selectedMarkerId.value == vehicle.vin) {
                       showController = false;
-                      tappedMarker = null;
+                      selectedMarkerId = MarkerId('');
                     } else {
                       showController = true;
-                      tappedMarker = markers.first;
+                      selectedMarkerId = MarkerId(vehicle.vin);
                     }
                   });
                 },
               ),
-            };
+            );
           });
         }
       }

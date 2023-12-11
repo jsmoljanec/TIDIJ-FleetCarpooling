@@ -23,6 +23,8 @@ Stream<List<Vehicle>> getVehicles() {
         year: value['year'],
         active: value['active'],
         imageUrl: value['imageUrl'],
+        latitude: value['latitude'],
+        longitude: value['longitude'],
       ));
     });
 
