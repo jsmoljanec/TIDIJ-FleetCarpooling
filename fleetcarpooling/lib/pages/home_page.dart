@@ -11,7 +11,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final TextEditingController _searchController = TextEditingController();
+  late Stream<List<Vehicle>> _vehiclesStream;
+
   Stream<List<Vehicle>> vehicles = getVehicles();
+  void _handleSearch(String input) {
+    setState(() {
+      _vehiclesStream = getVehicles().map((vehicles) => vehicles
+          .where((vehicle) =>
+              vehicle.model.toLowerCase().contains(input.toLowerCase()))
+          .toList());
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _vehiclesStream = getVehicles();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -113,6 +131,8 @@ class _HomePageState extends State<HomePage> {
                     child: SizedBox(
                       height: 43,
                       child: TextField(
+                        controller: _searchController,
+                        onChanged: _handleSearch,
                         style: const TextStyle(
                             color: AppColors.mainTextColor, fontSize: 16),
                         decoration: InputDecoration(
@@ -150,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   StreamBuilder<List<Vehicle>>(
-                    stream: getVehicles(),
+                    stream: _vehiclesStream,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
