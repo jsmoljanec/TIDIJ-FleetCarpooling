@@ -22,7 +22,9 @@ class VehicleService implements VehicleRepository {
         registration: event.vehicle.registration,
         year: event.vehicle.year,
         active: event.vehicle.active,
-        imageUrl: event.vehicle.imageUrl);
+        imageUrl: event.vehicle.imageUrl,
+        latitude: event.vehicle.latitude,
+        longitude: event.vehicle.longitude);
 
     newCarRef.set(vehicle.toMap());
   }

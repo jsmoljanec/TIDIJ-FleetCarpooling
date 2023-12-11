@@ -144,7 +144,9 @@ class _AddVehicleQRForm extends State<AddVehicleQRForm> {
         registration: registration,
         year: year,
         active: active,
-        imageUrl: imageUrl);
+        imageUrl: imageUrl,
+        latitude: 0,
+        longitude: 0);
 
     BlocProvider.of<VehicleBloc>(context)
         .add(AddVehicleEvent(vehicle: newVehicle));
