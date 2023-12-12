@@ -14,7 +14,7 @@ class ReservationService implements ReservationRepository {
     var query = await databaseReference
         .child("Reservation")
         .orderByChild('VinCar')
-        .equalTo('556XYZ789LMN123OP');
+        .equalTo(vinCar);
 
     DatabaseEvent snapshot = await query.once();
     if (snapshot.snapshot.value != null) {
