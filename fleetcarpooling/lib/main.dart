@@ -24,12 +24,11 @@ Future<void> main() async {
   Widget initialScreen = user != null ? NavigationPage() : LoginForm();
 
   runApp(MyApp(initialScreen: initialScreen));
-
 }
 
 class MyApp extends StatelessWidget {
   final TextEditingController myController = TextEditingController();
-    final Widget initialScreen;
+  final Widget initialScreen;
 
   MyApp({required this.initialScreen, super.key});
 
