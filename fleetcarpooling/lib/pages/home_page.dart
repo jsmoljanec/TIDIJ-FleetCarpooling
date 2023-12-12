@@ -1,6 +1,7 @@
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/pages/profileForm.dart';
+import 'package:fleetcarpooling/pages/selected_vehicle_page.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
   late Stream<List<Vehicle>> _vehiclesStream;
+  String vinCar = "";
 
   Stream<List<Vehicle>> vehicles = getVehicles();
   void _handleSearch(String input) {
@@ -199,13 +201,24 @@ class _HomePageState extends State<HomePage> {
                               child: Text('No vehicles available.'));
                         }
 
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+                            child: InkWell(
+                              onTap: () {
+                                vinCar = snapshot.data![index].vin;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SelectedVehiclePage(
+                                            vin: vinCar,
+                                          )),
+                                );
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: AppColors.primaryColor,
@@ -252,17 +265,17 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                               ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
