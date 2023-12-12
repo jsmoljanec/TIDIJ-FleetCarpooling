@@ -1,6 +1,7 @@
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/pages/profileForm.dart';
+import 'package:fleetcarpooling/pages/selected_vehicle_page.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
   late Stream<List<Vehicle>> _vehiclesStream;
+  String vinCar = "";
 
   Stream<List<Vehicle>> vehicles = getVehicles();
   void _handleSearch(String input) {
@@ -199,50 +201,62 @@ class _HomePageState extends State<HomePage> {
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.primaryColor,
-                                borderRadius: BorderRadius.circular(30.0),
-                                border: Border.all(
-                                  color: AppColors.mainTextColor,
-                                  width: 0.5,
+                            child: InkWell(
+                              onTap: () {
+                                vinCar = snapshot.data![index].vin;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SelectedVehiclePage(
+                                            vin: vinCar,
+                                          )),
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  border: Border.all(
+                                    color: AppColors.mainTextColor,
+                                    width: 0.5,
+                                  ),
                                 ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 12),
-                                    child: Image.network(
-                                      snapshot.data![index].imageUrl,
-                                      fit: BoxFit.cover,
-                                      height: 122,
-                                      width: 209,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 12),
+                                      child: Image.network(
+                                        snapshot.data![index].imageUrl,
+                                        fit: BoxFit.cover,
+                                        height: 122,
+                                        width: 209,
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        24, 20, 24, 20),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          snapshot.data![index].model,
-                                          style: const TextStyle(
-                                              color: AppColors.mainTextColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 24),
-                                        ),
-                                        Text(
-                                          snapshot.data![index].transType,
-                                          style: const TextStyle(
-                                              color: AppColors.mainTextColor,
-                                              fontSize: 18),
-                                        )
-                                      ],
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          24, 20, 24, 20),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            snapshot.data![index].model,
+                                            style: const TextStyle(
+                                                color: AppColors.mainTextColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 24),
+                                          ),
+                                          Text(
+                                            snapshot.data![index].transType,
+                                            style: const TextStyle(
+                                                color: AppColors.mainTextColor,
+                                                fontSize: 18),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           );
