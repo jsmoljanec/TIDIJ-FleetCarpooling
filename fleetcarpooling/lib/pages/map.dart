@@ -14,13 +14,17 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   late RawDatagramSocket _clientSocket;
-  final destinationIPAddress = InternetAddress("10.0.2.2");
+  // final destinationIPAddress = InternetAddress("10.0.2.2");
+  // final destinationIPAddress = InternetAddress("10.24.37.53");
+  final destinationIPAddress = InternetAddress("192.168.174.184");
+
   static const port = 50001;
 
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(46.303117, 16.324079);
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
   late String locationInfo = 'Waiting for location data...';
+  late String actionMessage = 'Waiting for action...';
   
   Set<Marker> markers = {};
   bool showController = false;
@@ -35,48 +39,57 @@ class _MapPageState extends State<MapPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.green[700],
-      ),
-      home: Scaffold(
-        body: Stack(
-            children: [
-              GoogleMap(
-                onMapCreated: onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target: _center,
-                  zoom: 11.0,
-                ),
-                onTap: (_) {
-                  setState(() {
-                    showController = false;
-                    selectedMarkerId = MarkerId('');
-                  });
-              },
-                markers: markers,
+Widget build(BuildContext context) {
+  return MaterialApp(
+    theme: ThemeData(
+      useMaterial3: true,
+      colorSchemeSeed: Colors.green[700],
+    ),
+    home: Scaffold(
+      body: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              color: Colors.white, // Boja pozadine teksta
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                actionMessage,
+                style: const TextStyle(fontSize: 18.0),
               ),
-              Positioned(
-                top: 16.0,
-                left: 16.0,
-                child: Text(
-                  locationInfo,
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ),
-              if (showController)
-                VehicleController(
-                  onCommand: (command) {
-                    sendCommand(command);
-                  },
-                ),
-            ],
+            ),
           ),
+          Positioned.fill(
+            top: MediaQuery.of(context).padding.top + 40.0, // Prilagodite ovu visinu prema potrebi
+            child: GoogleMap(
+              onMapCreated: onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 12.0,
+              ),
+              onTap: (_) {
+                setState(() {
+                  showController = false;
+                  selectedMarkerId = MarkerId('');
+                });
+              },
+              markers: markers,
+            ),
+          ),
+          if (showController)
+            VehicleController(
+              onCommand: (command) {
+                sendCommand(command);
+              },
+            ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -86,7 +99,7 @@ class _MapPageState extends State<MapPage> {
     // print('Connecting to UDP server...');
     _clientSocket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
     // _clientSocket.send('Hello from Flutter'.codeUnits, destinationIPAddress, port);
-    sendCommand("current position");
+    sendCommand("current-position");
 
     _clientSocket.listen((RawSocketEvent event) {
       if (event == RawSocketEvent.read) {
@@ -99,33 +112,29 @@ class _MapPageState extends State<MapPage> {
           var latitude = double.parse(match.group(1)!);
           var longitude = double.parse(match.group(2)!);
           print('$latitude, $longitude');
-
-          // setState(() {
-          //   locationInfo = 'Latitude: $latitude, Longitude: $longitude';
-          //   markers = {
-          //     Marker(
-          //       markerId: const MarkerId('vehicle'),
-          //       position: LatLng(latitude, longitude),
-          //       infoWindow: const InfoWindow(title: 'Vehicle Location'),
-          //       icon: markerIcon,
-          //       onTap: () {
-          //         setState(() {
-          //           if (tappedMarker != null && tappedMarker == markers.first) {
-          //             showController = false;
-          //             tappedMarker = null;
-          //           } else {
-          //             showController = true;
-          //             tappedMarker = markers.first;
-          //           }
-          //         });
-          //       },
-          //     ),
-          //   };
-          // });
         }
       }
     });
   }
+
+  void sendCommand(String command) {
+    _clientSocket.send("$command ${selectedMarkerId.value}".codeUnits, destinationIPAddress, port);
+    setState(() {
+      setActionMessage(command);
+    });
+  }
+
+  void setActionMessage(String command) {
+  setState(() {
+    if (command.startsWith("set-destination")) {
+      actionMessage = 'Destination set.';
+    } else if (command.startsWith("start")) {
+      actionMessage = 'Vehicle $selectedMarkerId started ride.';
+    } else if (command.startsWith("stop")) {
+      actionMessage = 'Vehicle $selectedMarkerId stopped ride.';
+    }
+  });
+}
 
   Marker createVehicleMarker(Vehicle vehicle) {
   return Marker(
@@ -160,10 +169,6 @@ void updateMapWithVehicleMarkers() {
     }
   });
 }
-
-  void sendCommand(String command) {
-    _clientSocket.send(command.codeUnits, destinationIPAddress, port);
-  }
 
   void _dispose() {
     _clientSocket.close();
