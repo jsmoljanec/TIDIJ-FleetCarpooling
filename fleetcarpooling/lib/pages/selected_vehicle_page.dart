@@ -1,4 +1,5 @@
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
+import 'package:fleetcarpooling/ui_elements/calendar.dart';
 import 'package:flutter/material.dart';
 
 class SelectedVehiclePage extends StatefulWidget {
@@ -13,7 +14,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(24.0),
@@ -35,6 +36,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
               ],
             ),
           ),
+          MyCalendar(),
         ],
       ),
     );
