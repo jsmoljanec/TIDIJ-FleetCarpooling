@@ -1,4 +1,5 @@
 import 'package:fleetcarpooling/auth/auth_login.dart';
+import 'package:fleetcarpooling/pages/admin_home_page.dart';
 import 'package:fleetcarpooling/pages/reset_password_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
@@ -109,7 +110,12 @@ class _LoginFormState extends State<LoginForm> {
                     if (logged == true) {
                       adminIsLogged = await AuthLogin().isAdmin();
                       if (adminIsLogged == true) {
-                        //implementirati zaslon za admina
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AdminHomePage(),
+                          ),
+                        );
                       } else {
                         Navigator.pushReplacement(
                           context,
