@@ -1,14 +1,20 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_interface.dart';
 import 'package:fleetcarpooling/Modularity/bloc/vehicle_bloc.dart';
 import 'package:fleetcarpooling/Modularity/pages/add_vehicle_QR_form.dart';
 import 'package:fleetcarpooling/Modularity/pages/add_vehicle_manually_form.dart';
 import 'package:fleetcarpooling/Modularity/service/vehicle_service.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddVehicleForm extends StatelessWidget {
+class AddVehicleSelection extends StatelessWidget {
   final VehicleRepository _vehicleRepository = VehicleService();
+  final List<AddVehicleInteface> _vehicleAdditionForms = [
+    AddVehicleManuallyForm() as AddVehicleInteface,
+    AddVehicleQRForm() as AddVehicleInteface
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,44 +42,31 @@ class AddVehicleForm extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          SizedBox(height: 50),
-          MyElevatedButton(
-              onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => VehicleBloc(_vehicleRepository),
-                      child: AddVehicleManuallyForm(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ..._vehicleAdditionForms.map(
+              (vehicleAdditionForm) => MyElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                        create: (context) => VehicleBloc(_vehicleRepository),
+                        child: vehicleAdditionForm,
+                      ),
                     ),
-                  ),
-                );
-              },
-              label: 'Add vehicle manually'),
-          MyElevatedButton(
-              onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => VehicleBloc(_vehicleRepository),
-                      child: AddVehicleQRForm(),
-                    ),
-                  ),
-                );
-              },
-              label: 'Add vehicle with QR code'),
-          Expanded(
-            child: Image.asset(
+                  );
+                },
+                label: vehicleAdditionForm.getName(),
+              ),
+            ),
+            Image.asset(
               'assets/images/logo.png',
               fit: BoxFit.cover,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

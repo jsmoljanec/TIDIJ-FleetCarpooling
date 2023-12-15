@@ -1,3 +1,4 @@
+import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_interface.dart';
 import 'package:fleetcarpooling/Modularity/bloc/vehicle_bloc.dart';
 import 'package:fleetcarpooling/Modularity/event/vehicle_event.dart';
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
@@ -10,9 +11,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fleetcarpooling/ui_elements/text_field.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
-class AddVehicleManuallyForm extends StatefulWidget {
+class AddVehicleManuallyForm extends AddVehicleInteface {
   @override
-  _AddVehicleManuallyForm createState() => _AddVehicleManuallyForm();
+  State<StatefulWidget> createState() => _AddVehicleManuallyForm();
+
+  @override
+  String getName() {
+    return "Manual addition";
+  }
 }
 
 class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
@@ -555,7 +561,6 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
               SizedBox(height: 40.0),
               MyElevatedButton(
                 onPressed: () {
-                  // Check if VIN satisfies the regex condition
                   bool isVinValid =
                       RegExp(r'^.{17}$').hasMatch(vinController.text);
 
@@ -568,7 +573,6 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                       selectedYear.toString().isEmpty == false &&
                       selectedTransType.toString().isEmpty == false &&
                       imageUrlCar.isEmpty == false) {
-                    // VIN is valid, proceed with adding the new vehicle
                     String vin = vinController.text;
                     String model = modelController.text;
                     String brand = brandController.text;
@@ -595,7 +599,6 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                     BlocProvider.of<VehicleBloc>(context)
                         .add(AddVehicleEvent(vehicle: newVehicle));
                   } else {
-                    // VIN is not valid, show an error or take appropriate action
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
