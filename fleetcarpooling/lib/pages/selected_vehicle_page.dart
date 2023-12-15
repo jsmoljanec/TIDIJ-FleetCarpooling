@@ -37,8 +37,8 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
             ),
           ),
           const MyCalendar(
-            height: 250,
-            width: 250,
+            height: 200,
+            width: 220,
           ),
         ],
       ),
