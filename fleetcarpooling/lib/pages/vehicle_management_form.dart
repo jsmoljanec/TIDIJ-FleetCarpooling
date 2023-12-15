@@ -27,7 +27,7 @@ class VehicleManagementForm extends StatelessWidget {
           children: [
             Text("VEHICLE MANAGEMENT",
                 style:
-                    TextStyle(color: AppColors.mainTextColor, fontSize: 25.0)),
+                    TextStyle(color: AppColors.mainTextColor, fontSize: 22.0)),
           ],
         ),
         centerTitle: true,
