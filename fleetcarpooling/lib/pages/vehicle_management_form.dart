@@ -1,10 +1,10 @@
-import 'package:fleetcarpooling/Modularity/pages/add_vehicle_form.dart';
+import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_selection.dart';
 import 'package:fleetcarpooling/pages/delete_disable_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
-class VehicleManagamentForm extends StatelessWidget {
+class VehicleManagementForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +25,7 @@ class VehicleManagamentForm extends StatelessWidget {
         title: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Vehicle managament",
+            Text("Vehicle management",
                 style:
                     TextStyle(color: AppColors.mainTextColor, fontSize: 25.0)),
           ],
@@ -41,10 +41,11 @@ class VehicleManagamentForm extends StatelessWidget {
               onPressed: () async {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddVehicleForm()),
+                  MaterialPageRoute(
+                      builder: (context) => AddVehicleSelection()),
                 );
               },
-              label: 'Add car manually od with QR'),
+              label: 'Add car manually or with QR'),
           MyElevatedButton(
               onPressed: () async {
                 Navigator.push(

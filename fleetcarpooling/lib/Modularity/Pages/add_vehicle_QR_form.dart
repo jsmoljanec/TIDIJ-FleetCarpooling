@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_interface.dart';
 import 'package:fleetcarpooling/Modularity/bloc/vehicle_bloc.dart';
 import 'package:fleetcarpooling/Modularity/event/vehicle_event.dart';
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
@@ -10,9 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class AddVehicleQRForm extends StatefulWidget {
+class AddVehicleQRForm extends AddVehicleInteface {
   @override
   State<StatefulWidget> createState() => _AddVehicleQRForm();
+
+  @override
+  String getName() {
+    return "Add via QR code";
+  }
 }
 
 class _AddVehicleQRForm extends State<AddVehicleQRForm> {
