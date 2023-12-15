@@ -25,7 +25,7 @@ class VehicleManagementForm extends StatelessWidget {
         title: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Vehicle management",
+            Text("VEHICLE MANAGEMENT",
                 style:
                     TextStyle(color: AppColors.mainTextColor, fontSize: 25.0)),
           ],
