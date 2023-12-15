@@ -26,7 +26,7 @@ class DeleteDisableForm extends StatelessWidget {
         title: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Delete/disable car",
+            Text("List all cars",
                 style:
                     TextStyle(color: AppColors.mainTextColor, fontSize: 25.0)),
           ],
@@ -135,26 +135,49 @@ class CardWidget extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Disable Car'),
-                        content:
-                            Text('Are you sure you want to disable this car?'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('Cancel'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          TextButton(
-                            child: Text('Yes'),
-                            onPressed: () {
-                              disableCar(vehicle.vin, vehicle.active);
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
+                      if (vehicle.active == true) {
+                        return AlertDialog(
+                          title: Text('Disable Car'),
+                          content: Text(
+                              'Are you sure you want to disable this car?'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('Cancel'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text('Yes'),
+                              onPressed: () {
+                                disableCar(vehicle.vin, vehicle.active);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      } else {
+                        return AlertDialog(
+                          title: Text('Disable Car'),
+                          content: Text(
+                              'Are you sure you want to activate this car?'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('Cancel'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text('Yes'),
+                              onPressed: () {
+                                disableCar(vehicle.vin, vehicle.active);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      }
                     },
                   );
                 },
