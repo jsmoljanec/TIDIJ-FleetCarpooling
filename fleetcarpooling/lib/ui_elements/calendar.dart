@@ -4,14 +4,16 @@ import 'package:table_calendar/table_calendar.dart';
 import 'colors' as my_defined_colors;
 
 class MyCalendar extends StatelessWidget {
-  const MyCalendar({super.key});
+  final double height;
+  final double width;
+  const MyCalendar({super.key, required this.height, required this.width});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: SizedBox(
-          width: 300,
-          height: 500,
+          width: width,
+          height: height,
           child: TableCalendar(
             firstDay: DateTime.utc(2010, 10, 16),
             lastDay: DateTime.utc(2030, 3, 14),
@@ -23,13 +25,16 @@ class MyCalendar extends StatelessWidget {
                 disabledTextStyle: TextStyle(
                   color: my_defined_colors.AppColors.unavailableColor,
                 ),
+                selectedTextStyle: TextStyle(
+                  color: my_defined_colors.AppColors.activeDays,
+                ),
                 defaultTextStyle:
                     TextStyle(color: my_defined_colors.AppColors.activeDays)),
             headerStyle: HeaderStyle(
               titleCentered: true,
               formatButtonVisible: false,
               titleTextStyle: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: my_defined_colors.AppColors.mainTextColor),
               leftChevronIcon: const Icon(Icons.arrow_back_ios_new_rounded,
@@ -63,10 +68,10 @@ class MyCalendar extends StatelessWidget {
                     return formattedDay;
                 }
               },
-              weekdayStyle:
-                  TextStyle(color: my_defined_colors.AppColors.activeDays),
-              weekendStyle:
-                  TextStyle(color: my_defined_colors.AppColors.activeDays),
+              weekdayStyle: const TextStyle(
+                  color: my_defined_colors.AppColors.activeDays),
+              weekendStyle: const TextStyle(
+                  color: my_defined_colors.AppColors.activeDays),
             ),
             enabledDayPredicate: (day) {
               return day
