@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_interface.dart';
 import 'package:fleetcarpooling/Modularity/bloc/vehicle_bloc.dart';
 import 'package:fleetcarpooling/Modularity/event/vehicle_event.dart';
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
@@ -8,16 +8,19 @@ import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_mobile_vision/qr_camera.dart';
 
-class AddVehicleQRForm extends StatefulWidget {
+class AddVehicleQRForm extends AddVehicleInteface {
   @override
   State<StatefulWidget> createState() => _AddVehicleQRForm();
+
+  @override
+  String getName() {
+    return "Add via QR code";
+  }
 }
 
 class _AddVehicleQRForm extends State<AddVehicleQRForm> {
-  late final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  late QRViewController controller;
   late String qrText = '';
 
   @override
@@ -92,7 +95,7 @@ class _AddVehicleQRForm extends State<AddVehicleQRForm> {
         title: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("ADD NEW CAR ",
+            Text("ADD NEW CAR WITH QR ",
                 style:
                     TextStyle(color: AppColors.mainTextColor, fontSize: 18.0)),
           ],
@@ -102,9 +105,15 @@ class _AddVehicleQRForm extends State<AddVehicleQRForm> {
       body: Column(
         children: <Widget>[
           Expanded(
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
+            child: QrCamera(
+              fit: BoxFit.cover,
+              onError: (context, error) => Text(
+                error.toString(),
+                style: TextStyle(color: Colors.red),
+              ),
+              qrCodeCallback: (code) {
+                handleScannedData(code!);
+              },
             ),
           ),
         ],
@@ -112,16 +121,8 @@ class _AddVehicleQRForm extends State<AddVehicleQRForm> {
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-
-    controller.scannedDataStream.listen((scanData) {
-      handleScannedData(scanData.code!);
-    });
-  }
-
   void handleScannedData(String scannedData) {
-    print("skenirano");
+    print("Scanned");
     Map<String, dynamic> decodedData = jsonDecode(scannedData);
     String vin = decodedData['vin'];
     String model = decodedData['model'];
@@ -148,11 +149,5 @@ class _AddVehicleQRForm extends State<AddVehicleQRForm> {
 
     BlocProvider.of<VehicleBloc>(context)
         .add(AddVehicleEvent(vehicle: newVehicle));
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
   }
 }

@@ -26,7 +26,7 @@ class DeleteDisableForm extends StatelessWidget {
         title: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Delete/disable car",
+            Text("LIST ALL CARS",
                 style:
                     TextStyle(color: AppColors.mainTextColor, fontSize: 25.0)),
           ],
@@ -86,14 +86,21 @@ class CardWidget extends StatelessWidget {
       child: Card(
         color: Colors.white,
         child: ListTile(
-          leading: Image.network(vehicle.imageUrl),
+          leading: Container(
+            width: 120,
+            height: 80,
+            child: Image.network(
+              vehicle.imageUrl,
+              fit: BoxFit.cover,
+            ),
+          ),
           title: Text(
             '${vehicle.brand} ${vehicle.model}',
             style: TextStyle(color: AppColors.mainTextColor),
           ),
           subtitle: Text(
             '${vehicle.year}',
-            style: TextStyle(color: AppColors.mainTextColor),
+            style: TextStyle(color: AppColors.mainTextColor, fontSize: 12),
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -135,26 +142,49 @@ class CardWidget extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Disable Car'),
-                        content:
-                            Text('Are you sure you want to disable this car?'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('Cancel'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          TextButton(
-                            child: Text('Yes'),
-                            onPressed: () {
-                              disableCar(vehicle.vin, vehicle.active);
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
+                      if (vehicle.active == true) {
+                        return AlertDialog(
+                          title: Text('Disable Car'),
+                          content: Text(
+                              'Are you sure you want to disable this car?'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('Cancel'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text('Yes'),
+                              onPressed: () {
+                                disableCar(vehicle.vin, vehicle.active);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      } else {
+                        return AlertDialog(
+                          title: Text('Disable Car'),
+                          content: Text(
+                              'Are you sure you want to activate this car?'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('Cancel'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text('Yes'),
+                              onPressed: () {
+                                disableCar(vehicle.vin, vehicle.active);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      }
                     },
                   );
                 },
