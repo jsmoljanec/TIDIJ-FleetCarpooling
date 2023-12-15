@@ -26,7 +26,7 @@ class DeleteDisableForm extends StatelessWidget {
         title: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("List all cars",
+            Text("LIST ALL CARS",
                 style:
                     TextStyle(color: AppColors.mainTextColor, fontSize: 25.0)),
           ],
