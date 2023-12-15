@@ -86,14 +86,21 @@ class CardWidget extends StatelessWidget {
       child: Card(
         color: Colors.white,
         child: ListTile(
-          leading: Image.network(vehicle.imageUrl),
+          leading: Container(
+            width: 120,
+            height: 80,
+            child: Image.network(
+              vehicle.imageUrl,
+              fit: BoxFit.cover,
+            ),
+          ),
           title: Text(
             '${vehicle.brand} ${vehicle.model}',
             style: TextStyle(color: AppColors.mainTextColor),
           ),
           subtitle: Text(
             '${vehicle.year}',
-            style: TextStyle(color: AppColors.mainTextColor),
+            style: TextStyle(color: AppColors.mainTextColor, fontSize: 12),
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
