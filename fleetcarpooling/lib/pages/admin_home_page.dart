@@ -1,3 +1,6 @@
+import 'package:fleetcarpooling/pages/delete_disable_form.dart';
+import 'package:fleetcarpooling/pages/user_registration_form.dart';
+import 'package:fleetcarpooling/pages/vehicle_managament_form.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
@@ -31,7 +34,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
           const Spacer(),
           ElevatedButton(
             onPressed: () {
-              // Implement the action for the first button
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserRegistrationForm(),
+                ),
+              );
             },
             style: ButtonStyle(
               backgroundColor:
@@ -52,7 +60,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              // Implement the action for the second button
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => VehicleManagamentForm(),
+                ),
+              );
             },
             style: ButtonStyle(
               backgroundColor:
@@ -73,7 +86,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              // Implement the action for the third button
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DeleteDisableForm(),
+                ),
+              );
             },
             style: ButtonStyle(
               backgroundColor:
@@ -91,9 +109,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
             ),
             child: const Text('LIST ALL CARS'),
           ),
-          const Spacer(),
+          SizedBox(
+            width: double.infinity,
+            child: Image.asset(
+              'assets/images/logo.png',
+              fit: BoxFit.cover,
+            ),
+          ),
         ],
       ),
     );
   }
 }
+
