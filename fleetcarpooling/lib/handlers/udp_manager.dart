@@ -30,7 +30,7 @@ class UDPManager {
   }
 
   void handleUdpMessage(String message) {
-    parseAndHandleLocationMessage(message);
+    (message.toLowerCase()).contains("is currently at") ? parseAndHandleLocationMessage(message) : "";
   }
 
   void parseAndHandleLocationMessage(String message) {
