@@ -1,5 +1,5 @@
 import 'package:fleetcarpooling/Models/terms_model.dart';
-import 'package:fleetcarpooling/ReservationService/registration_service.dart';
+import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/ReservationService/terms_service.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/calendar.dart';
@@ -32,15 +32,19 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
     _loadData();
   }
 
-  Future<void> _loadData() async {
-    List<DateTime> radniSati = _termsService.createWorkHours(
+  void _loadData() {
+    List<DateTime> workHours = _termsService.createWorkHours(
         DateTime.now(), DateTime.now().add(Duration(days: 365)));
-    termini = await _service.getReservation(widget.vin);
-    busyTerms = _termsService.extractReservedTerms(termini);
-    freeTerms =
-        radniSati.where((termin) => !busyTerms.contains(termin)).toList();
 
-    setState(() {});
+    _service.getReservationStream(widget.vin).listen((newTermini) {
+      termini = newTermini;
+      busyTerms = _termsService.extractReservedTerms(termini);
+
+      freeTerms =
+          workHours.where((termin) => !busyTerms.contains(termin)).toList();
+
+      setState(() {});
+    });
   }
 
   @override

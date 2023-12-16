@@ -3,23 +3,22 @@ import 'package:firebase_database/firebase_database.dart';
 import '../Models/terms_model.dart';
 
 abstract class ReservationRepository {
-  Future<List<Terms>> getReservation(String vinCar);
+  Stream<List<Terms>> getReservationStream(String vinCar);
 }
 
 class ReservationService implements ReservationRepository {
   @override
-  Future<List<Terms>> getReservation(String vinCar) async {
-    List<Terms> termini = [];
+  Stream<List<Terms>> getReservationStream(String vinCar) {
     final databaseReference = FirebaseDatabase.instance.ref();
-    var query = await databaseReference
+    var query = databaseReference
         .child("Reservation")
         .orderByChild('VinCar')
         .equalTo(vinCar);
 
-    DatabaseEvent snapshot = await query.once();
-    if (snapshot.snapshot.value != null) {
+    return query.onValue.map((event) {
+      List<Terms> termini = [];
       Map<dynamic, dynamic>? reservations =
-          snapshot.snapshot.value as Map<dynamic, dynamic>?;
+          event.snapshot.value as Map<dynamic, dynamic>?;
       reservations?.forEach((key, value) {
         if (value['pickupDate'] != null) {
           DateTime pickupDate =
@@ -29,7 +28,7 @@ class ReservationService implements ReservationRepository {
           termini.add(Terms(pickupDate, returnDate));
         }
       });
-    }
-    return termini;
+      return termini;
+    });
   }
 }
