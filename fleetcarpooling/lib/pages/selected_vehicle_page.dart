@@ -1,5 +1,6 @@
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/calendar.dart';
+import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 class SelectedVehiclePage extends StatefulWidget {
@@ -13,6 +14,7 @@ class SelectedVehiclePage extends StatefulWidget {
 class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Column(
         children: [
@@ -36,9 +38,28 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
               ],
             ),
           ),
-          const MyCalendar(
-            height: 200,
-            width: 220,
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.primaryColor,
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30)),
+                border: Border.all(
+                  color: AppColors.mainTextColor,
+                ),
+              ),
+              child: Column(
+                children: [
+                  MyCalendar(
+                    height: 200,
+                    width: screenWidth,
+                  ),
+                  MyElevatedButton(
+                      onPressed: () {}, label: "MAKE A RESERVATION")
+                ],
+              ),
+            ),
           ),
         ],
       ),
