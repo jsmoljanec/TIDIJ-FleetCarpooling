@@ -4,7 +4,7 @@ import 'package:fleetcarpooling/handlers/udp_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fleetcarpooling/ui_elements/vehicle_controller.dart';
-import 'dart:io';
+// import 'dart:io';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -14,7 +14,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  late RawDatagramSocket _clientSocket;
+  // late RawDatagramSocket _clientSocket;
   // final destinationIPAddress = InternetAddress("10.0.2.2");
   // final destinationIPAddress = InternetAddress("10.24.37.53");
 
@@ -31,13 +31,22 @@ class _MapPageState extends State<MapPage> {
   // String destinationIPAddress = "192.168.174.184";
   static const port = 50001;
   final UDPManager udpManager = UDPManager("192.168.174.184", port);
+  late BitmapDescriptor icon;
 
   @override
-  void initState() {
+  void initState(){
     udpManager.connectUDP();
     updateMapWithVehicleMarkers();
-    selectedMarkerId = MarkerId('');
+    selectedMarkerId = const MarkerId('');
+    getIcons();
     super.initState();
+  }
+
+  getIcons() async {
+    var icon = await BitmapDescriptor.fromAssetImage(const ImageConfiguration(),"assets/icons/vehicle_icon.png");
+    setState(() {
+      this.icon = icon;
+    });
   }
 
   @override
@@ -50,21 +59,7 @@ class _MapPageState extends State<MapPage> {
       home: Scaffold(
         body: Stack(
           children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                color: Colors.white, // Boja pozadine teksta
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  actionMessage,
-                  style: const TextStyle(fontSize: 18.0),
-                ),
-              ),
-            ),
             Positioned.fill(
-              top: MediaQuery.of(context).padding.top + 40.0, // Prilagodite ovu visinu prema potrebi
               child: GoogleMap(
                 onMapCreated: onMapCreated,
                 initialCameraPosition: CameraPosition(
@@ -74,7 +69,7 @@ class _MapPageState extends State<MapPage> {
                 onTap: (_) {
                   setState(() {
                     showController = false;
-                    selectedMarkerId = MarkerId('');
+                    selectedMarkerId = const MarkerId('');
                   });
                 },
                 markers: markers,
@@ -112,6 +107,7 @@ class _MapPageState extends State<MapPage> {
 
   Marker createVehicleMarker(Vehicle vehicle) {
   return Marker(
+    icon: icon,
     markerId: MarkerId(vehicle.vin),
     position: LatLng(vehicle.latitude, vehicle.longitude),
     infoWindow: InfoWindow(title: "${vehicle.brand} ${vehicle.model}"),
@@ -119,7 +115,7 @@ class _MapPageState extends State<MapPage> {
       setState(() {
         if (selectedMarkerId.value == vehicle.vin) {
           showController = false;
-          selectedMarkerId = MarkerId('');
+          selectedMarkerId = const MarkerId('');
         } else {
           showController = true;
           selectedMarkerId = MarkerId(vehicle.vin);
