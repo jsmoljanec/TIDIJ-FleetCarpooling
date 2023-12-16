@@ -43,7 +43,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   getIcons() async {
-    var icon = await BitmapDescriptor.fromAssetImage(const ImageConfiguration(),"assets/icons/vehicle_icon.png");
+    var icon = await BitmapDescriptor.fromAssetImage(const ImageConfiguration(),"assets/icons/vehicle_icon90.png");
     setState(() {
       this.icon = icon;
     });
