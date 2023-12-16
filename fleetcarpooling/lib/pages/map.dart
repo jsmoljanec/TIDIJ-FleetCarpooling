@@ -4,7 +4,6 @@ import 'package:fleetcarpooling/handlers/udp_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fleetcarpooling/ui_elements/vehicle_controller.dart';
-// import 'dart:io';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -13,28 +12,28 @@ class MapPage extends StatefulWidget {
   State<MapPage> createState() => _MapPageState();
 }
 
-class _MapPageState extends State<MapPage> {
-  // late RawDatagramSocket _clientSocket;
-  // final destinationIPAddress = InternetAddress("10.0.2.2");
-  // final destinationIPAddress = InternetAddress("10.24.37.53");
-
+class _MapPageState extends State<MapPage> {  
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(46.303117, 16.324079);
-  BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
-  late String locationInfo = 'Waiting for location data...';
   late String actionMessage = 'Waiting for action...';
   
   Set<Marker> markers = {};
   bool showController = false;
   late MarkerId selectedMarkerId;
 
-  // String destinationIPAddress = "192.168.174.184";
+  
   static const port = 50001;
-  final UDPManager udpManager = UDPManager("192.168.174.184", port);
+  late UDPManager udpManager;
   late BitmapDescriptor icon;
 
   @override
   void initState(){
+    String deviceIpAddress = const String.fromEnvironment('DEVICE_IP_ADDRESS');
+    if(deviceIpAddress.isNotEmpty){
+      udpManager = UDPManager(deviceIpAddress, port);
+    }else{
+      udpManager = UDPManager("10.0.2.2", port);
+    }
     udpManager.connectUDP();
     updateMapWithVehicleMarkers();
     selectedMarkerId = const MarkerId('');
@@ -80,7 +79,7 @@ class _MapPageState extends State<MapPage> {
                 onCommand: (command) {
                   udpManager.sendCommand(command, selectedMarkerId);
                   setActionMessage(command);
-                },
+                }
               ),
           ],
         ),
