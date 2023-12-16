@@ -1,7 +1,37 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-class ReservationService {
+import '../Models/terms_model.dart';
+
+abstract class ReservationRepository {
+  Stream<List<Terms>> getReservationStream(String vinCar);
+}
+
+class ReservationService implements ReservationRepository {
+  @override
+  Stream<List<Terms>> getReservationStream(String vinCar) {
+    final databaseReference = FirebaseDatabase.instance.ref();
+    var query = databaseReference
+        .child("Reservation")
+        .orderByChild('VinCar')
+        .equalTo(vinCar);
+
+    return query.onValue.map((event) {
+      List<Terms> termini = [];
+      Map<dynamic, dynamic>? reservations =
+          event.snapshot.value as Map<dynamic, dynamic>?;
+      reservations?.forEach((key, value) {
+        if (value['pickupDate'] != null) {
+          DateTime pickupDate =
+              DateTime.parse(value['pickupDate'] + ' ' + value['pickupTime']);
+          DateTime returnDate =
+              DateTime.parse(value['returnDate'] + ' ' + value['returnTime']);
+          termini.add(Terms(pickupDate, returnDate));
+        }
+      });
+      return termini;
+    });
+  }
+
   Future<void> addReservation(String vin, String emailDir, DateTime pickupTime,
       DateTime returnTime) async {
     String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
