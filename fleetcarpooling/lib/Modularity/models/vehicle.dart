@@ -9,6 +9,8 @@ class Vehicle {
   int year;
   bool active;
   String imageUrl;
+  double latitude;
+  double longitude;
 
   Vehicle(
       {required this.vin,
@@ -20,7 +22,9 @@ class Vehicle {
       required this.registration,
       required this.year,
       required this.active,
-      required this.imageUrl});
+      required this.imageUrl,
+      required this.latitude,
+      required this.longitude});
 
   Map<String, dynamic> toMap() {
     return {
@@ -34,6 +38,8 @@ class Vehicle {
       'year': year,
       'active': active,
       'imageUrl': imageUrl,
+      'latitude': latitude,
+      'longitude': longitude
     };
   }
 }
