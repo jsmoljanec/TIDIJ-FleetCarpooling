@@ -153,7 +153,7 @@ class MyCalendar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Available Hours on ${DateFormat.yMMMd().format(selectedDay)}\n\nAvailable Hours: $availableHoursString',
+                    'Available Hours on ${DateFormat.yMMMd().format(selectedDay)}\n\nAvailable hours for pick up: $availableHoursString',
                     style: TextStyle(
                       color: my_defined_colors.AppColors.mainTextColor,
                       fontSize: 18,
