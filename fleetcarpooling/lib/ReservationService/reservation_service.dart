@@ -23,6 +23,7 @@ class ReservationService implements ReservationRepository {
         if (value['pickupDate'] != null) {
           DateTime pickupDate =
               DateTime.parse(value['pickupDate'] + ' ' + value['pickupTime']);
+          pickupDate = pickupDate.subtract(Duration(hours: 1));
           DateTime returnDate =
               DateTime.parse(value['returnDate'] + ' ' + value['returnTime']);
           termini.add(Terms(pickupDate, returnDate));
