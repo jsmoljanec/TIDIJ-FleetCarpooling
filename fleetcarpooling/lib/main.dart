@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fleetcarpooling/auth/auth_login.dart';
+import 'package:fleetcarpooling/pages/admin_home_page.dart';
 import 'package:fleetcarpooling/pages/login_form.dart';
 import 'package:fleetcarpooling/pages/navigation.dart';
+import 'package:fleetcarpooling/ui_elements/colors';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -21,12 +24,13 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
 
   User? user = FirebaseAuth.instance.currentUser;
-  Widget initialScreen = user != null ? NavigationPage() : LoginForm();
+  Widget initialScreen = user != null ? const NavigationPage() : LoginForm();
 
   runApp(MyApp(initialScreen: initialScreen));
 }
 
 class MyApp extends StatelessWidget {
+  final AuthLogin _authLogin = AuthLogin();
   final TextEditingController myController = TextEditingController();
   final Widget initialScreen;
 
@@ -35,7 +39,36 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: initialScreen,
+      home: FutureBuilder<bool>(
+        future: _authLogin.isAdmin(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return const Scaffold(
+                backgroundColor: AppColors
+                    .backgroundColor, 
+                body: Center(
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                    ),
+                  ),
+                ),
+              ); 
+            case ConnectionState.done:
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                return snapshot.data == true ? AdminHomePage() : initialScreen;
+              }
+            default:
+              return const Text('Unexpected ConnectionState');
+          }
+        },
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
