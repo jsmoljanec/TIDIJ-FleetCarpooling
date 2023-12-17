@@ -1,5 +1,6 @@
 import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_selection.dart';
 import 'package:fleetcarpooling/pages/delete_disable_form.dart';
+import 'package:fleetcarpooling/pages/profileForm.dart';
 import 'package:fleetcarpooling/pages/user_registration_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
@@ -24,10 +25,20 @@ class AdminHomePage extends StatelessWidget {
               style: TextStyle(color: AppColors.mainTextColor, fontSize: 30.0),
             ),
             const SizedBox(width: 10),
-            Image.asset(
-              'assets/icons/profile.png',
-              height: 30,
-              width: 30,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfilePage(),
+                  ),
+                );
+              },
+              child: Image.asset(
+                'assets/icons/profile.png',
+                height: 30,
+                width: 30,
+              ),
             ),
           ],
         ),
