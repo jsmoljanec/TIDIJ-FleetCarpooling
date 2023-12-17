@@ -87,7 +87,7 @@ class CardWidget extends StatelessWidget {
         color: Colors.white,
         child: ListTile(
           leading: Container(
-            width: 120,
+            width: 90,
             height: 80,
             child: Image.network(
               vehicle.imageUrl,
