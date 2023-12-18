@@ -9,6 +9,7 @@ class Vehicle {
   int year;
   bool active;
   String imageUrl;
+  int distanceTraveled;
   double latitude;
   double longitude;
 
@@ -23,6 +24,7 @@ class Vehicle {
       required this.year,
       required this.active,
       required this.imageUrl,
+      this.distanceTraveled = 0,
       required this.latitude,
       required this.longitude});
 
@@ -38,6 +40,7 @@ class Vehicle {
       'year': year,
       'active': active,
       'imageUrl': imageUrl,
+      'distanceTraveled': distanceTraveled,
       'latitude': latitude,
       'longitude': longitude
     };

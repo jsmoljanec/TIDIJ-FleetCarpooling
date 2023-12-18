@@ -23,6 +23,7 @@ Stream<List<Vehicle>> getVehicles() {
         year: value['year'],
         active: value['active'],
         imageUrl: value['imageUrl'],
+        distanceTraveled: value['distanceTraveled'],
         latitude: value['latitude'],
         longitude: value['longitude'],
       ));
@@ -56,6 +57,7 @@ Stream<Vehicle?> getVehicle(String vin) {
           year: value['year'],
           active: value['active'],
           imageUrl: value['imageUrl'],
+          distanceTraveled: value['distanceTraveled'],
         );
       }
     });
