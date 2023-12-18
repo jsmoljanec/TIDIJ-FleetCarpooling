@@ -77,7 +77,8 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(32, 28, 8, 20),
+                              padding:
+                                  const EdgeInsets.fromLTRB(32, 28, 32, 20),
                               child: Row(
                                 children: [
                                   SizedBox(
@@ -89,13 +90,30 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                                     padding: const EdgeInsets.only(
                                         left: 8.0, top: 4),
                                     child: Text(
-                                      "${snapshot.data!.fuelConsumption}l/100km",
+                                      "${snapshot.data!.fuelConsumption} l/100km",
                                       style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w700,
                                           color: AppColors.mainTextColor),
                                     ),
                                   ),
+                                  const Spacer(),
+                                  SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: Image.asset(
+                                          "assets/icons/distance.png")),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, top: 4),
+                                    child: Text(
+                                      "${snapshot.data!.distanceTraveled} km",
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.mainTextColor),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
@@ -103,13 +121,13 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                               height: 200,
                               width: MediaQuery.of(context).size.width,
                             ),
+                            MyElevatedButton(
+                              onPressed: () {},
+                              label: "MAKE A RESERVATION",
+                            ),
                           ],
                         ),
                       ),
-                    ),
-                    MyElevatedButton(
-                      onPressed: () {},
-                      label: "MAKE A RESERVATION",
                     ),
                   ],
                 );

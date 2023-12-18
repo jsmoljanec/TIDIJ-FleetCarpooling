@@ -9,6 +9,7 @@ class Vehicle {
   int year;
   bool active;
   String imageUrl;
+  int distanceTraveled;
 
   Vehicle(
       {required this.vin,
@@ -20,7 +21,8 @@ class Vehicle {
       required this.registration,
       required this.year,
       required this.active,
-      required this.imageUrl});
+      required this.imageUrl,
+      this.distanceTraveled = 0});
 
   Map<String, dynamic> toMap() {
     return {
@@ -34,6 +36,7 @@ class Vehicle {
       'year': year,
       'active': active,
       'imageUrl': imageUrl,
+      'distanceTraveled': distanceTraveled,
     };
   }
 }
