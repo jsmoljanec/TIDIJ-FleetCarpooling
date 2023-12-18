@@ -1,6 +1,6 @@
+import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/auth/authNotification.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -46,8 +46,8 @@ class _NotificationPageState extends State<NotificationPage> {
             margin: const EdgeInsets.only(bottom: 27.5),
             width: screenWidth,
             decoration: const BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(color: AppColors.buttonColor))),
+              border: Border(bottom: BorderSide(color: AppColors.buttonColor)),
+            ),
             child: Padding(
               padding: EdgeInsets.only(top: padding2, bottom: padding2),
               child: const Text(
@@ -77,7 +77,8 @@ class _NotificationPageState extends State<NotificationPage> {
                     return const Center(
                       child: Text(
                         "No notifications",
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(
+                            fontSize: 20, color: AppColors.mainTextColor),
                       ),
                     );
                   } else {
@@ -85,7 +86,7 @@ class _NotificationPageState extends State<NotificationPage> {
                       child: ListView(
                         children: notifications.map((notification) {
                           String message =
-                              "You have a reservation for '${notification['pickupDate']}' from '${notification['pickupTime']}' until '${notification['returnDate']}' '${notification['returnTime']}'.";
+                              "You have a reservation for ${notification['pickupDate']} from ${notification['pickupTime']} until ${notification['returnDate']} ${notification['returnTime']}.";
                           return GestureDetector(
                             onTap: () {
                               _showReservationDetailsPopup(
@@ -93,17 +94,23 @@ class _NotificationPageState extends State<NotificationPage> {
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  left: 28, right: 29, bottom: 12),
+                                  left: 13, right: 14, bottom: 12),
                               child: Card(
                                 margin: const EdgeInsets.only(
-                                    left: 28, right: 29, bottom: 12),
+                                    left: 13, right: 14, bottom: 12),
                                 color: AppColors.backgroundColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Text(
                                     message,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(fontSize: 20),
+                                    textAlign: TextAlign.left,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      color: AppColors.mainTextColor,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -146,42 +153,66 @@ class _NotificationPageState extends State<NotificationPage> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
+            double notificationWidth = MediaQuery.of(context).size.width * 1.5;
+
             return AlertDialog(
-              title: const Text('Reservation Details'),
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Model: ${_getStringValue(carDetails['model'])}'),
-                  Text('Brand: ${_getStringValue(carDetails['brand'])}'),
-                  Text('Year: ${_getStringValue(carDetails['year'])}'),
-                  const SizedBox(height: 16),
-                  const Text('Reservation Details:'),
-                  Text('Pickup Date: $pickupDate'),
-                  Text('Pickup Time: $pickupTime'),
-                  Text('Return Date: $returnDate'),
-                  Text('Return Time: $returnTime'),
-                ],
+              backgroundColor: AppColors.backgroundColor,
+              title: const Text(
+                'Reservation details',
+                style: TextStyle(color: AppColors.mainTextColor, fontSize: 20, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              content: SizedBox(
+                width: notificationWidth,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildDetailRow(
+                          'Model:', _getStringValue(carDetails['model'])),
+                      _buildDetailRow(
+                          'Brand:', _getStringValue(carDetails['brand'])),
+                      _buildDetailRow(
+                          'Year:', _getStringValue(carDetails['year'])),
+                      const SizedBox(height: 16),
+                      _buildDetailRow('Pickup Date:', pickupDate),
+                      _buildDetailRow('Pickup Time:', pickupTime),
+                      _buildDetailRow('Return Date:', returnDate),
+                      _buildDetailRow('Return Time:', returnTime),
+                    ],
+                  ),
+                ),
               ),
               actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Close'),
+                Container(
+                  margin: const EdgeInsets.only(right: 8.0, bottom: 8.0),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Close',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: AppColors.mainTextColor),
+                      ),
+                    ),
+                  ),
                 ),
               ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
             );
           },
         );
       } else {
         // ignore: use_build_context_synchronously
-        _showErrorMessage(
-            context, 'Car details not found for VinCar: $vinCar');
+        _showErrorMessage(context, 'Car details not found for VinCar: $vinCar');
       }
     } catch (e) {
       // ignore: use_build_context_synchronously
-      _showErrorMessage(
-          context, 'Error showing reservation details: $e');
+      _showErrorMessage(context, 'Error showing reservation details: $e');
     }
   }
 
@@ -193,5 +224,23 @@ class _NotificationPageState extends State<NotificationPage> {
     } else {
       return '';
     }
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: RichText(
+        text: TextSpan(
+          style: const TextStyle(color: AppColors.mainTextColor, fontSize: 20),
+          children: [
+            TextSpan(
+              text: '$label ',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(text: value),
+          ],
+        ),
+      ),
+    );
   }
 }
