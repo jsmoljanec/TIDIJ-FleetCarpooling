@@ -1,3 +1,6 @@
+import 'package:fleetcarpooling/Models/terms_model.dart';
+import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
+import 'package:fleetcarpooling/ReservationService/terms_service.dart';
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
@@ -25,7 +28,38 @@ class SelectedVehiclePage extends StatefulWidget {
 }
 
 class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
-  final ReservationService _reservationService = ReservationService();
+  late ReservationService _service = ReservationService();
+  final TermsService _termsService = TermsService();
+  late List<Terms> termini;
+  late List<DateTime> busyTerms;
+  late List<DateTime> freeTerms;
+
+  @override
+  void initState() {
+    super.initState();
+    _service = ReservationService();
+    termini = [];
+    busyTerms = [];
+    freeTerms = [];
+
+    _loadData();
+  }
+
+  void _loadData() {
+    List<DateTime> workHours = _termsService.createWorkHours(
+        DateTime.now(), DateTime.now().add(Duration(days: 365)));
+
+    _service.getReservationStream(widget.vin).listen((newTermini) {
+      termini = newTermini;
+      busyTerms = _termsService.extractReservedTerms(termini);
+
+      freeTerms =
+          workHours.where((termin) => !busyTerms.contains(termin)).toList();
+
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,16 +165,15 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                             ),
                             MyCalendar(
                               height: 200,
-                              width: MediaQuery.of(context).size.width,
+                              width: 300,
+                              busyTerms: busyTerms,
+                              freeTerms: freeTerms,
                             ),
                             MyElevatedButton(
                               onPressed: () async {
                                 if (widget.isFree == true) {
-                                  await _reservationService.addReservation(
-                                      widget.vin,
-                                      "iva.plavsic2@gmail.com",
-                                      widget.pickupTime,
-                                      widget.returnTime);
+                                  await _service.addReservation(widget.vin,
+                                      widget.pickupTime, widget.returnTime);
                                 } else {
                                   showDialog(
                                     context: context,
