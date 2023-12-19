@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ReservationScreen extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
       body: Column(
         children: [
           Text(
-            'Selected Date Range: ${selectedDateRange?.start} - ${selectedDateRange?.end}',
+            'Selected Date Range: ${_formatDate(selectedDateRange?.start)} - ${_formatDate(selectedDateRange?.end)}',
           ),
           ElevatedButton(
             onPressed: () async {
@@ -36,7 +37,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
             },
             child: Text('Select Date Range'),
           ),
-          Text('Pickup Time: ${(pickupTime)}'),
+          Text('Pickup Time: ${_formatTime(pickupTime)}'),
           Slider(
             value: pickupTime.hour.toDouble(),
             min: 0,
@@ -48,7 +49,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
               });
             },
           ),
-          Text('Return Time: $returnTime'),
+          Text('Return Time: ${_formatTime(returnTime)}'),
           Slider(
             value: returnTime.hour.toDouble(),
             min: 0,
@@ -60,8 +61,35 @@ class _ReservationScreenState extends State<ReservationScreen> {
               });
             },
           ),
+          ElevatedButton(
+            onPressed: () async {
+              DateTime date = selectedDateRange!.start;
+              TimeOfDay time = pickupTime;
+
+              DateTime date2 = selectedDateRange!.end;
+              TimeOfDay time2 = returnTime;
+
+              DateTime pickupDateTime = DateTime(
+                  date.year, date.month, date.day, time.hour, time.minute);
+
+              DateTime returnDateTime = DateTime(
+                  date2.year, date2.month, date2.day, time2.hour, time2.minute);
+
+              print(pickupDateTime);
+              print(returnDateTime);
+            },
+            child: Text('Check'),
+          ),
         ],
       ),
     );
+  }
+
+  String _formatDate(DateTime? date) {
+    return date != null ? DateFormat('yyyy-MM-dd').format(date) : '';
+  }
+
+  String _formatTime(TimeOfDay timeOfDay) {
+    return '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
   }
 }
