@@ -4,6 +4,7 @@ import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/calendar.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
+import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 
 class SelectedVehiclePage extends StatefulWidget {
   final String vin;
@@ -14,6 +15,7 @@ class SelectedVehiclePage extends StatefulWidget {
 }
 
 class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
+  final ReservationService _reservationService = ReservationService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,7 +124,15 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                               width: MediaQuery.of(context).size.width,
                             ),
                             MyElevatedButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                await _reservationService.addReservation(
+                                    "wwww",
+                                    "iva.plavsic2@gmail.com",
+                                    DateTime.now(),
+                                    DateTime(2023, 12, 31, 23, 59, 59),
+                                    TimeOfDay.now(),
+                                    const TimeOfDay(hour: 12, minute: 30));
+                              },
                               label: "MAKE A RESERVATION",
                             ),
                           ],
