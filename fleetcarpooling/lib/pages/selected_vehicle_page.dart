@@ -8,7 +8,17 @@ import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 
 class SelectedVehiclePage extends StatefulWidget {
   final String vin;
-  const SelectedVehiclePage({Key? key, required this.vin}) : super(key: key);
+  final bool isFree;
+  final DateTime pickupTime;
+  final DateTime returnTime;
+
+  const SelectedVehiclePage(
+      {Key? key,
+      required this.vin,
+      required this.isFree,
+      required this.pickupTime,
+      required this.returnTime})
+      : super(key: key);
 
   @override
   State<SelectedVehiclePage> createState() => _SelectedVehiclePageState();
@@ -125,15 +135,36 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                             ),
                             MyElevatedButton(
                               onPressed: () async {
-                                await _reservationService.addReservation(
-                                    "wwww",
-                                    "iva.plavsic2@gmail.com",
-                                    DateTime.now(),
-                                    DateTime(2023, 12, 31, 23, 59, 59),
-                                    TimeOfDay.now(),
-                                    const TimeOfDay(hour: 12, minute: 30));
+                                if (widget.isFree == true) {
+                                  await _reservationService.addReservation(
+                                      widget.vin,
+                                      "iva.plavsic2@gmail.com",
+                                      widget.pickupTime,
+                                      widget.returnTime);
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text('Notify Me'),
+                                        content: const Text(
+                                            'This vehicle is currently not available. We will notify you when it becomes available.'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
                               },
-                              label: "MAKE A RESERVATION",
+                              label: widget.isFree
+                                  ? "MAKE A RESERVATION"
+                                  : "NOTIFY ME",
                             ),
                           ],
                         ),

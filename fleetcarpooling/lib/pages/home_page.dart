@@ -216,6 +216,11 @@ class _HomePageState extends State<HomePage> {
                                   MaterialPageRoute(
                                       builder: (context) => SelectedVehiclePage(
                                             vin: vinCar,
+                                            isFree: true,
+                                            pickupTime: DateTime.parse(
+                                                '2023-12-28 12:00'),
+                                            returnTime: DateTime.parse(
+                                                '2023-12-28 18:00'),
                                           )),
                                 );
                               },

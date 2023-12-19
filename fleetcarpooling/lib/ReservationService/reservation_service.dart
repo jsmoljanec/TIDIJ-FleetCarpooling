@@ -1,30 +1,35 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 
 class ReservationService {
-  Future<void> addReservation(String vin, String email, DateTime pickupDate,
-      DateTime returnDate, TimeOfDay pickupTime, TimeOfDay returnTime) async {
-    final DatabaseReference database = FirebaseDatabase.instance.reference();
+  Future<void> addReservation(String vin, String emailDir, DateTime pickupTime,
+      DateTime returnTime) async {
+    String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+    final DatabaseReference database = FirebaseDatabase.instance.ref();
     DatabaseReference reservationRef = database.child("Reservation");
-    DatabaseReference newReservationRef = reservationRef.child(vin);
+    DatabaseReference newReservationRef = reservationRef.child(uniqueName);
 
+    String pickupDate =
+        '${pickupTime.year}-${pickupTime.month}-${pickupTime.day}';
+    String returnDate =
+        '${returnTime.year}-${returnTime.month}-${returnTime.day}';
+    String pickupH =
+        '${pickupTime.hour}:${pickupTime.minute}${pickupTime.second}';
+    String returnH =
+        '${returnTime.hour}:${returnTime.minute}${returnTime.second}';
     try {
       await newReservationRef.set({
-        'vin': vin,
-        'email': email,
-        'pickupDate': pickupDate.toIso8601String(),
-        'returnDate': returnDate.toIso8601String(),
-        'pickupTime': _timeOfDayToMap(pickupTime),
-        'returnTime': _timeOfDayToMap(returnTime),
+        'VinCar': vin,
+        'email': FirebaseAuth.instance.currentUser?.email,
+        'pickupDate': pickupDate,
+        'returnDate': returnDate,
+        'pickupTime': pickupH,
+        'returnTime': returnH,
       });
       print('Reservation added successfully!');
     } catch (error) {
       print("Error adding reservation: $error");
       throw error;
     }
-  }
-
-  Map<String, dynamic> _timeOfDayToMap(TimeOfDay timeOfDay) {
-    return {'hour': timeOfDay.hour, 'minute': timeOfDay.minute};
   }
 }
