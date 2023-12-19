@@ -16,16 +16,6 @@ class MyCalendar extends StatelessWidget {
     required this.busyTerms,
     required this.freeTerms,
   }) : super(key: key);
-  final List<DateTime> busyTerms;
-  final List<DateTime> freeTerms;
-
-  const MyCalendar({
-    Key? key,
-    required this.height,
-    required this.width,
-    required this.busyTerms,
-    required this.freeTerms,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
