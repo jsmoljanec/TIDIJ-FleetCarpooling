@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import '../Models/terms_model.dart';
@@ -33,19 +34,22 @@ class ReservationService implements ReservationRepository {
     });
   }
 
-  Future<void> addReservation(String vin, String emailDir, DateTime pickupTime,
-      DateTime returnTime) async {
+  Future<void> addReservation(
+      String vin, DateTime pickupTime, DateTime returnTime) async {
     String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
     final DatabaseReference database = FirebaseDatabase.instance.ref();
     DatabaseReference reservationRef = database.child("Reservation");
     DatabaseReference newReservationRef = reservationRef.child(uniqueName);
-
+    String pickupH;
     String pickupDate =
         '${pickupTime.year}-${pickupTime.month}-${pickupTime.day}';
     String returnDate =
         '${returnTime.year}-${returnTime.month}-${returnTime.day}';
-    String pickupH =
-        '${pickupTime.hour}:${pickupTime.minute}${pickupTime.second}';
+    if (pickupTime.hour >= 10) {
+      pickupH = '${pickupTime.hour}:${pickupTime.minute}${pickupTime.second}';
+    } else {
+      pickupH = '0${pickupTime.hour}:${pickupTime.minute}${pickupTime.second}';
+    }
     String returnH =
         '${returnTime.hour}:${returnTime.minute}${returnTime.second}';
     try {

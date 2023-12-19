@@ -163,19 +163,17 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                                 ],
                               ),
                             ),
-                         MyCalendar(
-            height: 200,
-            width: 300,
-            busyTerms: busyTerms,
-            freeTerms: freeTerms,
+                            MyCalendar(
+                              height: 200,
+                              width: 300,
+                              busyTerms: busyTerms,
+                              freeTerms: freeTerms,
+                            ),
                             MyElevatedButton(
                               onPressed: () async {
                                 if (widget.isFree == true) {
-                                  await _reservationService.addReservation(
-                                      widget.vin,
-                                      "iva.plavsic2@gmail.com",
-                                      widget.pickupTime,
-                                      widget.returnTime);
+                                  await _service.addReservation(widget.vin,
+                                      widget.pickupTime, widget.returnTime);
                                 } else {
                                   showDialog(
                                     context: context,

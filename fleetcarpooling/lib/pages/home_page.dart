@@ -218,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                                             vin: vinCar,
                                             isFree: true,
                                             pickupTime: DateTime.parse(
-                                                '2023-12-28 12:00'),
+                                                '2023-12-28 07:00'),
                                             returnTime: DateTime.parse(
                                                 '2023-12-28 18:00'),
                                           )),
