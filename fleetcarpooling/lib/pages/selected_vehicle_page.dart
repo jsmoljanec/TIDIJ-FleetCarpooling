@@ -170,6 +170,20 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                               busyTerms: busyTerms,
                               freeTerms: freeTerms,
                             ),
+                            InkWell(
+                              onTap: () {
+                                //vodi na zaslon gdje se bira datum i vrijeme
+                              },
+                              child: const Text(
+                                "Change date",
+                                style: TextStyle(
+                                  color: AppColors.mainTextColor,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: AppColors.mainTextColor,
+                                  decorationThickness: 2.0,
+                                ),
+                              ),
+                            ),
                             MyElevatedButton(
                               onPressed: () async {
                                 if (widget.isFree == true) {
