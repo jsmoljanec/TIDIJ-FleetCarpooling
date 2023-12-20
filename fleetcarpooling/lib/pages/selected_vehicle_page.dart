@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/Models/terms_model.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/ReservationService/terms_service.dart';
@@ -7,7 +8,6 @@ import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/calendar.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
-import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 
 class SelectedVehiclePage extends StatefulWidget {
   final String vin;
@@ -47,7 +47,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
 
   void _loadData() {
     List<DateTime> workHours = _termsService.createWorkHours(
-        DateTime.now(), DateTime.now().add(Duration(days: 365)));
+        DateTime.now(), DateTime.now().add(const Duration(days: 365)));
 
     _service.getReservationStream(widget.vin).listen((newTermini) {
       termini = newTermini;
@@ -62,6 +62,8 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
 
   @override
   Widget build(BuildContext context) {
+    String email = FirebaseAuth.instance.currentUser!.email!;
+    print(email);
     return Scaffold(
       body: Column(
         children: [
@@ -173,6 +175,8 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                               onPressed: () async {
                                 if (widget.isFree == true) {
                                   await _service.addReservation(widget.vin,
+                                      widget.pickupTime, widget.returnTime);
+                                  await _service.confirmRegistration(email,
                                       widget.pickupTime, widget.returnTime);
                                 } else {
                                   showDialog(
