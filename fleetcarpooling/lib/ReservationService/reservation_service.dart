@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:fleetcarpooling/auth/send_email.dart';
 
 import '../Models/terms_model.dart';
 
@@ -66,5 +67,10 @@ class ReservationService implements ReservationRepository {
       print("Error adding reservation: $error");
       throw error;
     }
+  }
+
+  Future<void> confirmRegistration(
+      String email, DateTime pickupDate, DateTime returnDate) async {
+    sendReservationEmail(email, pickupDate, returnDate);
   }
 }

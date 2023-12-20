@@ -40,3 +40,28 @@ Future<void> sendLinkForNewPassword(String email, FirebaseAuth auth) async {
     // Handle errors as needed
   }
 }
+
+Future<void> sendReservationEmail(
+    String email, DateTime pickupDate, DateTime returnDate) async {
+  String username = dotenv.env['EMAIL_USERNAME']!;
+  String password = dotenv.env['EMAIL_PASSWORD']!;
+
+  final smtpServer = gmail(username, password);
+
+  final message = Message()
+    ..from = Address(username, 'FleetCarpooling')
+    ..recipients.add(email)
+    ..subject = 'Reservation confirmation'
+    ..html =
+        "<h3>Reservation confirmation</h3>\n<p></p>\n<p>You have reservation on day <b>$pickupDate</b> until <b>$returnDate</b>. Please change your password du or using the password change link that will be active 1 hour after receiving it.</p>";
+
+  try {
+    final sendReport = await send(message, smtpServer);
+    print('Message sent: ' + sendReport.toString());
+  } on MailerException catch (e) {
+    print('Message not sent.');
+    for (var p in e.problems) {
+      print('Problem: ${p.code}: ${p.msg}');
+    }
+  }
+}
