@@ -3,9 +3,7 @@ import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 class ChatTextField extends StatefulWidget {
-  const ChatTextField({super.key, required this.receiverId});
-
-  final String receiverId;
+  const ChatTextField({super.key});
 
   @override
   State<ChatTextField> createState() => _ChatTextFieldState();
@@ -20,31 +18,35 @@ class _ChatTextFieldState extends State<ChatTextField> {
   }
 
   @override
-  Widget build(BuildContext context) => Row(
-        children: [
-          Expanded(
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(top: 20.0),
+        child: Row(
+          children: [
+            Expanded(
               child: CustomTextFormField(
-            controller: controller,
-            hintText: 'Add message',
-          )),
-          const SizedBox(width: 5),
-          CircleAvatar(
-            backgroundColor: AppColors.buttonColor,
-            radius: 20,
-            child: IconButton(
-              icon: const Icon(Icons.send, color: Colors.white),
-              onPressed: () {},
+                controller: controller,
+                hintText: 'Add message',
+              ),
             ),
-          ),
-          const SizedBox(width: 5),
-          CircleAvatar(
-            backgroundColor: AppColors.buttonColor,
-            radius: 20,
-            child: IconButton(
-              icon: const Icon(Icons.camera_alt, color: Colors.white),
-              onPressed: () {},
+            const SizedBox(width: 5),
+            CircleAvatar(
+              backgroundColor: AppColors.buttonColor,
+              radius: 20,
+              child: IconButton(
+                icon: const Icon(Icons.send, color: Colors.white),
+                onPressed: () {},
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 5),
+            CircleAvatar(
+              backgroundColor: AppColors.buttonColor,
+              radius: 20,
+              child: IconButton(
+                icon: const Icon(Icons.camera_alt, color: Colors.white),
+                onPressed: () {},
+              ),
+            ),
+          ],
+        ),
       );
 }
