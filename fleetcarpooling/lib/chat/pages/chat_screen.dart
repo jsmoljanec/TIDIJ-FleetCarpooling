@@ -1,3 +1,4 @@
+import 'package:fleetcarpooling/chat/widgets/chat_messages.dart';
 import 'package:fleetcarpooling/chat/widgets/chat_text_field.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
@@ -49,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          children: [ChatTextField(receiverId: widget.vin)],
+          children: [Expanded(child: ChatMessages()), ChatTextField()],
         ),
       ),
     );
