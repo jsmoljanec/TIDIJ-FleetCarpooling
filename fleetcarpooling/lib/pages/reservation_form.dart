@@ -1,3 +1,4 @@
+import 'package:fleetcarpooling/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -74,6 +75,16 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
               DateTime returnDateTime = DateTime(
                   date2.year, date2.month, date2.day, time2.hour, time2.minute);
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(
+                    pickupTime: pickupDateTime,
+                    returnTime: returnDateTime,
+                  ),
+                ),
+              );
 
               print(pickupDateTime);
               print(returnDateTime);

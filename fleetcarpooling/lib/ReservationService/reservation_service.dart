@@ -3,8 +3,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/auth/send_email.dart';
 import 'package:fleetcarpooling/Models/reservation_model.dart';
 import 'package:flutter/material.dart';
+import 'package:fleetcarpooling/Models/terms_model.dart';
 
-import '../Models/terms_model.dart';
+
 
 abstract class ReservationRepository {
   Stream<List<Terms>> getReservationStream(String vinCar);
@@ -90,7 +91,57 @@ class ReservationService implements ReservationRepository {
     sendReservationEmail(email, datePickup, timePickup, dateReturn, timeReturn);
   }
 
-  Future<bool> checkReservation(String email, String vinCar) async {
+  Future<bool> getReservationforCar(
+      String vin, DateTime pickupTime, DateTime returnTime) async {
+    List<Terms> termini = [];
+
+    final databaseReference = FirebaseDatabase.instance.ref();
+    var query = await databaseReference
+        .child("Reservation")
+        .orderByChild('VinCar')
+        .equalTo(vin);
+
+    DatabaseEvent snapshot = await query.once();
+    if (snapshot.snapshot.value != null) {
+      Map<dynamic, dynamic>? reservations =
+          snapshot.snapshot.value as Map<dynamic, dynamic>?;
+      reservations?.forEach((key, value) {
+        if (value['pickupDate'] != null) {
+          DateTime pickupBusyDate =
+              DateTime.parse(value['pickupDate'] + ' ' + value['pickupTime']);
+          DateTime returnBusyDate =
+              DateTime.parse(value['returnDate'] + ' ' + value['returnTime']);
+          termini.add(Terms(pickupBusyDate, returnBusyDate));
+        }
+      });
+    }
+
+    print(termini);
+
+    if (pickupTime.isBefore(returnTime)) {
+      bool isAvailable = true;
+      for (int i = 0; i < termini.length; i++) {
+        if ((pickupTime.isBefore(termini[i].returnDate) &&
+                returnTime.isAfter(termini[i].pickupDate)) ||
+            (pickupTime.isBefore(termini[i].returnDate) &&
+                returnTime.isAfter(termini[i].pickupDate))) {
+          isAvailable = false;
+          break;
+        }
+      }
+      if (isAvailable) {
+        print('Auto je dostupan!');
+        return true;
+      } else {
+        print('Automobil nije dostupan u odabranom vremenskom razdoblju.');
+        return false;
+      }
+    } else {
+      print('Vrijeme povratka mora biti nakon vremena preuzimanja.');
+      return false;
+    }
+  }
+   Future<bool> checkReservation(String email, String vinCar) async {
     final databaseReference = FirebaseDatabase.instance.ref();
     var query = databaseReference
         .child("Reservation")
@@ -127,4 +178,5 @@ class ReservationService implements ReservationRepository {
 
     return false;
   }
+
 }
