@@ -3,6 +3,7 @@ import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/ReservationService/terms_service.dart';
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
+import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/calendar.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
@@ -94,7 +95,17 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChatScreen(
+                                            vin: snapshot.data!.vin,
+                                            brand: snapshot.data!.brand,
+                                            model: snapshot.data!.model,
+                                          )),
+                                );
+                              },
                               child: Image.asset("assets/icons/chat.png"),
                             ),
                           ),
