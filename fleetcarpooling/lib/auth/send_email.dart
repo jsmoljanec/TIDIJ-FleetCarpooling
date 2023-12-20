@@ -41,8 +41,8 @@ Future<void> sendLinkForNewPassword(String email, FirebaseAuth auth) async {
   }
 }
 
-Future<void> sendReservationEmail(
-    String email, DateTime pickupDate, DateTime returnDate) async {
+Future<void> sendReservationEmail(String email, String datePickup,
+    String timePickup, String dateReturn, String timeReturn) async {
   String username = dotenv.env['EMAIL_USERNAME']!;
   String password = dotenv.env['EMAIL_PASSWORD']!;
 
@@ -53,7 +53,7 @@ Future<void> sendReservationEmail(
     ..recipients.add(email)
     ..subject = 'Reservation confirmation'
     ..html =
-        "<h3>Reservation confirmation</h3>\n<p></p>\n<p>You have reservation on day <b>$pickupDate</b> until <b>$returnDate</b>. Please change your password du or using the password change link that will be active 1 hour after receiving it.</p>";
+        "<h3>Reservation confirmation</h3>\n<p></p>\n<p>You have reservation on day <b>$datePickup</b> at <b>$timePickup</b> until <b>$dateReturn</b> at <b>$timeReturn</b>.";
 
   try {
     final sendReport = await send(message, smtpServer);

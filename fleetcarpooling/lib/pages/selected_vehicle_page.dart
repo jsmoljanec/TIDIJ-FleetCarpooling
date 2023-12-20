@@ -63,7 +63,6 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
   @override
   Widget build(BuildContext context) {
     String email = FirebaseAuth.instance.currentUser!.email!;
-    print(email);
     return Scaffold(
       body: Column(
         children: [
