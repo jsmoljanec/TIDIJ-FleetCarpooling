@@ -25,7 +25,7 @@ class ReservationService implements ReservationRepository {
         if (value['pickupDate'] != null) {
           DateTime pickupDate =
               DateTime.parse(value['pickupDate'] + ' ' + value['pickupTime']);
-          pickupDate = pickupDate.subtract(Duration(hours: 1));
+          pickupDate = pickupDate.subtract(const Duration(hours: 1));
           DateTime returnDate =
               DateTime.parse(value['returnDate'] + ' ' + value['returnTime']);
           termini.add(Terms(pickupDate, returnDate));
@@ -69,8 +69,22 @@ class ReservationService implements ReservationRepository {
     }
   }
 
+  String _formatNumber(int number) {
+    return number.toString().padLeft(2, '0');
+  }
+
   Future<void> confirmRegistration(
       String email, DateTime pickupDate, DateTime returnDate) async {
-    sendReservationEmail(email, pickupDate, returnDate);
+    String datePickup =
+        "${pickupDate.year}-${_formatNumber(pickupDate.month)}-${_formatNumber(pickupDate.day)}";
+    String timePickup =
+        "${_formatNumber(pickupDate.hour)}:${_formatNumber(pickupDate.minute)}";
+
+    String dateReturn =
+        "${returnDate.year}-${_formatNumber(returnDate.month)}-${_formatNumber(returnDate.day)}";
+    String timeReturn =
+        "${_formatNumber(returnDate.hour)}:${_formatNumber(returnDate.minute)}";
+
+    sendReservationEmail(email, datePickup, timePickup, dateReturn, timeReturn);
   }
 }
