@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fleetcarpooling/chat/provider/firebase_provider.dart';
 import 'package:fleetcarpooling/pages/login_form.dart';
 import 'package:fleetcarpooling/pages/navigation.dart';
-
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -33,10 +34,11 @@ class MyApp extends StatelessWidget {
   MyApp({required this.initialScreen, super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: initialScreen,
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+        create: (_) => FirebaseProvider(),
+        child: MaterialApp(
+          home: initialScreen,
+          debugShowCheckedModeBanner: false,
+        ),
+      );
 }
