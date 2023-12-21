@@ -1,7 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:fleetcarpooling/chat/service/firebase_firestore_service.dart';
 import 'package:fleetcarpooling/chat/widgets/custom_text_form_field.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChatTextField extends StatefulWidget {
   const ChatTextField({super.key, required this.receiverId});
@@ -12,6 +15,8 @@ class ChatTextField extends StatefulWidget {
 
 class _ChatTextFieldState extends State<ChatTextField> {
   final controller = TextEditingController();
+
+  Uint8List? file;
   @override
   void dispose() {
     controller.dispose();
@@ -44,7 +49,7 @@ class _ChatTextFieldState extends State<ChatTextField> {
               radius: 20,
               child: IconButton(
                 icon: const Icon(Icons.camera_alt, color: Colors.white),
-                onPressed: () {},
+                onPressed: _sendImage,
               ),
             ),
           ],
@@ -60,5 +65,17 @@ class _ChatTextFieldState extends State<ChatTextField> {
       FocusScope.of(context).unfocus();
     }
     FocusScope.of(context).unfocus();
+  }
+
+  Future<void> _sendImage() async {
+    ImagePicker imagePickerGallery = ImagePicker();
+    XFile? file =
+        await imagePickerGallery.pickImage(source: ImageSource.gallery);
+    if (file != null) {
+      await FirebaseFirestoreService.addImageMessage(
+        receiverId: widget.receiverId,
+        file: file,
+      );
+    }
   }
 }
