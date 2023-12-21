@@ -3,6 +3,7 @@ import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/pages/profileForm.dart';
 import 'package:fleetcarpooling/pages/selected_vehicle_page.dart';
+import 'package:fleetcarpooling/pages/reservation_form.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
@@ -99,53 +100,70 @@ class _HomePageState extends State<HomePage> {
                             alignment: Alignment.center,
                             child: Row(
                               children: [
-                                Column(
-                                  children: [
-                                    Text(
-                                      "${getShortWeekday(widget.pickupTime)}, ${widget.pickupTime.day}.${widget.pickupTime.month}",
-                                      style: const TextStyle(
-                                        color: AppColors.mainTextColor,
-                                        fontSize: 24,
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ReservationScreen(),
                                       ),
-                                    ),
-                                    Text(
-                                      "${widget.pickupTime.hour}:${widget.pickupTime.minute}${widget.pickupTime.minute}",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w300,
-                                          color: AppColors.mainTextColor,
-                                          fontSize: 24),
-                                    )
-                                  ],
-                                ),
-                                const Column(
-                                  children: [
-                                    Icon(
-                                      Icons.arrow_forward,
-                                      color: AppColors.buttonColor,
-                                    ),
-                                    Text(
-                                      " ",
-                                      style: TextStyle(fontSize: 24),
-                                    )
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Text(
-                                      "${getShortWeekday(widget.returnTime)}, ${widget.returnTime.day}.${widget.returnTime.month}",
-                                      style: const TextStyle(
-                                        color: AppColors.mainTextColor,
-                                        fontSize: 24,
+                                    );
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Text(
+                                            "${getShortWeekday(widget.pickupTime)}, ${widget.pickupTime.day}.${widget.pickupTime.month}",
+                                            style: const TextStyle(
+                                              color: AppColors.mainTextColor,
+                                              fontSize: 24,
+                                            ),
+                                          ),
+                                          Text(
+                                            "${widget.pickupTime.hour}:${widget.pickupTime.minute}${widget.pickupTime.minute}",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: AppColors.mainTextColor,
+                                              fontSize: 24,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    Text(
-                                      "${widget.returnTime.hour}:${widget.returnTime.minute}${widget.returnTime.minute}",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w300,
-                                          color: AppColors.mainTextColor,
-                                          fontSize: 24),
-                                    )
-                                  ],
+                                      const Column(
+                                        children: [
+                                          Icon(
+                                            Icons.arrow_forward,
+                                            color: AppColors.buttonColor,
+                                          ),
+                                          Text(
+                                            " ",
+                                            style: TextStyle(fontSize: 24),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            "${getShortWeekday(widget.returnTime)}, ${widget.returnTime.day}.${widget.returnTime.month}",
+                                            style: const TextStyle(
+                                              color: AppColors.mainTextColor,
+                                              fontSize: 24,
+                                            ),
+                                          ),
+                                          Text(
+                                            "${widget.returnTime.hour}:${widget.returnTime.minute}${widget.returnTime.minute}",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: AppColors.mainTextColor,
+                                              fontSize: 24,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
