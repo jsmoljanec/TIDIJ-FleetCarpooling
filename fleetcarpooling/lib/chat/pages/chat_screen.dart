@@ -50,7 +50,12 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          children: [Expanded(child: ChatMessages()), ChatTextField()],
+          children: [
+            Expanded(child: ChatMessages()),
+            ChatTextField(
+              receiverId: widget.vin,
+            )
+          ],
         ),
       ),
     );
