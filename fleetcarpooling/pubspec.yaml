@@ -52,6 +52,7 @@ dependencies:
   permission_handler: ^10.2.0
   fluttertoast: ^8.0.8
   timeago: ^3.6.0
+  cloud_firestore: ^4.13.6
 
 dev_dependencies:
   flutter_test:
