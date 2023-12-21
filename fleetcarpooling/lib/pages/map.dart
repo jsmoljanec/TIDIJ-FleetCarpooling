@@ -12,28 +12,43 @@ class MapPage extends StatefulWidget {
   State<MapPage> createState() => _MapPageState();
 }
 
-class _MapPageState extends State<MapPage> {  
+class _MapPageState extends State<MapPage> {
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(46.303117, 16.324079);
   late String actionMessage = 'Waiting for action...';
-  
+
   Set<Marker> markers = {};
   bool showController = false;
   late MarkerId selectedMarkerId;
 
-  
   static const port = 50001;
   late UDPManager udpManager;
   late BitmapDescriptor icon;
 
+  late String flagContent;
+  late String vehicleIdContent;
+
   @override
-  void initState(){
+  void initState() {
     String deviceIpAddress = const String.fromEnvironment('DEVICE_IP_ADDRESS');
-    if(deviceIpAddress.isNotEmpty){
-      udpManager = UDPManager(deviceIpAddress, port);
-    }else{
-      udpManager = UDPManager("10.0.2.2", port);
-    }
+    String finalIpAddress =
+        deviceIpAddress.isNotEmpty ? deviceIpAddress : "10.0.2.2";
+    udpManager = UDPManager(
+      finalIpAddress,
+      port,
+      udpMessageHandler: (message) {
+        RegExp bracketsRegExp = RegExp(r'\[([^\]]*)\]');
+        Iterable<RegExpMatch> matches = bracketsRegExp.allMatches(message);
+
+        if (matches.isNotEmpty) {
+          flagContent = matches.elementAt(0).group(1) ?? '';
+          vehicleIdContent =
+              matches.length > 1 ? matches.elementAt(1).group(1) ?? '' : '';
+        } else {
+          print('Uglate zagrade nisu pronađene u tekstu.');
+        }
+      },
+    );
     udpManager.connectUDP();
     updateMapWithVehicleMarkers();
     selectedMarkerId = const MarkerId('');
@@ -42,7 +57,8 @@ class _MapPageState extends State<MapPage> {
   }
 
   getIcons() async {
-    var icon = await BitmapDescriptor.fromAssetImage(const ImageConfiguration(),"assets/icons/vehicle_icon90.png");
+    var icon = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(), "assets/icons/vehicle_icon90.png");
     setState(() {
       this.icon = icon;
     });
@@ -75,61 +91,45 @@ class _MapPageState extends State<MapPage> {
               ),
             ),
             if (showController)
-              VehicleController(
-                onCommand: (command) {
-                  udpManager.sendCommand(command, selectedMarkerId);
-                  setActionMessage(command);
-                }
-              ),
+              VehicleController(onCommand: (command) {
+                udpManager.sendCommand(command, selectedMarkerId);
+              }),
           ],
         ),
       ),
     );
-  } 
-
+  }
 
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
 
-  void setActionMessage(String command) {
-    setState(() {
-      if (command.startsWith("set-destination")) {
-        actionMessage = 'Destination set.';
-      } else if (command.startsWith("start")) {
-        actionMessage = 'Vehicle $selectedMarkerId started ride.';
-      } else if (command.startsWith("stop")) {
-        actionMessage = 'Vehicle $selectedMarkerId stopped ride.';
-      }
-    });
-  }
-
   Marker createVehicleMarker(Vehicle vehicle) {
-  return Marker(
-    icon: icon,
-    markerId: MarkerId(vehicle.vin),
-    position: LatLng(vehicle.latitude, vehicle.longitude),
-    infoWindow: InfoWindow(title: "${vehicle.brand} ${vehicle.model}"),
-    onTap: () {
-      setState(() {
-        if (selectedMarkerId.value == vehicle.vin) {
-          showController = false;
-          selectedMarkerId = const MarkerId('');
-        } else {
-          showController = true;
-          selectedMarkerId = MarkerId(vehicle.vin);
-        }
-      });
-    },
-  );
-}
+    return Marker(
+      icon: icon,
+      markerId: MarkerId(vehicle.vin),
+      position: LatLng(vehicle.latitude, vehicle.longitude),
+      infoWindow: InfoWindow(title: "${vehicle.brand} ${vehicle.model}"),
+      onTap: () {
+        setState(() {
+          if (selectedMarkerId.value == vehicle.vin) {
+            showController = false;
+            selectedMarkerId = const MarkerId('');
+          } else {
+            showController = true;
+            selectedMarkerId = MarkerId(vehicle.vin);
+          }
+        });
+      },
+    );
+  }
 
   void updateMapWithVehicleMarkers() {
     getVehicles().listen((vehicles) {
       final newMarkers = vehicles
-        .where((vehicle) => vehicle.active == true)
-        .map(createVehicleMarker)
-        .toSet();
+          .where((vehicle) => vehicle.active == true)
+          .map(createVehicleMarker)
+          .toSet();
 
       if (newMarkers.isNotEmpty) {
         setState(() {

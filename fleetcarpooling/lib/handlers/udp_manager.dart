@@ -8,8 +8,9 @@ class UDPManager {
   late RawDatagramSocket _clientSocket;
   late InternetAddress destinationIPAddress;
   late int port;
+  late UdpMessageHandler udpMessageHandler;
 
-  UDPManager(String destinationIP, givenPort) {
+  UDPManager(String destinationIP, givenPort, {required this.udpMessageHandler}) {
     destinationIPAddress = InternetAddress(destinationIP);
     port = givenPort;
   }
@@ -31,6 +32,7 @@ class UDPManager {
 
   void handleUdpMessage(String message) {
     (message.toLowerCase()).contains("is currently at") ? parseAndHandleLocationMessage(message) : "";
+    udpMessageHandler(message);
   }
 
   void parseAndHandleLocationMessage(String message) {
