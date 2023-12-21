@@ -5,12 +5,13 @@ class VehicleController extends StatelessWidget {
   final Function(String) onCommand;
   final selectedMarkerId;
 
-  const VehicleController({super.key, required this.onCommand, this.selectedMarkerId});
+  const VehicleController(
+      {super.key, required this.onCommand, this.selectedMarkerId});
 
   @override
   Widget build(BuildContext context) {
     TextEditingController locationController = TextEditingController();
-    
+
     return Positioned(
       bottom: 10.0,
       left: 10.0,
@@ -30,15 +31,17 @@ class VehicleController extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    width: 150.0,
+                    width: 140.0,
                     margin: const EdgeInsets.only(right: 8.0),
                     child: TextField(
                       controller: locationController,
                       decoration: const InputDecoration(
                         hintText: 'Enter destination',
-                        hintStyle: TextStyle(color: my_defined_colors.AppColors.buttonColor),
+                        hintStyle: TextStyle(
+                            color: my_defined_colors.AppColors.buttonColor),
                         enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: my_defined_colors.AppColors.buttonColor),
+                          borderSide: BorderSide(
+                              color: my_defined_colors.AppColors.buttonColor),
                         ),
                       ),
                     ),
@@ -96,6 +99,17 @@ class VehicleController extends StatelessWidget {
                       color: my_defined_colors.AppColors.primaryColor,
                     ),
                   ),
+                  const SizedBox(width: 8.0),
+                  ElevatedButton(
+                    onPressed: () => onCommand("lock"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: my_defined_colors.AppColors.buttonColor,
+                    ),
+                    child: const Icon(
+                      Icons.lock,
+                      color: my_defined_colors.AppColors.primaryColor,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -103,7 +117,5 @@ class VehicleController extends StatelessWidget {
         ),
       ),
     );
-
   }
 }
-
