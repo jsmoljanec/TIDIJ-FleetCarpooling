@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+import 'package:fleetcarpooling/chat/provider/firebase_provider.dart';
 import 'package:fleetcarpooling/chat/widgets/chat_messages.dart';
 import 'package:fleetcarpooling/chat/widgets/chat_text_field.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
@@ -5,17 +7,24 @@ import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
+  const ChatScreen(
+      {super.key, required this.vin, required this.brand, required this.model});
   final String vin;
   final String brand;
   final String model;
-  const ChatScreen(
-      {super.key, required this.vin, required this.brand, required this.model});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  @override
+  void initState() {
+    Provider.of<FirebaseProvider>(context, listen: false)
+        .getMessages(widget.vin);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Expanded(child: ChatMessages()),
+            ChatMessages(receiverId: widget.vin),
             ChatTextField(
               receiverId: widget.vin,
             )
