@@ -13,6 +13,7 @@ class VehicleService implements VehicleRepository {
     DatabaseReference carsRef = databaseReference.child("Vehicles");
     DatabaseReference newCarRef = carsRef.child(event.vehicle.vin);
     Vehicle vehicle = Vehicle(
+    Vehicle vehicle = Vehicle(
         vin: event.vehicle.vin,
         model: event.vehicle.model,
         brand: event.vehicle.brand,
