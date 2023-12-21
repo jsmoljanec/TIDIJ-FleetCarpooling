@@ -23,12 +23,47 @@ Stream<List<Vehicle>> getVehicles() {
         year: value['year'],
         active: value['active'],
         imageUrl: value['imageUrl'],
+        distanceTraveled: value['distanceTraveled'],
         latitude: value['latitude'],
         longitude: value['longitude'],
       ));
     });
 
     controller.add(allVehicles);
+  });
+
+  return controller.stream;
+}
+
+Stream<Vehicle?> getVehicle(String vin) {
+  DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles");
+  final StreamController<Vehicle?> controller = StreamController<Vehicle?>();
+
+  ref.onValue.listen((DatabaseEvent event) {
+    Map<dynamic, dynamic>? values =
+        event.snapshot.value as Map<dynamic, dynamic>?;
+    Vehicle? vehicle;
+
+    values?.forEach((key, value) {
+      if (value['vin'] == vin) {
+        vehicle = Vehicle(
+            vin: value['vin'],
+            model: value['model'],
+            brand: value['brand'],
+            capacity: value['capacity'],
+            transType: value['transtype'],
+            fuelConsumption: value['fuelConsumption'],
+            registration: value['registration'],
+            year: value['year'],
+            active: value['active'],
+            imageUrl: value['imageUrl'],
+            latitude: value['latitude'],
+            longitude: value['longitude'],
+            distanceTraveled: value['distanceTraveled']);
+      }
+    });
+
+    controller.add(vehicle);
   });
 
   return controller.stream;

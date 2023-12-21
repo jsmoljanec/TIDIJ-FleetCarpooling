@@ -7,12 +7,13 @@ abstract class VehicleRepository {
 }
 
 class VehicleService implements VehicleRepository {
+  @override
   Future<void> addVehicle(AddVehicleEvent event) async {
     final databaseReference = FirebaseDatabase.instance.ref();
 
     DatabaseReference carsRef = databaseReference.child("Vehicles");
     DatabaseReference newCarRef = carsRef.child(event.vehicle.vin);
-    Vehicle vehicle = new Vehicle(
+    Vehicle vehicle = Vehicle(
         vin: event.vehicle.vin,
         model: event.vehicle.model,
         brand: event.vehicle.brand,
@@ -23,6 +24,7 @@ class VehicleService implements VehicleRepository {
         year: event.vehicle.year,
         active: event.vehicle.active,
         imageUrl: event.vehicle.imageUrl,
+        distanceTraveled: event.vehicle.distanceTraveled,
         latitude: event.vehicle.latitude,
         longitude: event.vehicle.longitude);
 
