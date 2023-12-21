@@ -1,4 +1,5 @@
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
+import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/pages/profileForm.dart';
 import 'package:fleetcarpooling/pages/selected_vehicle_page.dart';
@@ -6,7 +7,14 @@ import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final DateTime pickupTime;
+  final DateTime returnTime;
+
+  const HomePage({
+    Key? key,
+    required this.pickupTime,
+    required this.returnTime,
+  }) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -15,9 +23,29 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
   late Stream<List<Vehicle>> _vehiclesStream;
-  String vinCar = "";
+    String vinCar = "";
 
-  Stream<List<Vehicle>> vehicles = getVehicles();
+  String getShortWeekday(DateTime dateTime) {
+    switch (dateTime.weekday) {
+      case DateTime.monday:
+        return 'Mon';
+      case DateTime.tuesday:
+        return 'Tue';
+      case DateTime.wednesday:
+        return 'Wed';
+      case DateTime.thursday:
+        return 'Thu';
+      case DateTime.friday:
+        return 'Fri';
+      case DateTime.saturday:
+        return 'Sat';
+      case DateTime.sunday:
+        return 'Sun';
+      default:
+        return '';
+    }
+  }
+
   void _handleSearch(String input) {
     setState(() {
       _vehiclesStream = getVehicles().map((vehicles) => vehicles
@@ -38,6 +66,7 @@ class _HomePageState extends State<HomePage> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double padding2 = screenHeight * 0.02;
+
     return Scaffold(
         body: Padding(
       padding: const EdgeInsets.only(top: 25.0),
@@ -66,28 +95,29 @@ class _HomePageState extends State<HomePage> {
                       child: Stack(
                         fit: StackFit.loose,
                         children: [
-                          const Align(
+                          Align(
                             alignment: Alignment.center,
                             child: Row(
                               children: [
                                 Column(
                                   children: [
                                     Text(
-                                      "Thu, 26 Oct",
-                                      style: TextStyle(
-                                          color: AppColors.mainTextColor,
-                                          fontSize: 24),
+                                      "${getShortWeekday(widget.pickupTime)}, ${widget.pickupTime.day}.${widget.pickupTime.month}",
+                                      style: const TextStyle(
+                                        color: AppColors.mainTextColor,
+                                        fontSize: 24,
+                                      ),
                                     ),
                                     Text(
-                                      "11:00",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w100,
+                                      "${widget.pickupTime.hour}:${widget.pickupTime.minute}${widget.pickupTime.minute}",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w300,
                                           color: AppColors.mainTextColor,
                                           fontSize: 24),
                                     )
                                   ],
                                 ),
-                                Column(
+                                const Column(
                                   children: [
                                     Icon(
                                       Icons.arrow_forward,
@@ -102,15 +132,16 @@ class _HomePageState extends State<HomePage> {
                                 Column(
                                   children: [
                                     Text(
-                                      "Fri, 27 Oct",
-                                      style: TextStyle(
-                                          color: AppColors.mainTextColor,
-                                          fontSize: 24),
+                                      "${getShortWeekday(widget.returnTime)}, ${widget.returnTime.day}.${widget.returnTime.month}",
+                                      style: const TextStyle(
+                                        color: AppColors.mainTextColor,
+                                        fontSize: 24,
+                                      ),
                                     ),
                                     Text(
-                                      "17:30",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w100,
+                                      "${widget.returnTime.hour}:${widget.returnTime.minute}${widget.returnTime.minute}",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w300,
                                           color: AppColors.mainTextColor,
                                           fontSize: 24),
                                     )
@@ -120,21 +151,21 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Align(
-                              alignment: Alignment.centerRight,
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ProfilePage()),
-                                  );
-                                },
-                                child: SizedBox(
-                                  child:
-                                      Image.asset("assets/icons/profile.png"),
-                                ),
-                              )),
+                            alignment: Alignment.centerRight,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ProfilePage(),
+                                  ),
+                                );
+                              },
+                              child: SizedBox(
+                                child: Image.asset("assets/icons/profile.png"),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -201,8 +232,30 @@ class _HomePageState extends State<HomePage> {
                         physics: const BouncingScrollPhysics(),
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+                          return FutureBuilder<bool>(
+                            future: ReservationService().getReservationforCar(
+                              snapshot.data![index].vin,
+                              widget.pickupTime,
+                              widget.returnTime,
+                            ),
+                            builder: (context, reservationSnapshot) {
+                              if (reservationSnapshot.data == false) {
+                                // Handle case when reservation data is false
+                              }
+
+                              if (reservationSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
+
+                              bool isFree = reservationSnapshot.data ?? false;
+                              double opacity = isFree ? 1.0 : 0.5;
+                              return Opacity(
+                                opacity: opacity,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(24, 0, 24, 12),
                             child: InkWell(
                               onTap: () {
                                 vinCar = snapshot.data![index].vin;
@@ -219,53 +272,59 @@ class _HomePageState extends State<HomePage> {
                                           )),
                                 );
                               },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryColor,
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  border: Border.all(
-                                    color: AppColors.mainTextColor,
-                                    width: 0.5,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.primaryColor,
+                                        borderRadius: BorderRadius.circular(30.0),
+                                        border: Border.all(
+                                          color: AppColors.mainTextColor,
+                                          width: 0.5,
+                                        ),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding:
+                                              const EdgeInsets.only(top: 12),
+                                            child: Image.network(
+                                              snapshot.data![index].imageUrl,
+                                              fit: BoxFit.cover,
+                                              height: 122,
+                                              width: 209,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                24, 20, 24, 20),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(
+                                                  snapshot.data![index].model,
+                                                  style: const TextStyle(
+                                                      color:
+                                                        AppColors.mainTextColor,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 24),
+                                                ),
+                                                Text(
+                                                  snapshot.data![index].transType,
+                                                  style: const TextStyle(
+                                                      color:
+                                                        AppColors.mainTextColor,
+                                                      fontSize: 18),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                ),
+                                    ),
                                   ),
                                 ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 12),
-                                      child: Image.network(
-                                        snapshot.data![index].imageUrl,
-                                        fit: BoxFit.cover,
-                                        height: 122,
-                                        width: 209,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          24, 20, 24, 20),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            snapshot.data![index].model,
-                                            style: const TextStyle(
-                                                color: AppColors.mainTextColor,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 24),
-                                          ),
-                                          Text(
-                                            snapshot.data![index].transType,
-                                            style: const TextStyle(
-                                                color: AppColors.mainTextColor,
-                                                fontSize: 18),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                              );
+                            },
                           );
                         },
                       );
