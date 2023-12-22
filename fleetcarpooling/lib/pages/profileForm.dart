@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/auth/user_model.dart' as usermod;
 import 'package:fleetcarpooling/auth/user_repository.dart';
 import 'package:fleetcarpooling/pages/changePasswordForm.dart';
@@ -152,6 +153,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   MyElevatedButton(
                     onPressed: () {
                       FirebaseAuth.instance.signOut();
+                      AuthLogin().updateOnlineStatus(
+                          FirebaseAuth.instance.currentUser?.uid, "offline");
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => LoginForm()),
