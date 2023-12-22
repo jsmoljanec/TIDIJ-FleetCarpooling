@@ -1,17 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:fleetcarpooling/auth/user_model.dart';
+
 import 'package:fleetcarpooling/chat/models/message.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseProvider extends ChangeNotifier {
   ScrollController scrollController = ScrollController();
   List<Message> messages = [];
-  Future<User> getUserById(String userId) async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("Users/$userId");
-    DatabaseEvent event = await ref.once();
 
-    return event.snapshot.value as User;
+  Future<Map<String, dynamic>> getUserData(String userId) async {
+    try {
+      DatabaseReference ref = FirebaseDatabase.instance.ref("Users/$userId");
+      DatabaseEvent event = await ref.once();
+      Map<dynamic, dynamic>? userData =
+          event.snapshot.value as Map<dynamic, dynamic>?;
+      return userData?.map((key, value) => MapEntry(key.toString(), value)) ??
+          {};
+    } catch (error) {
+      throw Exception("Error fetching user data: $error");
+    }
   }
 
   List<Message> getMessages(String receiverId) {

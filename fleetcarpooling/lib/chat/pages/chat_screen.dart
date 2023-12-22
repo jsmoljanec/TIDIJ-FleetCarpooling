@@ -56,16 +56,31 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            ChatMessages(receiverId: widget.vin),
-            ChatTextField(
-              receiverId: widget.vin,
-            )
-          ],
-        ),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 250),
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/logo.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                ChatMessages(receiverId: widget.vin),
+                ChatTextField(
+                  receiverId: widget.vin,
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
