@@ -65,3 +65,28 @@ Future<void> sendReservationEmail(String email, String datePickup,
     }
   }
 }
+
+Future<void> sendNotifyMeEmail(String email, String datePickup,
+    String timePickup, String dateReturn, String timeReturn) async {
+  String username = dotenv.env['EMAIL_USERNAME']!;
+  String password = dotenv.env['EMAIL_PASSWORD']!;
+
+  final smtpServer = gmail(username, password);
+
+  final message = Message()
+    ..from = Address(username, 'FleetCarpooling')
+    ..recipients.add(email)
+    ..subject = 'Reservation cancellation'
+    ..html =
+        "<h3>Someone canceled their reservation for <b>$datePickup</b> at <b>$timePickup</b> until <b>$dateReturn</b> at <b>$timeReturn</b>.";
+
+  try {
+    final sendReport = await send(message, smtpServer);
+    print('Message sent: ' + sendReport.toString());
+  } on MailerException catch (e) {
+    print('Message not sent.');
+    for (var p in e.problems) {
+      print('Problem: ${p.code}: ${p.msg}');
+    }
+  }
+}
