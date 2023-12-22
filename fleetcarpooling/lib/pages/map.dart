@@ -28,6 +28,7 @@ class _MapPageState extends State<MapPage> {
 
   late String flagContent;
   late String vehicleIdContent;
+  bool refreshUI = false;
 
   @override
   void initState() {
@@ -94,9 +95,11 @@ class _MapPageState extends State<MapPage> {
               ),
             ),
             if (showController)
-              VehicleController(onCommand: (command) {
-                udpManager.sendCommand(command, selectedMarkerId);
-              }),
+              VehicleController(
+                  onCommand: (command) {
+                    udpManager.sendCommand(command, selectedMarkerId);
+                  },
+                  refreshUI: refreshUI),
           ],
         ),
       ),
@@ -144,13 +147,16 @@ class _MapPageState extends State<MapPage> {
 
   void showToast(String message, String flagContent, String vehicleIdContent,
       String selectedMarkerId) {
-    if (flagContent == "0000") {
+    if (flagContent == "0000" ||
+        flagContent == "1001" ||
+        flagContent == "1010") {
       return;
     }
 
     if (vehicleIdContent == selectedMarkerId) {
+      String cleanedMessage = message.replaceFirst(RegExp(r'\[.*?\]'), '');
       Fluttertoast.showToast(
-        msg: message,
+        msg: cleanedMessage.trim(), // Uklanjanje vodećih i završnih razmaka
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
