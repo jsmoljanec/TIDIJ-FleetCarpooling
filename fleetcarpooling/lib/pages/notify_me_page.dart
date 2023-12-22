@@ -38,7 +38,7 @@ class NotifyMe extends StatelessWidget {
         returnTime,
       );
     }
-    //saveNotifyMeData();
+    saveNotifyMeData();
 
     return Scaffold(
       body: GestureDetector(
