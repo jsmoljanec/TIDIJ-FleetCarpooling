@@ -64,6 +64,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
   @override
   Widget build(BuildContext context) {
     String email = FirebaseAuth.instance.currentUser!.email!;
+
     return Scaffold(
       body: Column(
         children: [
@@ -196,7 +197,13 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const NotifyMe()),
+                                        builder: (context) => NotifyMe(
+                                              vinCar: snapshot.data!.vin,
+                                              pickupDateTime: widget.pickupTime
+                                                  .toLocal(),
+                                              returnDateTime: widget.returnTime
+                                                  .toLocal()
+                                            )),
                                   );
                                 }
                               },
