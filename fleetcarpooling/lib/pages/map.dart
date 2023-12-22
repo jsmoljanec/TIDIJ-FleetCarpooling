@@ -30,7 +30,7 @@ class _MapPageState extends State<MapPage> {
   late String flagContent;
   late String vehicleIdContent;
   bool refreshUI = false;
-  bool checkingReservation = false;
+  Future<bool>? reservationCheckFuture;
 
   @override
   void initState() {
@@ -89,15 +89,25 @@ class _MapPageState extends State<MapPage> {
               ),
             ),
             if (showController)
-              VehicleController(
-                  onCommand: (command) {
-                    udpManager.sendCommand(command, selectedMarkerId);
-                  },
-                  refreshUI: refreshUI),
-            if (checkingReservation)
-              const Center(
-                child: CircularProgressIndicator(),
-              ),
+              FutureBuilder<bool>(
+                future: reservationCheckFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Prikazuje loading indikator dok se čeka na rezultat.
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    // Ako rezervacija postoji, prikazuje kontroler, inače ništa.
+                    return snapshot.data == true
+                        ? VehicleController(
+                            onCommand: (command) {
+                              udpManager.sendCommand(command, selectedMarkerId);
+                            },
+                            refreshUI: refreshUI,
+                          )
+                        : Container(); // Prazan kontejner ako nema rezervacije.
+                  }
+                },
+              )
           ],
         ),
       ),
@@ -124,15 +134,15 @@ class _MapPageState extends State<MapPage> {
       infoWindow: InfoWindow(title: "${vehicle.brand} ${vehicle.model}"),
       onTap: () async {
         setState(() {
-          checkingReservation = true;
+          reservationCheckFuture = ReservationService()
+              .checkReservation("iva.plavsic18@gmail.com", vehicle.vin);
         });
-        bool hasReservation = await ReservationService()
-            .checkReservation("iva.plavsic18@gmail.com", vehicle.vin);
-        print("dali postoji rezervacija: $hasReservation");
+
+        bool hasReservation = await reservationCheckFuture!;
+
         setState(() {
-          checkingReservation = false;
           if (selectedMarkerId.value == vehicle.vin) {
-            showController = false;
+            showController = true;
             selectedMarkerId = const MarkerId('');
           } else {
             if (hasReservation) {
