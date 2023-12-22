@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'colors' as my_defined_colors;
 
-class VehicleController extends StatelessWidget {
+class VehicleController extends StatefulWidget {
   final Function(String) onCommand;
   final selectedMarkerId;
+  final bool refreshUI;
 
   const VehicleController(
-      {super.key, required this.onCommand, this.selectedMarkerId});
+      {super.key,
+      required this.onCommand,
+      this.selectedMarkerId,
+      required this.refreshUI});
+
+  @override
+  _VehicleControllerState createState() => _VehicleControllerState();
+}
+
+class _VehicleControllerState extends State<VehicleController> {
+  TextEditingController locationController = TextEditingController();
+  String destination = "";
+  FocusNode locationFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController locationController = TextEditingController();
-
     return Positioned(
       bottom: 10.0,
       left: 10.0,
@@ -35,6 +46,7 @@ class VehicleController extends StatelessWidget {
                     margin: const EdgeInsets.only(right: 8.0),
                     child: TextField(
                       controller: locationController,
+                      focusNode: locationFocusNode,
                       decoration: const InputDecoration(
                         hintText: 'Enter destination',
                         hintStyle: TextStyle(
@@ -51,7 +63,9 @@ class VehicleController extends StatelessWidget {
                     onPressed: () {
                       var inputText = locationController.text;
                       if (inputText != "" && inputText.isEmpty == false) {
-                        onCommand("set-destination $inputText");
+                        widget.onCommand("set-destination $inputText");
+                        locationController.text = "";
+                        locationFocusNode.unfocus();
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -68,7 +82,7 @@ class VehicleController extends StatelessWidget {
               Row(
                 children: [
                   ElevatedButton(
-                    onPressed: () => onCommand("start"),
+                    onPressed: () => widget.onCommand("start"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: my_defined_colors.AppColors.buttonColor,
                     ),
@@ -79,7 +93,7 @@ class VehicleController extends StatelessWidget {
                   ),
                   const SizedBox(width: 8.0),
                   ElevatedButton(
-                    onPressed: () => onCommand("stop"),
+                    onPressed: () => widget.onCommand("stop"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: my_defined_colors.AppColors.buttonColor,
                     ),
@@ -90,7 +104,7 @@ class VehicleController extends StatelessWidget {
                   ),
                   const SizedBox(width: 8.0),
                   ElevatedButton(
-                    onPressed: () => onCommand("restart"),
+                    onPressed: () => widget.onCommand("restart"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: my_defined_colors.AppColors.buttonColor,
                     ),
@@ -101,7 +115,7 @@ class VehicleController extends StatelessWidget {
                   ),
                   const SizedBox(width: 8.0),
                   ElevatedButton(
-                    onPressed: () => onCommand("lock"),
+                    onPressed: () => widget.onCommand("lock"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: my_defined_colors.AppColors.buttonColor,
                     ),
