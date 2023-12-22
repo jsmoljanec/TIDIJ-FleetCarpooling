@@ -1,10 +1,11 @@
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
+import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/handlers/udp_manager.dart';
+import 'package:fleetcarpooling/ui_elements/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fleetcarpooling/ui_elements/vehicle_controller.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -29,6 +30,7 @@ class _MapPageState extends State<MapPage> {
   late String flagContent;
   late String vehicleIdContent;
   bool refreshUI = false;
+  bool checkingReservation = false;
 
   @override
   void initState() {
@@ -46,7 +48,7 @@ class _MapPageState extends State<MapPage> {
           flagContent = matches.elementAt(0).group(1) ?? '';
           vehicleIdContent =
               matches.length > 1 ? matches.elementAt(1).group(1) ?? '' : '';
-          showToast(
+          CustomToast().showStatusToast(
               message, flagContent, vehicleIdContent, selectedMarkerId.value);
         } else {
           print('Uglate zagrade nisu pronađene u tekstu.');
@@ -58,14 +60,6 @@ class _MapPageState extends State<MapPage> {
     selectedMarkerId = const MarkerId('');
     getIcons();
     super.initState();
-  }
-
-  getIcons() async {
-    var icon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(), "assets/icons/vehicle_icon90.png");
-    setState(() {
-      this.icon = icon;
-    });
   }
 
   @override
@@ -100,10 +94,22 @@ class _MapPageState extends State<MapPage> {
                     udpManager.sendCommand(command, selectedMarkerId);
                   },
                   refreshUI: refreshUI),
+            if (checkingReservation)
+              const Center(
+                child: CircularProgressIndicator(),
+              ),
           ],
         ),
       ),
     );
+  }
+
+  getIcons() async {
+    var icon = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(), "assets/icons/vehicle_icon90.png");
+    setState(() {
+      this.icon = icon;
+    });
   }
 
   void onMapCreated(GoogleMapController controller) {
@@ -116,14 +122,27 @@ class _MapPageState extends State<MapPage> {
       markerId: MarkerId(vehicle.vin),
       position: LatLng(vehicle.latitude, vehicle.longitude),
       infoWindow: InfoWindow(title: "${vehicle.brand} ${vehicle.model}"),
-      onTap: () {
+      onTap: () async {
         setState(() {
+          checkingReservation = true;
+        });
+        bool hasReservation = await ReservationService()
+            .checkReservation("iva.plavsic18@gmail.com", vehicle.vin);
+        print("dali postoji rezervacija: $hasReservation");
+        setState(() {
+          checkingReservation = false;
           if (selectedMarkerId.value == vehicle.vin) {
             showController = false;
             selectedMarkerId = const MarkerId('');
           } else {
-            showController = true;
-            selectedMarkerId = MarkerId(vehicle.vin);
+            if (hasReservation) {
+              showController = true;
+              selectedMarkerId = MarkerId(vehicle.vin);
+            } else {
+              showController = false;
+              CustomToast().showFlutterToast(
+                  "You dont have reservation for this vehicle!");
+            }
           }
         });
       },
@@ -143,28 +162,6 @@ class _MapPageState extends State<MapPage> {
         });
       }
     });
-  }
-
-  void showToast(String message, String flagContent, String vehicleIdContent,
-      String selectedMarkerId) {
-    if (flagContent == "0000" ||
-        flagContent == "1001" ||
-        flagContent == "1010") {
-      return;
-    }
-
-    if (vehicleIdContent == selectedMarkerId) {
-      String cleanedMessage = message.replaceFirst(RegExp(r'\[.*?\]'), '');
-      Fluttertoast.showToast(
-        msg: cleanedMessage.trim(), // Uklanjanje vodećih i završnih razmaka
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.grey,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-    }
   }
 
   @override
