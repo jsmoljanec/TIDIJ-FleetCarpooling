@@ -4,6 +4,7 @@ import 'package:fleetcarpooling/handlers/udp_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fleetcarpooling/ui_elements/vehicle_controller.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -44,6 +45,8 @@ class _MapPageState extends State<MapPage> {
           flagContent = matches.elementAt(0).group(1) ?? '';
           vehicleIdContent =
               matches.length > 1 ? matches.elementAt(1).group(1) ?? '' : '';
+          showToast(
+              message, flagContent, vehicleIdContent, selectedMarkerId.value);
         } else {
           print('Uglate zagrade nisu pronađene u tekstu.');
         }
@@ -137,6 +140,25 @@ class _MapPageState extends State<MapPage> {
         });
       }
     });
+  }
+
+  void showToast(String message, String flagContent, String vehicleIdContent,
+      String selectedMarkerId) {
+    if (flagContent == "0000") {
+      return;
+    }
+
+    if (vehicleIdContent == selectedMarkerId) {
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
   }
 
   @override
