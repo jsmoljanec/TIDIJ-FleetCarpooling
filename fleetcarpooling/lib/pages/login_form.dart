@@ -120,7 +120,7 @@ class _LoginFormState extends State<LoginForm> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const NavigationPage(),
+                            builder: (context) =>  NavigationPage(returnTime: DateTime.now(), pickupTime: DateTime.now()),
                           ),
                         );
                       }

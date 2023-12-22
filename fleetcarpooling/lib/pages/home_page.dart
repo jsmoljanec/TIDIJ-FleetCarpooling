@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
   late Stream<List<Vehicle>> _vehiclesStream;
     String vinCar = "";
+  bool isEqual = false;
 
   String getShortWeekday(DateTime dateTime) {
     switch (dateTime.weekday) {
@@ -60,6 +61,16 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _vehiclesStream = getVehicles();
+    if (widget.pickupTime.day == widget.returnTime.day &&
+        widget.pickupTime.month == widget.returnTime.month &&
+        widget.pickupTime.year == widget.returnTime.year &&
+        widget.pickupTime.hour == widget.returnTime.hour &&
+        widget.pickupTime.minute == widget.returnTime.minute) {
+      isEqual = true;
+    }
+    print(widget.pickupTime);
+    print(widget.returnTime);
+    print(isEqual);
   }
 
   @override
@@ -112,24 +123,41 @@ class _HomePageState extends State<HomePage> {
                                   },
                                   child: Row(
                                     children: [
-                                      Column(
-                                        children: [
-                                          Text(
-                                            "${getShortWeekday(widget.pickupTime)}, ${widget.pickupTime.day}.${widget.pickupTime.month}",
-                                            style: const TextStyle(
-                                              color: AppColors.mainTextColor,
-                                              fontSize: 24,
+                                      Visibility(
+                                        visible: isEqual,
+                                        child: const Column(
+                                          children: [
+                                            Text(
+                                              "Unesite datum",
+                                              style: TextStyle(
+                                                color: AppColors.mainTextColor,
+                                                fontSize: 24,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            "${widget.pickupTime.hour}:${widget.pickupTime.minute}${widget.pickupTime.minute}",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              color: AppColors.mainTextColor,
-                                              fontSize: 24,
+                                          ],
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible: !isEqual,
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              "${getShortWeekday(widget.pickupTime)}, ${widget.pickupTime.day}.${widget.pickupTime.month}",
+                                              style: const TextStyle(
+                                                color: AppColors.mainTextColor,
+                                                fontSize: 24,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            Text(
+                                              "${widget.pickupTime.hour}:${widget.pickupTime.minute}${widget.pickupTime.minute}",
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                                color: AppColors.mainTextColor,
+                                                fontSize: 24,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       const Column(
                                         children: [
@@ -143,24 +171,27 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ],
                                       ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            "${getShortWeekday(widget.returnTime)}, ${widget.returnTime.day}.${widget.returnTime.month}",
-                                            style: const TextStyle(
-                                              color: AppColors.mainTextColor,
-                                              fontSize: 24,
+                                      Visibility(
+                                        visible: !isEqual,
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              "${getShortWeekday(widget.returnTime)}, ${widget.returnTime.day}.${widget.returnTime.month}",
+                                              style: const TextStyle(
+                                                color: AppColors.mainTextColor,
+                                                fontSize: 24,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            "${widget.returnTime.hour}:${widget.returnTime.minute}${widget.returnTime.minute}",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              color: AppColors.mainTextColor,
-                                              fontSize: 24,
+                                            Text(
+                                              "${widget.returnTime.hour}:${widget.returnTime.minute}${widget.returnTime.minute}",
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                                color: AppColors.mainTextColor,
+                                                fontSize: 24,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),

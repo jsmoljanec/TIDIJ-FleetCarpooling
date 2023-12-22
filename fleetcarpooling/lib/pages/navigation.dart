@@ -1,3 +1,4 @@
+import 'package:fleetcarpooling/pages/reservation_form.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/pages/map.dart';
@@ -6,7 +7,13 @@ import 'package:fleetcarpooling/pages/notification_page.dart';
 import 'package:fleetcarpooling/pages/home_page.dart';
 
 class NavigationPage extends StatefulWidget {
-  const NavigationPage({super.key});
+  final DateTime pickupTime;
+  final DateTime returnTime;
+  const NavigationPage({
+    Key? key,
+    required this.pickupTime,
+    required this.returnTime,
+  }) : super(key: key);
 
   @override
   State<NavigationPage> createState() => _NavigationPageState();
@@ -14,12 +21,22 @@ class NavigationPage extends StatefulWidget {
 
 class _NavigationPageState extends State<NavigationPage> {
   int pressed = 0;
-  List<StatefulWidget> pages = [
-    const HomePage(),
-    const NotificationPage(),
-    const MapPage(),
-    const MyReservationsPage()
-  ];
+  late List<StatefulWidget> pages;
+
+  @override
+  void initState() {
+    super.initState();
+    pages = [
+      HomePage(
+        pickupTime: widget.pickupTime,
+        returnTime: widget.returnTime,
+      ),
+      const NotificationPage(),
+      const MapPage(),
+      const MyReservationsPage(),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

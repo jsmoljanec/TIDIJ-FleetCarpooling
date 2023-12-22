@@ -5,6 +5,7 @@ import 'package:fleetcarpooling/pages/admin_home_page.dart';
 import 'package:fleetcarpooling/pages/login_form.dart';
 import 'package:fleetcarpooling/pages/navigation.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:fleetcarpooling/pages/reservation_form.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -24,7 +25,7 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
 
   User? user = FirebaseAuth.instance.currentUser;
-  Widget initialScreen = user != null ? const NavigationPage() : LoginForm();
+  Widget initialScreen = user != null ?  NavigationPage(returnTime: DateTime.now(), pickupTime: DateTime.now()) : LoginForm();
 
   runApp(MyApp(initialScreen: initialScreen));
 }
