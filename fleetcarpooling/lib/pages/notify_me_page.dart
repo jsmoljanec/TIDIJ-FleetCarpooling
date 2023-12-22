@@ -7,7 +7,7 @@ class NotifyMe extends StatelessWidget {
   final DateTime pickupDateTime;
   final DateTime returnDateTime;
 
-  NotifyMe({
+  const NotifyMe({super.key, 
     required this.vinCar,
     required this.pickupDateTime,
     required this.returnDateTime,
@@ -15,11 +15,13 @@ class NotifyMe extends StatelessWidget {
 
   String get pickupDate =>
       "${pickupDateTime.year}-${pickupDateTime.month}-${pickupDateTime.day}";
-  String get pickupTime => "${pickupDateTime.hour}:${pickupDateTime.minute}";
+  String get pickupTime =>
+      "${pickupDateTime.hour}:${pickupDateTime.minute}${pickupDateTime.second}";
 
   String get returnDate =>
       "${returnDateTime.year}-${returnDateTime.month}-${returnDateTime.day}";
-  String get returnTime => "${returnDateTime.hour}:${returnDateTime.minute}";
+  String get returnTime =>
+      "${returnDateTime.hour}:${returnDateTime.minute}${returnDateTime.second}";
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,6 @@ class NotifyMe extends StatelessWidget {
     AuthNotifyMe authNotifyMe = AuthNotifyMe();
 
     Future<void> saveNotifyMeData() async {
-      print('VIN broj u NotifyMe prije spremanja: $vinCar');
       await authNotifyMe.saveNotifyMeData(
         vinCar,
         pickupDate,
@@ -36,11 +37,8 @@ class NotifyMe extends StatelessWidget {
         returnDate,
         returnTime,
       );
-      print('VIN broj u NotifyMe nakon spremanja: $vinCar');
     }
-
-    // Automatsko spremanje podataka prilikom izgradnje ekrana
-    saveNotifyMeData();
+    //saveNotifyMeData();
 
     return Scaffold(
       body: GestureDetector(
@@ -72,7 +70,7 @@ class NotifyMe extends StatelessWidget {
                   style: TextStyle(
                     color: AppColors.mainTextColor,
                     fontSize: 36.0,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
               ),
