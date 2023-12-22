@@ -1,13 +1,46 @@
+import 'package:fleetcarpooling/auth/auth_notify_me.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 class NotifyMe extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
-  const NotifyMe();
+  final String vinCar;
+  final DateTime pickupDateTime;
+  final DateTime returnDateTime;
+
+  NotifyMe({
+    required this.vinCar,
+    required this.pickupDateTime,
+    required this.returnDateTime,
+  });
+
+  String get pickupDate =>
+      "${pickupDateTime.year}-${pickupDateTime.month}-${pickupDateTime.day}";
+  String get pickupTime => "${pickupDateTime.hour}:${pickupDateTime.minute}";
+
+  String get returnDate =>
+      "${returnDateTime.year}-${returnDateTime.month}-${returnDateTime.day}";
+  String get returnTime => "${returnDateTime.hour}:${returnDateTime.minute}";
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+
+    AuthNotifyMe authNotifyMe = AuthNotifyMe();
+
+    Future<void> saveNotifyMeData() async {
+      print('VIN broj u NotifyMe prije spremanja: $vinCar');
+      await authNotifyMe.saveNotifyMeData(
+        vinCar,
+        pickupDate,
+        pickupTime,
+        returnDate,
+        returnTime,
+      );
+      print('VIN broj u NotifyMe nakon spremanja: $vinCar');
+    }
+
+    // Automatsko spremanje podataka prilikom izgradnje ekrana
+    saveNotifyMeData();
 
     return Scaffold(
       body: GestureDetector(
