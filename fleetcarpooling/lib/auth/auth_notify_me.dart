@@ -15,8 +15,7 @@ class AuthNotifyMe {
     try {
       User? user = _auth.currentUser;
       if (user != null) {
-        String uid = user.uid;
-        print('VIN broj u AuthNotifyMe prije spremanja: $vinCar');
+        String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
 
         Map<String, dynamic> notifyMeData = {
           'vinCar': vinCar,
@@ -27,14 +26,14 @@ class AuthNotifyMe {
           'returnTime': returnTime,
         };
 
-        DatabaseReference notifyMeRef = _database.child("NotifyMe").child(uid);
+        DatabaseReference notifyMeRef =
+            _database.child("NotifyMe").child(uniqueName);
         await notifyMeRef.set(notifyMeData);
-        print('VIN broj u AuthNotifyMe nakon spremanja: $vinCar');
       } else {
         throw Exception("User not authenticated");
       }
     } catch (e) {
-      print("Error saving NotifyMe data: $e");
+      throw Exception("Error saving NotifyMe data");
     }
   }
 }
