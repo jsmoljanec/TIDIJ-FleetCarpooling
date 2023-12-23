@@ -45,17 +45,24 @@ class AuthNotifyMe {
   }
 
   Future<void> checkAndNotifyReservationDeletion(
-      String vinCar, String reservationTime) async {
+    String vinCar,
+    String reservationTimeStart,
+    String reservationTimeEnd,
+  ) async {
     try {
-      DataSnapshot snapshot = (await _database.child("Reservation").once())
-          .snapshot;
+      DataSnapshot snapshot =
+          (await _database.child("Reservation").once()).snapshot;
 
       Map<dynamic, dynamic>? data = snapshot.value as Map<dynamic, dynamic>?;
       Map<dynamic, dynamic> reservations = data ?? {};
 
       reservations.forEach((key, value) async {
+        String reservationStart = value['reservationTimeStart'];
+        String reservationEnd = value['reservationTimeEnd'];
+
         if (value['vinCar'] == vinCar &&
-            value['reservationTime'] == reservationTime) {
+            timeRangesOverlap(reservationTimeStart, reservationTimeEnd,
+                reservationStart, reservationEnd)) {
           await sendNotifyMeEmail(
             value['vinCar'],
             value['pickupDate'],
@@ -73,6 +80,16 @@ class AuthNotifyMe {
       throw Exception("Error checking and notifying reservation deletion");
     }
   }
+
+  bool timeRangesOverlap(String start1, String end1, String start2, String end2) {
+  DateTime startTime1 = DateTime.parse(start1);
+  DateTime endTime1 = DateTime.parse(end1);
+
+  DateTime startTime2 = DateTime.parse(start2);
+  DateTime endTime2 = DateTime.parse(end2);
+
+  return endTime1.isAfter(startTime2) && startTime1.isBefore(endTime2);
+}
 
   Future<void> transferDataToNotificationTable(
       Map<dynamic, dynamic> data) async {
