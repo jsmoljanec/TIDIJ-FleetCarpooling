@@ -83,34 +83,42 @@ class _ReservationScreenState extends State<ReservationScreen> {
               },
             ),
           ),
-          MyElevatedButton(
-            onPressed: () async {
-              DateTime date = selectedDateRange!.start;
-              TimeOfDay time = pickupTime;
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: MyElevatedButton(
+                  onPressed: () async {
+                    DateTime date = selectedDateRange!.start;
+                    TimeOfDay time = pickupTime;
 
-              DateTime date2 = selectedDateRange!.end;
-              TimeOfDay time2 = returnTime;
+                    DateTime date2 = selectedDateRange!.end;
+                    TimeOfDay time2 = returnTime;
 
-              DateTime pickupDateTime = DateTime(
-                  date.year, date.month, date.day, time.hour, time.minute);
+                    DateTime pickupDateTime = DateTime(date.year, date.month,
+                        date.day, time.hour, time.minute);
 
-              DateTime returnDateTime = DateTime(
-                  date2.year, date2.month, date2.day, time2.hour, time2.minute);
+                    DateTime returnDateTime = DateTime(date2.year, date2.month,
+                        date2.day, time2.hour, time2.minute);
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NavigationPage(
-                    pickupTime: pickupDateTime,
-                    returnTime: returnDateTime,
-                  ),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NavigationPage(
+                          pickupTime: pickupDateTime,
+                          returnTime: returnDateTime,
+                        ),
+                      ),
+                    );
+
+                    print(pickupDateTime);
+                    print(returnDateTime);
+                  },
+                  label: "Check",
                 ),
-              );
-
-              print(pickupDateTime);
-              print(returnDateTime);
-            },
-            label: "Check",
+              ),
+            ),
           ),
         ],
       ),
