@@ -24,7 +24,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
   late Stream<List<Vehicle>> _vehiclesStream;
-    String vinCar = "";
+  String vinCar = "";
   bool isEqual = false;
 
   String getShortWeekday(DateTime dateTime) {
@@ -115,9 +115,25 @@ class _HomePageState extends State<HomePage> {
                                   onTap: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
                                             ReservationScreen(),
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          const begin = Offset(0.0, 1.0);
+                                          const end = Offset.zero;
+                                          const curve = Curves.ease;
+
+                                          var tween = Tween(
+                                                  begin: begin, end: end)
+                                              .chain(CurveTween(curve: curve));
+
+                                          return SlideTransition(
+                                            position: animation.drive(tween),
+                                            child: child,
+                                          );
+                                        },
                                       ),
                                     );
                                   },
@@ -128,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                                         child: const Column(
                                           children: [
                                             Text(
-                                              "Unesite datum",
+                                              "Click to select a date",
                                               style: TextStyle(
                                                 color: AppColors.mainTextColor,
                                                 fontSize: 24,
@@ -308,26 +324,28 @@ class _HomePageState extends State<HomePage> {
                                 child: Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(24, 0, 24, 12),
-                            child: InkWell(
-                              onTap: () {
-                                vinCar = snapshot.data![index].vin;
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SelectedVehiclePage(
-                                            vin: vinCar,
-                                            isFree: true,
-                                            pickupTime: DateTime.parse(
-                                                '2023-12-28 07:00'),
-                                            returnTime: DateTime.parse(
-                                                '2023-12-28 18:00'),
-                                          )),
-                                );
-                              },
+                                  child: InkWell(
+                                    onTap: () {
+                                      vinCar = snapshot.data![index].vin;
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SelectedVehiclePage(
+                                                  vin: vinCar,
+                                                  isFree: true,
+                                                  pickupTime: DateTime.parse(
+                                                      '2023-12-28 07:00'),
+                                                  returnTime: DateTime.parse(
+                                                      '2023-12-28 18:00'),
+                                                )),
+                                      );
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: AppColors.primaryColor,
-                                        borderRadius: BorderRadius.circular(30.0),
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
                                         border: Border.all(
                                           color: AppColors.mainTextColor,
                                           width: 0.5,
@@ -337,7 +355,7 @@ class _HomePageState extends State<HomePage> {
                                         children: [
                                           Padding(
                                             padding:
-                                              const EdgeInsets.only(top: 12),
+                                                const EdgeInsets.only(top: 12),
                                             child: Image.network(
                                               snapshot.data![index].imageUrl,
                                               fit: BoxFit.cover,
@@ -350,28 +368,31 @@ class _HomePageState extends State<HomePage> {
                                                 24, 20, 24, 20),
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text(
                                                   snapshot.data![index].model,
                                                   style: const TextStyle(
-                                                      color:
-                                                        AppColors.mainTextColor,
-                                                      fontWeight: FontWeight.bold,
+                                                      color: AppColors
+                                                          .mainTextColor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 24),
                                                 ),
                                                 Text(
-                                                  snapshot.data![index].transType,
+                                                  snapshot
+                                                      .data![index].transType,
                                                   style: const TextStyle(
-                                                      color:
-                                                        AppColors.mainTextColor,
+                                                      color: AppColors
+                                                          .mainTextColor,
                                                       fontSize: 18),
                                                 )
                                               ],
                                             ),
                                           ),
                                         ],
-                                ),
+                                      ),
                                     ),
                                   ),
                                 ),
