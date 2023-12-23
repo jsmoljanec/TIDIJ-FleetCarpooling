@@ -159,17 +159,20 @@ class _HomePageState extends State<HomePage> {
                                           ],
                                         ),
                                       ),
-                                      const Column(
-                                        children: [
-                                          Icon(
-                                            Icons.arrow_forward,
-                                            color: AppColors.buttonColor,
-                                          ),
-                                          Text(
-                                            " ",
-                                            style: TextStyle(fontSize: 24),
-                                          ),
-                                        ],
+                                      Visibility(
+                                        visible: !isEqual,
+                                        child: const Column(
+                                          children: [
+                                            Icon(
+                                              Icons.arrow_forward,
+                                              color: AppColors.buttonColor,
+                                            ),
+                                            Text(
+                                              " ",
+                                              style: TextStyle(fontSize: 24),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       Visibility(
                                         visible: !isEqual,
