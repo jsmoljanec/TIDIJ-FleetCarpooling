@@ -101,10 +101,24 @@ class ReservationService implements ReservationRepository {
         snapshot.snapshot.value as Map<dynamic, dynamic>?;
 
     if (reservations != null) {
+      DateTime currentDateTime = DateTime.now();
+
       for (var entry in reservations.entries) {
         var reservationData = entry.value as Map<dynamic, dynamic>;
+
         if (reservationData['email'] == email) {
-          return true;
+          String pickupDate = reservationData['pickupDate'];
+          String pickupTime = reservationData['pickupTime'];
+          String returnDate = reservationData['returnDate'];
+          String returnTime = reservationData['returnTime'];
+
+          DateTime pickupDateTime = DateTime.parse('$pickupDate $pickupTime');
+          DateTime returnDateTime = DateTime.parse('$returnDate $returnTime');
+
+          if (currentDateTime.isAfter(pickupDateTime) &&
+              currentDateTime.isBefore(returnDateTime)) {
+            return true;
+          }
         }
       }
     }

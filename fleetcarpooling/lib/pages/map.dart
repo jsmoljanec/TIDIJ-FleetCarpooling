@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
@@ -32,6 +33,8 @@ class _MapPageState extends State<MapPage> {
   bool refreshUI = false;
   Future<bool>? reservationCheckFuture;
 
+  User? user = FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
     String deviceIpAddress = const String.fromEnvironment('DEVICE_IP_ADDRESS');
@@ -65,47 +68,45 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: GoogleMap(
-                onMapCreated: onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target: _center,
-                  zoom: 12.0,
-                ),
-                onTap: (_) {
-                  setState(() {
-                    showController = false;
-                    selectedMarkerId = const MarkerId('');
-                  });
-                },
-                markers: markers,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: GoogleMap(
+              onMapCreated: onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 12.0,
               ),
+              onTap: (_) {
+                setState(() {
+                  showController = false;
+                  selectedMarkerId = const MarkerId('');
+                });
+              },
+              markers: markers,
             ),
-            if (showController)
-              FutureBuilder<bool>(
-                future: reservationCheckFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    // Prikazuje loading indikator dok se čeka na rezultat.
-                    return const Center(child: CircularProgressIndicator());
-                  } else {
-                    // Ako rezervacija postoji, prikazuje kontroler, inače ništa.
-                    return snapshot.data == true
-                        ? VehicleController(
-                            onCommand: (command) {
-                              udpManager.sendCommand(command, selectedMarkerId);
-                            },
-                            refreshUI: refreshUI,
-                          )
-                        : Container(); // Prazan kontejner ako nema rezervacije.
-                  }
-                },
-              )
-          ],
-        ),
-      );
+          ),
+          if (showController)
+            FutureBuilder<bool>(
+              future: reservationCheckFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return snapshot.data == true
+                      ? VehicleController(
+                          onCommand: (command) {
+                            udpManager.sendCommand(command, selectedMarkerId);
+                          },
+                          refreshUI: refreshUI,
+                        )
+                      : Container();
+                }
+              },
+            )
+        ],
+      ),
+    );
   }
 
   getIcons() async {
@@ -129,23 +130,28 @@ class _MapPageState extends State<MapPage> {
       onTap: () async {
         setState(() {
           reservationCheckFuture = ReservationService()
-              .checkReservation("iva.plavsic18@gmail.com", vehicle.vin);
+              .checkReservation("${user!.email}", vehicle.vin);
         });
 
         bool hasReservation = await reservationCheckFuture!;
 
         setState(() {
-          if (selectedMarkerId.value == vehicle.vin) {
-            showController = true;
-            selectedMarkerId = const MarkerId('');
+          if (!hasReservation) {
+            showController = false;
+            CustomToast().showFlutterToast(
+                "You dont have reservation for this vehicle!");
           } else {
-            if (hasReservation) {
+            if (selectedMarkerId.value == vehicle.vin) {
+              if (showController != true) {
+                showController = false;
+                selectedMarkerId = const MarkerId('');
+              } else {
+                showController = true;
+                selectedMarkerId = MarkerId(vehicle.vin);
+              }
+            } else {
               showController = true;
               selectedMarkerId = MarkerId(vehicle.vin);
-            } else {
-              showController = false;
-              CustomToast().showFlutterToast(
-                  "You dont have reservation for this vehicle!");
             }
           }
         });
