@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'package:fleetcarpooling/chat/models/message.dart';
 import 'package:fleetcarpooling/chat/provider/firebase_provider.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:firebase_database/firebase_database.dart';
+import 'package:provider/provider.dart';
+
+bool isSameChat = false;
 
 class MessageBubble extends StatefulWidget {
   const MessageBubble({
@@ -24,20 +27,42 @@ class MessageBubble extends StatefulWidget {
 class _MessageBubbleState extends State<MessageBubble> {
   late String username = "";
   late String profileImage = "";
-
+  late bool statusActivity = false;
+  late Timer _timer;
   @override
   void initState() {
     super.initState();
+    _fetchUserData();
+    _timer = Timer.periodic(Duration(seconds: 15), (Timer timer) {
+      _fetchUserData();
+    });
+  }
+
+  void _fetchUserData() {
     FirebaseProvider().getUserData(widget.message.senderId).then((userData) {
       if (mounted) {
         setState(() {
           username = userData['username'] ?? '';
           profileImage = userData['profileImage'] ?? '';
+          if (userData['statusActivity'] == "online")
+            statusActivity = true;
+          else
+            statusActivity = false;
         });
+        if (!isSameChat) {
+          Provider.of<FirebaseProvider>(context, listen: false).scrollDown();
+          isSameChat = true;
+        }
       }
     }).catchError((error) {
       print("Error fetching user data: $error");
     });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -65,17 +90,27 @@ class _MessageBubbleState extends State<MessageBubble> {
         mainAxisAlignment:
             widget.isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          if (!widget.isMe)
-            (profileImage != "" && profileImage != null)
-                ? CircleAvatar(
-                    backgroundImage: NetworkImage(profileImage),
-                    radius: 20,
-                  )
-                : CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Image.asset("assets/icons/profile.png"),
-                    radius: 20,
-                  ),
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              if (!widget.isMe)
+                (profileImage != "" && profileImage != null)
+                    ? CircleAvatar(
+                        backgroundImage: NetworkImage(profileImage),
+                        radius: 20,
+                      )
+                    : CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Image.asset("assets/icons/profile.png"),
+                        radius: 20,
+                      ),
+              if (!widget.isMe)
+                CircleAvatar(
+                  backgroundColor: statusActivity ? Colors.green : Colors.grey,
+                  radius: 5,
+                ),
+            ],
+          ),
           const SizedBox(width: 8),
           Container(
             decoration: BoxDecoration(

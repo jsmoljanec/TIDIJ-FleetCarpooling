@@ -1,3 +1,4 @@
+import 'package:fleetcarpooling/chat/widgets/message_bubble.dart';
 import 'package:provider/provider.dart';
 import 'package:fleetcarpooling/chat/provider/firebase_provider.dart';
 import 'package:fleetcarpooling/chat/widgets/chat_messages.dart';
@@ -20,6 +21,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
+    isSameChat = false;
     Provider.of<FirebaseProvider>(context, listen: false)
         .getMessages(widget.vin);
     super.initState();
@@ -44,6 +46,7 @@ class _ChatScreenState extends State<ChatScreen> {
           padding: const EdgeInsets.only(left: 8.0),
           child: CircularIconButton(
             onPressed: () {
+              isSameChat = false;
               Navigator.pop(context);
             },
           ),
