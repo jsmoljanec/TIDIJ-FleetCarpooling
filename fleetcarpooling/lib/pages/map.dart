@@ -64,12 +64,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.green[700],
-      ),
-      home: Scaffold(
+    return Scaffold(
         body: Stack(
           children: [
             Positioned.fill(
@@ -110,8 +105,7 @@ class _MapPageState extends State<MapPage> {
               )
           ],
         ),
-      ),
-    );
+      );
   }
 
   getIcons() async {
