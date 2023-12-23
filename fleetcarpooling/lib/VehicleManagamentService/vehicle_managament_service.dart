@@ -26,7 +26,7 @@ Stream<List<Vehicle>> getVehicles() {
         distanceTraveled: value['distanceTraveled'],
         latitude: value['latitude'],
         longitude: value['longitude'],
-        locked:value['locked'],
+        locked: value['locked'],
       ));
     });
 
@@ -83,4 +83,17 @@ Future<void> deleteCar(String vin) async {
   DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles/${vin}");
 
   await ref.remove();
+}
+
+Stream<bool> getLockStateStream(String vinCar) {
+  DatabaseReference ref =
+      FirebaseDatabase.instance.ref("Vehicles/$vinCar/locked");
+  final StreamController<bool> controller = StreamController<bool>();
+
+  ref.onValue.listen((DatabaseEvent event) {
+    bool isLocked = event.snapshot.value == true ? true : false;
+    controller.add(isLocked);
+  });
+
+  return controller.stream;
 }
