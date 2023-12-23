@@ -64,8 +64,7 @@ class _HomePageState extends State<HomePage> {
     if (widget.pickupTime.day == widget.returnTime.day &&
         widget.pickupTime.month == widget.returnTime.month &&
         widget.pickupTime.year == widget.returnTime.year &&
-        widget.pickupTime.hour == widget.returnTime.hour &&
-        widget.pickupTime.minute == widget.returnTime.minute) {
+        widget.pickupTime.hour == widget.returnTime.hour) {
       isEqual = true;
     }
     print(widget.pickupTime);

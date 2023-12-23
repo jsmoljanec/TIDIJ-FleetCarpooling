@@ -95,30 +95,28 @@ class _ReservationScreenState extends State<ReservationScreen> {
             lastDay: DateTime(2101),
             calendarStyle: CalendarStyle(
               selectedDecoration: const BoxDecoration(
-                color: Colors.blue,
+                color: AppColors.activeDays,
                 shape: BoxShape.circle,
               ),
-              rangeStartDecoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.5),
-                shape: BoxShape.circle,
-              ),
-              rangeEndDecoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.5),
-              ),
-              rangeHighlightColor: Colors.blue.withOpacity(0.2),
               defaultTextStyle: const TextStyle(
-                color: Colors.blue,
+                color: AppColors.activeDays,
               ),
               weekendTextStyle: const TextStyle(
-                color: Colors.blue,
+                color: AppColors.activeDays,
+              ),
+              todayDecoration: BoxDecoration(
+                color: AppColors.activeDays.withOpacity(0.5),
+                shape: BoxShape.circle,
               ),
             ),
             headerStyle: const HeaderStyle(
               titleCentered: true,
               formatButtonVisible: false,
-              leftChevronIcon: Icon(Icons.chevron_left, color: Colors.blue),
-              rightChevronIcon: Icon(Icons.chevron_right, color: Colors.blue),
-              titleTextStyle: TextStyle(color: Colors.blue),
+              leftChevronIcon:
+                  Icon(Icons.chevron_left, color: AppColors.activeDays),
+              rightChevronIcon:
+                  Icon(Icons.chevron_right, color: AppColors.activeDays),
+              titleTextStyle: TextStyle(color: AppColors.activeDays),
               headerPadding: EdgeInsets.all(8.0),
             ),
             onPageChanged: (focusedDay) {
