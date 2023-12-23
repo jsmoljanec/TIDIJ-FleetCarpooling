@@ -17,6 +17,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
   DateTimeRange? _selectedDateRange;
   TimeOfDay pickupTime = const TimeOfDay(hour: 7, minute: 0);
   TimeOfDay returnTime = const TimeOfDay(hour: 7, minute: 0);
+  bool isDateSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +160,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                   );
                 }
                 selectedDateRange = _selectedDateRange;
+                isDateSelected = true;
               });
             },
           ),
@@ -169,6 +171,12 @@ class _ReservationScreenState extends State<ReservationScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: MyElevatedButton(
                   onPressed: () async {
+                    if (!isDateSelected) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Please select date'),
+                      ));
+                      return;
+                    }
                     DateTime date = selectedDateRange!.start;
                     TimeOfDay time = pickupTime;
 
@@ -181,20 +189,36 @@ class _ReservationScreenState extends State<ReservationScreen> {
                     DateTime returnDateTime = DateTime(date2.year, date2.month,
                         date2.day, time2.hour, time2.minute);
 
-                    Navigator.push(
+                    Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => NavigationPage(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            NavigationPage(
                           pickupTime: pickupDateTime,
                           returnTime: returnDateTime,
                         ),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(0.0, -1.0);
+                          const end = Offset.zero;
+                          const curve = Curves.easeInOut;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
                       ),
+                      (route) => false,
                     );
 
                     print(pickupDateTime);
                     print(returnDateTime);
                   },
-                  label: "Check",
+                  label: "CHECK",
                 ),
               ),
             ),
