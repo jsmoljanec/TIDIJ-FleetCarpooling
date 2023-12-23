@@ -120,49 +120,69 @@ class _MessageBubbleState extends State<MessageBubble> {
               borderRadius: widget.isMe
                   ? const BorderRadius.only(
                       topRight: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
                       topLeft: Radius.circular(30),
-                      bottomLeft: Radius.circular(30))
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30))
                   : const BorderRadius.only(
                       topRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
                       topLeft: Radius.circular(30),
+                      bottomLeft: Radius.circular(30),
                       bottomRight: Radius.circular(30)),
-              border: Border.all(
-                color: Colors.white,
-                width: 2,
-              ),
             ),
             margin: const EdgeInsets.only(top: 10, right: 10, left: 10),
             padding: const EdgeInsets.all(10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: widget.isMe
-                  ? CrossAxisAlignment.start
-                  : CrossAxisAlignment.end,
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start, // Changed this line
               children: [
-                Text(
-                  username,
-                  style: const TextStyle(
-                    color: AppColors.mainTextColor,
-                    fontWeight: FontWeight.bold,
+                if (!widget.isMe)
+                  Text(
+                    username,
+                    style: const TextStyle(
+                      color: AppColors.mainTextColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
                 const SizedBox(height: 5),
                 widget.isImage
-                    ? Container(
-                        height: 200,
-                        width: 200,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          image: DecorationImage(
-                            image: NetworkImage(widget.message.content),
-                            fit: BoxFit.cover,
+                    ? GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                child: InteractiveViewer(
+                                  child: Image.network(widget.message.content),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          height: 200,
+                          width: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            image: DecorationImage(
+                              image: NetworkImage(widget.message.content),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       )
-                    : Text(widget.message.content,
-                        style: const TextStyle(color: AppColors.mainTextColor)),
+                    : Container(
+                        constraints: BoxConstraints(maxWidth: 250),
+                        child: Text(
+                          widget.message.content,
+                          style: TextStyle(
+                            color: AppColors.mainTextColor,
+                          ),
+                          maxLines: 10,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                 const SizedBox(height: 5),
                 Text(
                   timeago.format(widget.message.sentTime),
@@ -174,16 +194,6 @@ class _MessageBubbleState extends State<MessageBubble> {
               ],
             ),
           ),
-          if (widget.isMe)
-            (profileImage != "" && profileImage != null)
-                ? CircleAvatar(
-                    backgroundImage: NetworkImage(profileImage),
-                    radius: 20,
-                  )
-                : CircleAvatar(
-                    child: Image.asset("assets/icons/profile.png"),
-                    radius: 20,
-                  ),
         ],
       );
 }
