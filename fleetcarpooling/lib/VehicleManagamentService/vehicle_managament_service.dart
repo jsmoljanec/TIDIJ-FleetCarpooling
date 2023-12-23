@@ -26,6 +26,7 @@ Stream<List<Vehicle>> getVehicles() {
         distanceTraveled: value['distanceTraveled'],
         latitude: value['latitude'],
         longitude: value['longitude'],
+        locked:value['locked'],
       ));
     });
 

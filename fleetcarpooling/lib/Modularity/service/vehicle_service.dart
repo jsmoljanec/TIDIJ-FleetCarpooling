@@ -26,7 +26,8 @@ class VehicleService implements VehicleRepository {
         imageUrl: event.vehicle.imageUrl,
         distanceTraveled: event.vehicle.distanceTraveled,
         latitude: event.vehicle.latitude,
-        longitude: event.vehicle.longitude);
+        longitude: event.vehicle.longitude,
+        locked: event.vehicle.locked);
 
     newCarRef.set(vehicle.toMap());
   }
