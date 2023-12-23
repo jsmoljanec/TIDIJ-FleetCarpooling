@@ -1,3 +1,4 @@
+import 'package:fleetcarpooling/ui_elements/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'colors' as my_defined_colors;
 
@@ -61,11 +62,15 @@ class _VehicleControllerState extends State<VehicleController> {
                   const SizedBox(width: 8.0),
                   ElevatedButton(
                     onPressed: () {
-                      var inputText = locationController.text;
+                      var inputText = locationController.text.trim();
                       if (inputText != "" && inputText.isEmpty == false) {
+                      inputText = inputText.toLowerCase().replaceAll(' ', '_').replaceAll("č", "c").replaceAll("ć", "c").replaceAll("š", "s").replaceAll("đ", "dj").replaceAll("ž", "z").toUpperCase();
+                      inputText = inputText[0].toUpperCase() + inputText.substring(1);
                         widget.onCommand("set-destination $inputText");
                         locationController.text = "";
                         locationFocusNode.unfocus();
+                      }else{
+                        CustomToast().showFlutterToast("Destination field cant be empty!");
                       }
                     },
                     style: ElevatedButton.styleFrom(
