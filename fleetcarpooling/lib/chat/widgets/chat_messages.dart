@@ -40,7 +40,7 @@ class ChatMessages extends StatelessWidget {
                         value.messages[index].messageType == MessageType.text;
                     final isMe = FirebaseAuth.instance.currentUser?.uid ==
                         value.messages[index].senderId;
-
+                    FirebaseProvider().scrollDown();
                     return isTextMessage
                         ? MessageBubble(
                             isMe: isMe,
