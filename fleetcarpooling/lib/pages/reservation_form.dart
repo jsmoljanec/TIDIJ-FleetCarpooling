@@ -1,6 +1,8 @@
-import 'package:fleetcarpooling/pages/home_page.dart';
+import 'package:fleetcarpooling/pages/navigation.dart';
+import 'package:fleetcarpooling/ui_elements/buttons.dart';
+import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:fleetcarpooling/ui_elements/custom_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ReservationScreen extends StatefulWidget {
   @override
@@ -9,60 +11,79 @@ class ReservationScreen extends StatefulWidget {
 
 class _ReservationScreenState extends State<ReservationScreen> {
   DateTimeRange? selectedDateRange;
-  TimeOfDay pickupTime = TimeOfDay.now();
-  TimeOfDay returnTime = TimeOfDay.now();
+  TimeOfDay pickupTime = const TimeOfDay(hour: 7, minute: 0);
+  TimeOfDay returnTime = const TimeOfDay(hour: 7, minute: 0);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Car Reservation'),
+        centerTitle: true,
+        title: const Padding(
+          padding: EdgeInsets.only(top: 15.0),
+          child: Text(
+            "FLEET CARPOOLING",
+            style: TextStyle(color: AppColors.mainTextColor),
+          ),
+        ),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Selected Date Range: ${_formatDate(selectedDateRange?.start)} - ${_formatDate(selectedDateRange?.end)}',
+          const Text(
+            "WHEN ARE YOU PLANNING TO TRAVEL?",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: AppColors.mainTextColor, fontSize: 24),
           ),
-          ElevatedButton(
-            onPressed: () async {
-              DateTimeRange? pickedDateRange = await showDateRangePicker(
-                context: context,
-                firstDate: DateTime.now(),
-                lastDate: DateTime(2101),
-              );
-              if (pickedDateRange != null) {
+          const Padding(
+            padding: EdgeInsets.only(left: 24.0),
+            child: Text(
+              "Pick up time",
+              style: TextStyle(
+                color: AppColors.mainTextColor,
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          Center(
+            child: MyCustomSlider(
+              min: 7,
+              max: 16,
+              time: _formatTime(pickupTime),
+              initialValue: 7,
+              onChanged: (value) {
                 setState(() {
-                  selectedDateRange = pickedDateRange;
+                  pickupTime = TimeOfDay(hour: value.toInt(), minute: 00);
                 });
-              }
-            },
-            child: Text('Select Date Range'),
+              },
+            ),
           ),
-          Text('Pickup Time: ${_formatTime(pickupTime)}'),
-          Slider(
-            value: pickupTime.hour.toDouble(),
-            min: 0,
-            max: 23,
-            onChanged: (value) {
-              setState(() {
-                pickupTime =
-                    TimeOfDay(hour: value.toInt(), minute: pickupTime.minute);
-              });
-            },
+          const Padding(
+            padding: EdgeInsets.only(left: 24.0),
+            child: Text(
+              "Return time",
+              style: TextStyle(
+                color: AppColors.mainTextColor,
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ),
-          Text('Return Time: ${_formatTime(returnTime)}'),
-          Slider(
-            value: returnTime.hour.toDouble(),
-            min: 0,
-            max: 23,
-            onChanged: (value) {
-              setState(() {
-                returnTime =
-                    TimeOfDay(hour: value.toInt(), minute: returnTime.minute);
-              });
-            },
+          Center(
+            child: MyCustomSlider(
+              min: 0,
+              max: 23,
+              time: _formatTime(returnTime),
+              initialValue: 7,
+              onChanged: (value) {
+                setState(() {
+                  returnTime = TimeOfDay(hour: value.toInt(), minute: 00);
+                });
+              },
+            ),
           ),
-          ElevatedButton(
+          MyElevatedButton(
             onPressed: () async {
               DateTime date = selectedDateRange!.start;
               TimeOfDay time = pickupTime;
@@ -79,7 +100,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomePage(
+                  builder: (context) => NavigationPage(
                     pickupTime: pickupDateTime,
                     returnTime: returnDateTime,
                   ),
@@ -89,15 +110,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
               print(pickupDateTime);
               print(returnDateTime);
             },
-            child: Text('Check'),
+            label: "Check",
           ),
         ],
       ),
     );
-  }
-
-  String _formatDate(DateTime? date) {
-    return date != null ? DateFormat('yyyy-MM-dd').format(date) : '';
   }
 
   String _formatTime(TimeOfDay timeOfDay) {
