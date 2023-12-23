@@ -3,6 +3,7 @@ import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/ui_elements/custom_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class ReservationScreen extends StatefulWidget {
   @override
@@ -11,6 +12,9 @@ class ReservationScreen extends StatefulWidget {
 
 class _ReservationScreenState extends State<ReservationScreen> {
   DateTimeRange? selectedDateRange;
+  final CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime _focusedDay = DateTime.now();
+  DateTimeRange? _selectedDateRange;
   TimeOfDay pickupTime = const TimeOfDay(hour: 7, minute: 0);
   TimeOfDay returnTime = const TimeOfDay(hour: 7, minute: 0);
 
@@ -82,6 +86,81 @@ class _ReservationScreenState extends State<ReservationScreen> {
                 });
               },
             ),
+          ),
+          TableCalendar(
+            calendarFormat: _calendarFormat,
+            focusedDay: _focusedDay,
+            firstDay: DateTime.now(),
+            lastDay: DateTime(2101),
+            calendarStyle: CalendarStyle(
+              selectedDecoration: const BoxDecoration(
+                color: Colors.blue,
+                shape: BoxShape.circle,
+              ),
+              rangeStartDecoration: BoxDecoration(
+                color: Colors.blue.withOpacity(0.5),
+                shape: BoxShape.circle,
+              ),
+              rangeEndDecoration: BoxDecoration(
+                color: Colors.blue.withOpacity(0.5),
+              ),
+              rangeHighlightColor: Colors.blue.withOpacity(0.2),
+              defaultTextStyle: const TextStyle(
+                color: Colors.blue,
+              ),
+              weekendTextStyle: const TextStyle(
+                color: Colors.blue,
+              ),
+            ),
+            headerStyle: const HeaderStyle(
+              titleCentered: true,
+              formatButtonVisible: false,
+              leftChevronIcon: Icon(Icons.chevron_left, color: Colors.blue),
+              rightChevronIcon: Icon(Icons.chevron_right, color: Colors.blue),
+              titleTextStyle: TextStyle(color: Colors.blue),
+              headerPadding: EdgeInsets.all(8.0),
+            ),
+            onPageChanged: (focusedDay) {
+              setState(() {
+                _focusedDay = focusedDay;
+              });
+            },
+            selectedDayPredicate: (day) {
+              return _selectedDateRange != null &&
+                  day.isAfter(_selectedDateRange!.start
+                      .subtract(const Duration(days: 1))) &&
+                  day.isBefore(
+                      _selectedDateRange!.end.add(const Duration(days: 1)));
+            },
+            onDaySelected: (selectedDay, focusedDay) {
+              setState(() {
+                if (_selectedDateRange == null) {
+                  _selectedDateRange = DateTimeRange(
+                    start: selectedDay,
+                    end: selectedDay,
+                  );
+                } else if (_selectedDateRange!.start ==
+                    _selectedDateRange!.end) {
+                  final newStart =
+                      _selectedDateRange!.start.isBefore(selectedDay)
+                          ? _selectedDateRange!.start
+                          : selectedDay;
+                  final newEnd = _selectedDateRange!.start.isBefore(selectedDay)
+                      ? selectedDay
+                      : _selectedDateRange!.start;
+                  _selectedDateRange = DateTimeRange(
+                    start: newStart,
+                    end: newEnd,
+                  );
+                } else {
+                  _selectedDateRange = DateTimeRange(
+                    start: selectedDay,
+                    end: selectedDay,
+                  );
+                }
+                selectedDateRange = _selectedDateRange;
+              });
+            },
           ),
           Expanded(
             child: Align(
