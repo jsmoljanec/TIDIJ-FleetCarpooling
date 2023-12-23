@@ -25,6 +25,7 @@ Stream<List<Vehicle>> getVehicles() {
         imageUrl: value['imageUrl'],
         latitude: value['latitude'],
         longitude: value['longitude'],
+        locked:value['locked'],
       ));
     });
 
