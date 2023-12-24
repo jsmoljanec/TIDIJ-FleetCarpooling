@@ -146,8 +146,9 @@ class _AddVehicleQRForm extends State<AddVehicleQRForm> {
         year: year,
         active: active,
         imageUrl: imageUrl,
-        latitude: 0,
-        longitude: 0);
+        latitude: 46.3897,
+        longitude: 16.4380,
+        locked: true);
 
     BlocProvider.of<VehicleBloc>(context)
         .add(AddVehicleEvent(vehicle: newVehicle));

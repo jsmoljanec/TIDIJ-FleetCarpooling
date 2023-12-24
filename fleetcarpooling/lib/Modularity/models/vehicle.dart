@@ -12,6 +12,7 @@ class Vehicle {
   int distanceTraveled;
   double latitude;
   double longitude;
+  bool locked;
 
   Vehicle(
       {required this.vin,
@@ -26,7 +27,8 @@ class Vehicle {
       required this.imageUrl,
       this.distanceTraveled = 0,
       required this.latitude,
-      required this.longitude});
+      required this.longitude,
+      required this.locked});
 
   Map<String, dynamic> toMap() {
     return {
@@ -42,7 +44,8 @@ class Vehicle {
       'imageUrl': imageUrl,
       'distanceTraveled': distanceTraveled,
       'latitude': latitude,
-      'longitude': longitude
+      'longitude': longitude,
+      'locked': locked,
     };
   }
 }

@@ -596,6 +596,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                       imageUrl: imageUrlCar,
                       latitude: 46.3897,
                       longitude: 16.4380,
+                      locked: true,
                     );
 
                     BlocProvider.of<VehicleBloc>(context)

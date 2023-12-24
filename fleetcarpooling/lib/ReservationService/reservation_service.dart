@@ -87,4 +87,42 @@ class ReservationService implements ReservationRepository {
 
     sendReservationEmail(email, datePickup, timePickup, dateReturn, timeReturn);
   }
+
+  Future<bool> checkReservation(String email, String vinCar) async {
+    final databaseReference = FirebaseDatabase.instance.ref();
+    var query = databaseReference
+        .child("Reservation")
+        .orderByChild('VinCar')
+        .equalTo(vinCar);
+
+    var snapshot = await query.once();
+
+    Map<dynamic, dynamic>? reservations =
+        snapshot.snapshot.value as Map<dynamic, dynamic>?;
+
+    if (reservations != null) {
+      DateTime currentDateTime = DateTime.now();
+
+      for (var entry in reservations.entries) {
+        var reservationData = entry.value as Map<dynamic, dynamic>;
+
+        if (reservationData['email'] == email) {
+          String pickupDate = reservationData['pickupDate'];
+          String pickupTime = reservationData['pickupTime'];
+          String returnDate = reservationData['returnDate'];
+          String returnTime = reservationData['returnTime'];
+
+          DateTime pickupDateTime = DateTime.parse('$pickupDate $pickupTime');
+          DateTime returnDateTime = DateTime.parse('$returnDate $returnTime');
+
+          if (currentDateTime.isAfter(pickupDateTime) &&
+              currentDateTime.isBefore(returnDateTime)) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  }
 }
