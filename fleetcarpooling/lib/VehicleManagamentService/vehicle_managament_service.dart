@@ -60,7 +60,8 @@ Stream<Vehicle?> getVehicle(String vin) {
             imageUrl: value['imageUrl'],
             latitude: value['latitude'],
             longitude: value['longitude'],
-            distanceTraveled: value['distanceTraveled']);
+            distanceTraveled: value['distanceTraveled'],
+            locked: value['locked']);
       }
     });
 
