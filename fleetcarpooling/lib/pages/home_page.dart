@@ -211,7 +211,7 @@ class _HomePageState extends State<HomePage> {
                                   MaterialPageRoute(
                                       builder: (context) => SelectedVehiclePage(
                                             vin: vinCar,
-                                            isFree: false,
+                                            isFree: true,
                                             pickupTime: DateTime.parse(
                                                 '2023-12-28 07:00'),
                                             returnTime: DateTime.parse(
