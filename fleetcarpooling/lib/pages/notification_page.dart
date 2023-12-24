@@ -142,67 +142,78 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   void _showNotificationDetailsPopup(
-      BuildContext context, Map<String, dynamic> notificationDetails) {
-    try {
-      String message = notificationDetails['message'];
+    BuildContext context,
+    Map<String, dynamic> notification,
+  ) async {
+    String pickupDate = notification['pickupDate'].toString();
+    String pickupTime = notification['pickupTime'].toString();
+    String returnDate = notification['returnDate'].toString();
+    String returnTime = notification['returnTime'].toString();
+    String model = notification['model'].toString();
+    String brand = notification['brand'].toString();
+    String year = notification['year'].toString();
 
-      // ignore: use_build_context_synchronously
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          double notificationWidth = MediaQuery.of(context).size.width * 1.5;
+    double notificationWidth = MediaQuery.of(context).size.width * 1.5;
 
-          return AlertDialog(
-            backgroundColor: AppColors.backgroundColor,
-            title: const Text(
-              'Notification details',
-              style: TextStyle(
-                  color: AppColors.mainTextColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColors.backgroundColor,
+          title: const Text(
+            'Notification Details',
+            style: TextStyle(
+              color: AppColors.mainTextColor,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
-            content: SizedBox(
-              width: notificationWidth,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildDetailRow('Message:', message),
-                  ],
-                ),
+            textAlign: TextAlign.center,
+          ),
+          content: SizedBox(
+            width: notificationWidth,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildDetailRow('Pickup Date:', pickupDate),
+                  _buildDetailRow('Pickup Time:', pickupTime),
+                  _buildDetailRow('Return Date:', returnDate),
+                  _buildDetailRow('Return Time:', returnTime),
+                  const SizedBox(height: 16),
+                  _buildDetailRow('Model:', model),
+                  _buildDetailRow('Brand:', brand),
+                  _buildDetailRow('Year:', year),
+                ],
               ),
             ),
-            actions: [
-              Container(
-                margin: const EdgeInsets.only(right: 8.0, bottom: 8.0),
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Close',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: AppColors.mainTextColor),
+          ),
+          actions: [
+            Container(
+              margin: const EdgeInsets.only(right: 8.0, bottom: 8.0),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Close',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: AppColors.mainTextColor,
                     ),
                   ),
                 ),
               ),
-            ],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
             ),
-          );
-        },
-      );
-    } catch (e) {
-      // ignore: use_build_context_synchronously
-      _showErrorMessage(context, 'Error showing notification details: $e');
-    }
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildDetailRow(String label, String value) {
