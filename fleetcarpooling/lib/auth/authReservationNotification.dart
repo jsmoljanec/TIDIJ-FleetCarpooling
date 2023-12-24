@@ -42,7 +42,7 @@ class AuthReservationNotification {
                       pickupDateTime.isBefore(now))) {
                     _saveNotificationToDatabase(
                       'You have a reservation for ${value['pickupDate']} from ${value['pickupTime']} until ${value['returnDate']} ${value['returnTime']}.',
-                      value['vinCar'],
+                      value['vinCar']
                     );
                   }
                 }
