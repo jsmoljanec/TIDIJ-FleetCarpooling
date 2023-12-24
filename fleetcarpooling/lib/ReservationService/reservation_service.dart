@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/auth/send_email.dart';
-
-import '../Models/terms_model.dart';
+import 'package:fleetcarpooling/Models/reservation_model.dart';
+import 'package:flutter/material.dart';
+import 'package:fleetcarpooling/Models/terms_model.dart';
 
 abstract class ReservationRepository {
   Stream<List<Terms>> getReservationStream(String vinCar);
@@ -42,17 +43,22 @@ class ReservationService implements ReservationRepository {
     DatabaseReference reservationRef = database.child("Reservation");
     DatabaseReference newReservationRef = reservationRef.child(uniqueName);
     String pickupH;
+    String returnH;
     String pickupDate =
-        '${pickupTime.year}-${pickupTime.month}-${pickupTime.day}';
+        '${pickupTime.year}-${pickupTime.month.toString().padLeft(2, '0')}-${pickupTime.day.toString().padLeft(2, '0')}';
     String returnDate =
-        '${returnTime.year}-${returnTime.month}-${returnTime.day}';
+        '${returnTime.year}-${returnTime.month.toString().padLeft(2, '0')}-${returnTime.day.toString().padLeft(2, '0')}';
     if (pickupTime.hour >= 10) {
       pickupH = '${pickupTime.hour}:${pickupTime.minute}${pickupTime.second}';
     } else {
       pickupH = '0${pickupTime.hour}:${pickupTime.minute}${pickupTime.second}';
     }
-    String returnH =
-        '${returnTime.hour}:${returnTime.minute}${returnTime.second}';
+    if (returnTime.hour >= 10) {
+      returnH = '${returnTime.hour}:${returnTime.minute}${returnTime.second}';
+    } else {
+      returnH = '0${returnTime.hour}:${returnTime.minute}${returnTime.second}';
+    }
+
     try {
       await newReservationRef.set({
         'VinCar': vin,
@@ -88,7 +94,57 @@ class ReservationService implements ReservationRepository {
     sendReservationEmail(email, datePickup, timePickup, dateReturn, timeReturn);
   }
 
-  Future<bool> checkReservation(String email, String vinCar) async {
+  Future<bool> getReservationforCar(
+      String vin, DateTime pickupTime, DateTime returnTime) async {
+    List<Terms> termini = [];
+
+    final databaseReference = FirebaseDatabase.instance.ref();
+    var query = await databaseReference
+        .child("Reservation")
+        .orderByChild('VinCar')
+        .equalTo(vin);
+
+    DatabaseEvent snapshot = await query.once();
+    if (snapshot.snapshot.value != null) {
+      Map<dynamic, dynamic>? reservations =
+          snapshot.snapshot.value as Map<dynamic, dynamic>?;
+      reservations?.forEach((key, value) {
+        if (value['pickupDate'] != null) {
+          DateTime pickupBusyDate =
+              DateTime.parse(value['pickupDate'] + ' ' + value['pickupTime']);
+          DateTime returnBusyDate =
+              DateTime.parse(value['returnDate'] + ' ' + value['returnTime']);
+          termini.add(Terms(pickupBusyDate, returnBusyDate));
+        }
+      });
+    }
+
+    print(termini);
+
+    if (pickupTime.isBefore(returnTime)) {
+      bool isAvailable = true;
+      for (int i = 0; i < termini.length; i++) {
+        if ((pickupTime.isBefore(termini[i].returnDate) &&
+                returnTime.isAfter(termini[i].pickupDate)) ||
+            (pickupTime.isBefore(termini[i].returnDate) &&
+                returnTime.isAfter(termini[i].pickupDate))) {
+          isAvailable = false;
+          break;
+        }
+      }
+      if (isAvailable) {
+        print('Auto je dostupan!');
+        return true;
+      } else {
+        print('Automobil nije dostupan u odabranom vremenskom razdoblju.');
+        return false;
+      }
+    } else {
+      print('Vrijeme povratka mora biti nakon vremena preuzimanja.');
+      return false;
+    }
+  }
+   Future<bool> checkReservation(String email, String vinCar) async {
     final databaseReference = FirebaseDatabase.instance.ref();
     var query = databaseReference
         .child("Reservation")
@@ -125,4 +181,5 @@ class ReservationService implements ReservationRepository {
 
     return false;
   }
+
 }
