@@ -5,8 +5,6 @@ import 'package:fleetcarpooling/Models/reservation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/Models/terms_model.dart';
 
-
-
 abstract class ReservationRepository {
   Stream<List<Terms>> getReservationStream(String vinCar);
 }
@@ -45,17 +43,22 @@ class ReservationService implements ReservationRepository {
     DatabaseReference reservationRef = database.child("Reservation");
     DatabaseReference newReservationRef = reservationRef.child(uniqueName);
     String pickupH;
+    String returnH;
     String pickupDate =
-        '${pickupTime.year}-${pickupTime.month}-${pickupTime.day}';
+        '${pickupTime.year}-${pickupTime.month.toString().padLeft(2, '0')}-${pickupTime.day.toString().padLeft(2, '0')}';
     String returnDate =
-        '${returnTime.year}-${returnTime.month}-${returnTime.day}';
+        '${returnTime.year}-${returnTime.month.toString().padLeft(2, '0')}-${returnTime.day.toString().padLeft(2, '0')}';
     if (pickupTime.hour >= 10) {
       pickupH = '${pickupTime.hour}:${pickupTime.minute}${pickupTime.second}';
     } else {
       pickupH = '0${pickupTime.hour}:${pickupTime.minute}${pickupTime.second}';
     }
-    String returnH =
-        '${returnTime.hour}:${returnTime.minute}${returnTime.second}';
+    if (returnTime.hour >= 10) {
+      returnH = '${returnTime.hour}:${returnTime.minute}${returnTime.second}';
+    } else {
+      returnH = '0${returnTime.hour}:${returnTime.minute}${returnTime.second}';
+    }
+
     try {
       await newReservationRef.set({
         'VinCar': vin,

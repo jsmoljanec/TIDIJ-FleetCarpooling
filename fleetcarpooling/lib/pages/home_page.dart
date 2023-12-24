@@ -78,6 +78,12 @@ class _HomePageState extends State<HomePage> {
     double screenWidth = MediaQuery.of(context).size.width;
     double padding2 = screenHeight * 0.02;
 
+    String pickupDateTime =
+        '${widget.pickupTime.year}-${widget.pickupTime.month.toString().padLeft(2, '0')}-${widget.pickupTime.day.toString().padLeft(2, '0')} ${widget.pickupTime.hour.toString().padLeft(2, '0')}:${widget.pickupTime.minute}${widget.pickupTime.second}';
+
+    String returnDateTime =
+        '${widget.returnTime.year}-${widget.returnTime.month.toString().padLeft(2, '0')}-${widget.returnTime.day.toString().padLeft(2, '0')} ${widget.returnTime.hour.toString().padLeft(2, '0')}:${widget.returnTime.minute}${widget.returnTime.second}';
+
     return Scaffold(
         body: Padding(
       padding: const EdgeInsets.only(top: 25.0),
@@ -333,10 +339,8 @@ class _HomePageState extends State<HomePage> {
                                                 SelectedVehiclePage(
                                                   vin: vinCar,
                                                   isFree: true,
-                                                  pickupTime: DateTime.parse(
-                                                      '2023-12-28 07:00'),
-                                                  returnTime: DateTime.parse(
-                                                      '2023-12-28 18:00'),
+                                                  pickupTime: widget.pickupTime,
+                                                  returnTime: widget.returnTime,
                                                 )),
                                       );
                                     },
