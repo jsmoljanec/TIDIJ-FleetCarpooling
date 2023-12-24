@@ -338,7 +338,7 @@ class _HomePageState extends State<HomePage> {
                                             builder: (context) =>
                                                 SelectedVehiclePage(
                                                   vin: vinCar,
-                                                  isFree: true,
+                                                  isFree: isFree,
                                                   pickupTime: widget.pickupTime,
                                                   returnTime: widget.returnTime,
                                                 )),
