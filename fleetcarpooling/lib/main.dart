@@ -37,7 +37,6 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final AuthLogin _authLogin = AuthLogin();
   final TextEditingController myController = TextEditingController();
   final Widget initialScreen;
 
@@ -47,19 +46,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => ChangeNotifierProvider(
         create: (_) => FirebaseProvider(),
         child: MaterialApp(
-          home: AppWrapper(),
+          home: AppWrapper(initialScreen: initialScreen),
           debugShowCheckedModeBanner: false,
         ),
       );
 }
 
 class AppWrapper extends StatefulWidget {
+  final Widget initialScreen;
+
+  AppWrapper({required this.initialScreen});
+
   @override
   _AppWrapperState createState() => _AppWrapperState();
 }
 
 class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
   late final TextEditingController myController;
+  final AuthLogin _authLogin = AuthLogin();
 
   @override
   void initState() {
@@ -96,7 +100,7 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
   }
 
   @override
-  Widget build(BuildContext context)  => ChangeNotifierProvider(
+  Widget build(BuildContext context) => ChangeNotifierProvider(
         create: (_) => FirebaseProvider(),
         child: MaterialApp(
           home: FutureBuilder<bool>(
@@ -123,7 +127,7 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
                   } else {
                     return snapshot.data == true
                         ? AdminHomePage()
-                        : initialScreen;
+                        : widget.initialScreen;
                   }
                 default:
                   return const Text('Unexpected ConnectionState');
@@ -132,7 +136,5 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
           ),
           debugShowCheckedModeBanner: false,
         ),
-      ),
-
-  );
+      );
 }
