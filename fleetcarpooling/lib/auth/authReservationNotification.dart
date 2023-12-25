@@ -26,7 +26,7 @@ class AuthReservationNotification {
         String message = _constructNotificationMessage(reservationData);
 
         await _databaseReference.child('Notifications').push().set({
-          'userEmail': currentUser.email,
+          'email': currentUser.email,
           'message': message,
           'VinCar': reservationData['vinCar'],
           'pickupDate': _formatDate(reservationData['pickupDate']),
