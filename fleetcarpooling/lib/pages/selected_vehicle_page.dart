@@ -4,6 +4,8 @@ import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/ReservationService/terms_service.dart';
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
+import 'package:fleetcarpooling/auth/authReservationNotification.dart';
+import 'package:fleetcarpooling/pages/notify_me_page.dart';
 import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/calendar.dart';
@@ -30,6 +32,8 @@ class SelectedVehiclePage extends StatefulWidget {
 
 class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
   late ReservationService _service = ReservationService();
+  final AuthReservationNotification authReservationNotification =
+      AuthReservationNotification();
   final TermsService _termsService = TermsService();
   late List<Terms> termini;
   late List<DateTime> busyTerms;
@@ -64,6 +68,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
   @override
   Widget build(BuildContext context) {
     String email = FirebaseAuth.instance.currentUser!.email!;
+
     return Scaffold(
       body: Column(
         children: [
@@ -202,24 +207,28 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                                       widget.pickupTime, widget.returnTime);
                                   await _service.confirmRegistration(email,
                                       widget.pickupTime, widget.returnTime);
+                                  await authReservationNotification
+                                      .saveNotificationToDatabase({
+                                    'vinCar': widget.vin,
+                                    'pickupDate':
+                                        widget.pickupTime.toLocal().toString(),
+                                    'pickupTime':
+                                        widget.pickupTime.toLocal().toString(),
+                                    'returnDate':
+                                        widget.returnTime.toLocal().toString(),
+                                    'returnTime':
+                                        widget.returnTime.toLocal().toString(),
+                                  });
                                 } else {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('Notify Me'),
-                                        content: const Text(
-                                            'This vehicle is currently not available. We will notify you when it becomes available.'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text('OK'),
-                                          ),
-                                        ],
-                                      );
-                                    },
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => NotifyMe(
+                                            vinCar: snapshot.data!.vin,
+                                            pickupDateTime:
+                                                widget.pickupTime.toLocal(),
+                                            returnDateTime:
+                                                widget.returnTime.toLocal())),
                                   );
                                 }
                               },
