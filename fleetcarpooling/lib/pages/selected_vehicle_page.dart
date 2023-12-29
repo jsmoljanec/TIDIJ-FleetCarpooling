@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fleetcarpooling/Models/terms_model.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
-import 'package:fleetcarpooling/ReservationService/terms_service.dart';
 import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/auth/authReservationNotification.dart';
@@ -32,40 +30,9 @@ class SelectedVehiclePage extends StatefulWidget {
 }
 
 class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
-  late ReservationService _service = ReservationService();
+  final ReservationService service = ReservationService();
   final AuthReservationNotification authReservationNotification =
       AuthReservationNotification();
-  final TermsService _termsService = TermsService();
-  late List<Terms> termini;
-  late List<DateTime> busyTerms;
-  late List<DateTime> freeTerms;
-
-  @override
-  void initState() {
-    super.initState();
-    _service = ReservationService();
-    termini = [];
-    busyTerms = [];
-    freeTerms = [];
-
-    _loadData();
-  }
-
-  void _loadData() {
-    List<DateTime> workHours = _termsService.createWorkHours(
-        DateTime.now(), DateTime.now().add(const Duration(days: 365)));
-
-    _service.getReservationStream(widget.vin).listen((newTermini) {
-      termini = newTermini;
-      busyTerms = _termsService.extractReservedTerms(termini);
-
-      freeTerms =
-          workHours.where((termin) => !busyTerms.contains(termin)).toList();
-
-      setState(() {});
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     String email = FirebaseAuth.instance.currentUser!.email!;
@@ -74,6 +41,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
       body: Column(
         children: [
           Expanded(
+            // ignore: sort_child_properties_last
             child: StreamBuilder<Vehicle?>(
               stream: getVehicle(widget.vin),
               builder: (context, snapshot) {
@@ -128,14 +96,16 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                     Expanded(
                       child: Container(
                         height: double.infinity,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: AppColors.primaryColor,
-                          borderRadius: const BorderRadius.only(
+                          borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(30),
                             topRight: Radius.circular(30),
                           ),
-                          border: Border.all(
-                            color: AppColors.mainTextColor,
+                          border: Border(
+                            top: BorderSide(color: AppColors.mainTextColor),
+                            left: BorderSide(color: AppColors.mainTextColor),
+                            right: BorderSide(color: AppColors.mainTextColor),
                           ),
                         ),
                         child: Column(
@@ -181,83 +151,6 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                                 ],
                               ),
                             ),
-                            MyCalendar(
-                              height: 200,
-                              width: 300,
-                              busyTerms: busyTerms,
-                              freeTerms: freeTerms,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder: (context, animation,
-                                            secondaryAnimation) =>
-                                        const ReservationScreen(),
-                                    transitionsBuilder: (context, animation,
-                                        secondaryAnimation, child) {
-                                      const begin = Offset(0.0, 1.0);
-                                      const end = Offset.zero;
-                                      const curve = Curves.ease;
-
-                                      var tween = Tween(begin: begin, end: end)
-                                          .chain(CurveTween(curve: curve));
-
-                                      return SlideTransition(
-                                        position: animation.drive(tween),
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                "Change date",
-                                style: TextStyle(
-                                  color: AppColors.mainTextColor,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: AppColors.mainTextColor,
-                                  decorationThickness: 2.0,
-                                ),
-                              ),
-                            ),
-                            MyElevatedButton(
-                              onPressed: () async {
-                                if (widget.isFree == true) {
-                                  await _service.addReservation(widget.vin,
-                                      widget.pickupTime, widget.returnTime);
-                                  await _service.confirmRegistration(email,
-                                      widget.pickupTime, widget.returnTime);
-                                  await authReservationNotification
-                                      .saveNotificationToDatabase({
-                                    'vinCar': widget.vin,
-                                    'pickupDate':
-                                        widget.pickupTime.toLocal().toString(),
-                                    'pickupTime':
-                                        widget.pickupTime.toLocal().toString(),
-                                    'returnDate':
-                                        widget.returnTime.toLocal().toString(),
-                                    'returnTime':
-                                        widget.returnTime.toLocal().toString(),
-                                  });
-                                } else {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => NotifyMe(
-                                            vinCar: snapshot.data!.vin,
-                                            pickupDateTime:
-                                                widget.pickupTime.toLocal(),
-                                            returnDateTime:
-                                                widget.returnTime.toLocal())),
-                                  );
-                                }
-                              },
-                              label: widget.isFree
-                                  ? "MAKE A RESERVATION"
-                                  : "NOTIFY ME",
-                            ),
                           ],
                         ),
                       ),
@@ -265,6 +158,79 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                   ],
                 );
               },
+            ),
+            flex: 3,
+          ),
+          Expanded(
+            flex: 4,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: AppColors.primaryColor,
+                borderRadius: BorderRadius.only(),
+                border: Border(
+                  left: BorderSide(color: AppColors.mainTextColor),
+                  right: BorderSide(color: AppColors.mainTextColor),
+                ),
+              ),
+              height: double.infinity,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  MyCalendar(
+                    height: double.infinity,
+                    width: MediaQuery.of(context).size.width,
+                    vin: widget.vin,
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: const Text(
+                      "Change date",
+                      style: TextStyle(
+                        color: AppColors.mainTextColor,
+                        decoration: TextDecoration.underline,
+                        decorationColor: AppColors.mainTextColor,
+                        decorationThickness: 2.0,
+                      ),
+                    ),
+                  ),
+                  MyElevatedButton(
+                    onPressed: () async {
+                      if (widget.isFree == true) {
+                        await service.addReservation(
+                          widget.vin,
+                          widget.pickupTime,
+                          widget.returnTime,
+                        );
+                        await service.confirmRegistration(
+                          email,
+                          widget.pickupTime,
+                          widget.returnTime,
+                        );
+                        await authReservationNotification
+                            .saveNotificationToDatabase({
+                          'vinCar': widget.vin,
+                          'pickupDate': widget.pickupTime.toLocal().toString(),
+                          'pickupTime': widget.pickupTime.toLocal().toString(),
+                          'returnDate': widget.returnTime.toLocal().toString(),
+                          'returnTime': widget.returnTime.toLocal().toString(),
+                        });
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NotifyMe(
+                              vinCar: "snapshot.data!.vin",
+                              pickupDateTime: widget.pickupTime.toLocal(),
+                              returnDateTime: widget.returnTime.toLocal(),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    label: widget.isFree ? "MAKE A RESERVATION" : "NOTIFY ME",
+                  ),
+                ],
+              ),
             ),
           ),
         ],
