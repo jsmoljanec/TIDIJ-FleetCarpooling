@@ -12,20 +12,24 @@ class TermsService {
   }
 
   List<DateTime> extractReservedTerms(List<Terms> terms) {
-    List<DateTime> reservedTerms = [];
-    for (Terms t in terms) {
-      for (int i = 0; i <= t.returnDate.difference(t.pickupDate).inDays; i++) {
-        for (int j = (i == 0 ? t.pickupDate.hour : 7);
-            j <=
-                (i < t.returnDate.difference(t.pickupDate).inDays
-                    ? 16
-                    : t.returnDate.hour);
-            j++) {
-          reservedTerms.add(DateTime(
-              t.pickupDate.year, t.pickupDate.month, t.pickupDate.day + i, j));
+    var start = 7;
+    var end = 17;
+
+    var reservedTerms = <DateTime>[];
+
+    for (var reservation in terms) {
+      var currentDay = reservation.pickupDate;
+
+      while (
+          currentDay.isBefore(reservation.returnDate.add(Duration(hours: 1)))) {
+        if (currentDay.hour >= start && currentDay.hour < end) {
+          reservedTerms.add(currentDay);
         }
+
+        currentDay = currentDay.add(Duration(hours: 1));
       }
     }
+
     return reservedTerms;
   }
 }
