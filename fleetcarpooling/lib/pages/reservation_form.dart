@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class ReservationScreen extends StatefulWidget {
+  const ReservationScreen({Key? key}) : super(key: key);
+
   @override
   _ReservationScreenState createState() => _ReservationScreenState();
 }
@@ -32,138 +34,139 @@ class _ReservationScreenState extends State<ReservationScreen> {
           ),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "WHEN ARE YOU PLANNING TO TRAVEL?",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.mainTextColor, fontSize: 24),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 24.0),
-            child: Text(
-              "Pick up time",
-              style: TextStyle(
-                color: AppColors.mainTextColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "WHEN ARE YOU PLANNING TO TRAVEL?",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: AppColors.mainTextColor, fontSize: 20),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 24.0),
+              child: Text(
+                "Pick up time",
+                style: TextStyle(
+                  color: AppColors.mainTextColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-          ),
-          Center(
-            child: MyCustomSlider(
-              min: 7,
-              max: 16,
-              time: _formatTime(pickupTime),
-              initialValue: 7,
-              onChanged: (value) {
+            Center(
+              child: MyCustomSlider(
+                min: 7,
+                max: 16,
+                time: _formatTime(pickupTime),
+                initialValue: 7,
+                onChanged: (value) {
+                  setState(() {
+                    pickupTime = TimeOfDay(hour: value.toInt(), minute: 00);
+                  });
+                },
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 24.0),
+              child: Text(
+                "Return time",
+                style: TextStyle(
+                  color: AppColors.mainTextColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            Center(
+              child: MyCustomSlider(
+                min: 0,
+                max: 23,
+                time: _formatTime(returnTime),
+                initialValue: 7,
+                onChanged: (value) {
+                  setState(() {
+                    returnTime = TimeOfDay(hour: value.toInt(), minute: 00);
+                  });
+                },
+              ),
+            ),
+            TableCalendar(
+              calendarFormat: _calendarFormat,
+              focusedDay: _focusedDay,
+              firstDay: DateTime.now(),
+              lastDay: DateTime(2101),
+              calendarStyle: CalendarStyle(
+                selectedDecoration: const BoxDecoration(
+                  color: AppColors.activeDays,
+                  shape: BoxShape.circle,
+                ),
+                defaultTextStyle: const TextStyle(
+                  color: AppColors.activeDays,
+                ),
+                weekendTextStyle: const TextStyle(
+                  color: AppColors.activeDays,
+                ),
+                todayDecoration: BoxDecoration(
+                  color: AppColors.activeDays.withOpacity(0.5),
+                  shape: BoxShape.circle,
+                ),
+              ),
+              headerStyle: const HeaderStyle(
+                titleCentered: true,
+                formatButtonVisible: false,
+                leftChevronIcon:
+                    Icon(Icons.chevron_left, color: AppColors.activeDays),
+                rightChevronIcon:
+                    Icon(Icons.chevron_right, color: AppColors.activeDays),
+                titleTextStyle: TextStyle(color: AppColors.activeDays),
+                headerPadding: EdgeInsets.all(8.0),
+              ),
+              onPageChanged: (focusedDay) {
                 setState(() {
-                  pickupTime = TimeOfDay(hour: value.toInt(), minute: 00);
+                  _focusedDay = focusedDay;
+                });
+              },
+              selectedDayPredicate: (day) {
+                return _selectedDateRange != null &&
+                    day.isAfter(_selectedDateRange!.start
+                        .subtract(const Duration(days: 1))) &&
+                    day.isBefore(
+                        _selectedDateRange!.end.add(const Duration(days: 1)));
+              },
+              onDaySelected: (selectedDay, focusedDay) {
+                setState(() {
+                  if (_selectedDateRange == null) {
+                    _selectedDateRange = DateTimeRange(
+                      start: selectedDay,
+                      end: selectedDay,
+                    );
+                  } else if (_selectedDateRange!.start ==
+                      _selectedDateRange!.end) {
+                    final newStart =
+                        _selectedDateRange!.start.isBefore(selectedDay)
+                            ? _selectedDateRange!.start
+                            : selectedDay;
+                    final newEnd =
+                        _selectedDateRange!.start.isBefore(selectedDay)
+                            ? selectedDay
+                            : _selectedDateRange!.start;
+                    _selectedDateRange = DateTimeRange(
+                      start: newStart,
+                      end: newEnd,
+                    );
+                  } else {
+                    _selectedDateRange = DateTimeRange(
+                      start: selectedDay,
+                      end: selectedDay,
+                    );
+                  }
+                  selectedDateRange = _selectedDateRange;
+                  isDateSelected = true;
                 });
               },
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 24.0),
-            child: Text(
-              "Return time",
-              style: TextStyle(
-                color: AppColors.mainTextColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-          Center(
-            child: MyCustomSlider(
-              min: 0,
-              max: 23,
-              time: _formatTime(returnTime),
-              initialValue: 7,
-              onChanged: (value) {
-                setState(() {
-                  returnTime = TimeOfDay(hour: value.toInt(), minute: 00);
-                });
-              },
-            ),
-          ),
-          TableCalendar(
-            calendarFormat: _calendarFormat,
-            focusedDay: _focusedDay,
-            firstDay: DateTime.now(),
-            lastDay: DateTime(2101),
-            calendarStyle: CalendarStyle(
-              selectedDecoration: const BoxDecoration(
-                color: AppColors.activeDays,
-                shape: BoxShape.circle,
-              ),
-              defaultTextStyle: const TextStyle(
-                color: AppColors.activeDays,
-              ),
-              weekendTextStyle: const TextStyle(
-                color: AppColors.activeDays,
-              ),
-              todayDecoration: BoxDecoration(
-                color: AppColors.activeDays.withOpacity(0.5),
-                shape: BoxShape.circle,
-              ),
-            ),
-            headerStyle: const HeaderStyle(
-              titleCentered: true,
-              formatButtonVisible: false,
-              leftChevronIcon:
-                  Icon(Icons.chevron_left, color: AppColors.activeDays),
-              rightChevronIcon:
-                  Icon(Icons.chevron_right, color: AppColors.activeDays),
-              titleTextStyle: TextStyle(color: AppColors.activeDays),
-              headerPadding: EdgeInsets.all(8.0),
-            ),
-            onPageChanged: (focusedDay) {
-              setState(() {
-                _focusedDay = focusedDay;
-              });
-            },
-            selectedDayPredicate: (day) {
-              return _selectedDateRange != null &&
-                  day.isAfter(_selectedDateRange!.start
-                      .subtract(const Duration(days: 1))) &&
-                  day.isBefore(
-                      _selectedDateRange!.end.add(const Duration(days: 1)));
-            },
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                if (_selectedDateRange == null) {
-                  _selectedDateRange = DateTimeRange(
-                    start: selectedDay,
-                    end: selectedDay,
-                  );
-                } else if (_selectedDateRange!.start ==
-                    _selectedDateRange!.end) {
-                  final newStart =
-                      _selectedDateRange!.start.isBefore(selectedDay)
-                          ? _selectedDateRange!.start
-                          : selectedDay;
-                  final newEnd = _selectedDateRange!.start.isBefore(selectedDay)
-                      ? selectedDay
-                      : _selectedDateRange!.start;
-                  _selectedDateRange = DateTimeRange(
-                    start: newStart,
-                    end: newEnd,
-                  );
-                } else {
-                  _selectedDateRange = DateTimeRange(
-                    start: selectedDay,
-                    end: selectedDay,
-                  );
-                }
-                selectedDateRange = _selectedDateRange;
-                isDateSelected = true;
-              });
-            },
-          ),
-          Expanded(
-            child: Align(
+            Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -220,8 +223,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
