@@ -1,6 +1,6 @@
-import 'package:fleetcarpooling/auth/Notification.dart';
-import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:flutter/material.dart';
+import 'package:fleetcarpooling/auth/Notification.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -12,7 +12,6 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   AuthNotification authNotification = AuthNotification();
   String notificationMessage = '';
-
   late Stream<List<Map<String, dynamic>>> _notificationStream;
 
   @override
@@ -21,122 +20,127 @@ class _NotificationPageState extends State<NotificationPage> {
     _notificationStream = authNotification.notificationStream;
   }
 
-  void _showErrorMessage(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-    double padding2 = screenHeight * 0.02;
+    double padding1 = screenHeight * 0.02;
+    double padding2 = screenHeight * 0.03;
 
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(bottom: 27.5),
-            width: screenWidth,
-            decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: AppColors.buttonColor)),
-            ),
-            child: Padding(
-              padding: EdgeInsets.only(top: padding2, bottom: padding2),
-              child: const Text(
-                "NOTIFICATIONS",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.mainTextColor, fontSize: 24),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 25.0),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 450),
+              child: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/logo.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
-          ),
-          StreamBuilder<List<Map<String, dynamic>>>(
-            stream: _notificationStream,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                notificationMessage = 'Error: ${snapshot.error}';
-                return Text(notificationMessage);
-              } else {
-                List<Map<String, dynamic>> notifications = snapshot.data ?? [];
-
-                notificationMessage =
-                    'Notifications received: ${notifications.length}';
-
-                if (notifications.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      "No notifications",
-                      style: TextStyle(
-                          fontSize: 20, color: AppColors.mainTextColor),
+            Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: AppColors.buttonColor),
                     ),
-                  );
-                } else {
-                  return Expanded(
-                    child: ListView(
-                      children: notifications.map((notification) {
-                        String message = notification['message'];
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(top: padding2, bottom: padding1),
+                    child: const Text(
+                      "NOTIFICATIONS",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: AppColors.mainTextColor,
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: StreamBuilder<List<Map<String, dynamic>>>(
+                    stream: _notificationStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        notificationMessage = 'Error: ${snapshot.error}';
+                        return Text(notificationMessage);
+                      } else {
+                        List<Map<String, dynamic>> notifications =
+                            snapshot.data ?? [];
 
-                        return GestureDetector(
-                          onTap: () {
-                            _showNotificationDetailsPopup(
-                                context, notification);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 13, right: 14, bottom: 12),
-                            child: Card(
-                              margin: const EdgeInsets.only(
-                                  left: 13, right: 14, bottom: 12),
-                              color: AppColors.backgroundColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text(
-                                  message,
-                                  textAlign: TextAlign.left,
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    color: AppColors.mainTextColor,
-                                  ),
-                                ),
+                        notificationMessage =
+                            'Notifications received: ${notifications.length}';
+
+                        if (notifications.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              "No notifications",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: AppColors.mainTextColor,
                               ),
                             ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  );
-                }
-              }
-            },
-          ),
-          SizedBox(
-            width: double.infinity,
-            child: Image.asset(
-              'assets/images/logo.png',
-              fit: BoxFit.cover,
+                          );
+                        } else {
+                          return ListView(
+                            padding: EdgeInsets.only(top: padding2),
+                            children: notifications.map((notification) {
+                              String message = notification['message'];
+
+                              return GestureDetector(
+                                onTap: () {
+                                  _showNotificationDetailsPopup(
+                                      context, notification);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 13,
+                                    right: 14,
+                                    bottom: 12,
+                                  ),
+                                  child: Card(
+                                    margin: const EdgeInsets.only(
+                                      left: 13,
+                                      right: 14,
+                                      bottom: 12,
+                                    ),
+                                    color: AppColors.backgroundColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Text(
+                                        message,
+                                        textAlign: TextAlign.left,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          color: AppColors.mainTextColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        }
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
