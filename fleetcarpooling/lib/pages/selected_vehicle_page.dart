@@ -7,6 +7,7 @@ import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_serv
 import 'package:fleetcarpooling/auth/authReservationNotification.dart';
 import 'package:fleetcarpooling/pages/notify_me_page.dart';
 import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
+import 'package:fleetcarpooling/pages/reservation_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/calendar.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
@@ -188,7 +189,28 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                             ),
                             InkWell(
                               onTap: () {
-                                //vodi na zaslon gdje se bira datum i vrijeme
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        const ReservationScreen(),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      const begin = Offset(0.0, 1.0);
+                                      const end = Offset.zero;
+                                      const curve = Curves.ease;
+
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve));
+
+                                      return SlideTransition(
+                                        position: animation.drive(tween),
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                );
                               },
                               child: const Text(
                                 "Change date",
