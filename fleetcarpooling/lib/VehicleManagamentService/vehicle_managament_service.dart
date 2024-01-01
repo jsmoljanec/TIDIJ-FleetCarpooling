@@ -71,6 +71,33 @@ Stream<Vehicle?> getVehicle(String vin) {
   return controller.stream;
 }
 
+Future<String?> getVehicleModelAndBrand(String vin) async {
+  DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles");
+
+  String? vehicleModelAndBrand;
+
+  try {
+    DatabaseEvent event = await ref.orderByChild('vin').equalTo(vin).once();
+    DataSnapshot snapshot = event.snapshot;
+
+    if (snapshot.value != null && snapshot.value is Map<dynamic, dynamic>) {
+      Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
+      values.forEach((key, value) {
+        if (value['vin'] == vin) {
+          String model = value['model'];
+          String brand = value['brand'];
+          vehicleModelAndBrand = '$brand $model';
+        }
+      });
+    }
+  } catch (e) {
+    print('Error getting vehicle data: $e');
+    return null;
+  }
+
+  return vehicleModelAndBrand;
+}
+
 Future<void> disableCar(String vin, bool active) async {
   DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles/${vin}");
 
