@@ -168,7 +168,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
             Container(
               height: 300,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.primaryColor,
                 borderRadius: BorderRadius.only(),
                 border: Border(
@@ -183,7 +183,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.primaryColor,
                 borderRadius: BorderRadius.only(),
                 border: Border(
@@ -211,7 +211,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.primaryColor,
                 borderRadius: BorderRadius.only(),
                 border: Border(
@@ -247,7 +247,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => NotifyMe(
-                            vinCar: "snapshot.data!.vin",
+                            vinCar: widget.vin,
                             pickupDateTime: widget.pickupTime.toLocal(),
                             returnDateTime: widget.returnTime.toLocal(),
                           ),
