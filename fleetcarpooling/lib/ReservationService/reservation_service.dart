@@ -36,6 +36,24 @@ class ReservationService implements ReservationRepository {
     });
   }
 
+  Stream<List<String>> getUserReservationsStream(String email) {
+    final databaseReference = FirebaseDatabase.instance.ref();
+    var query = databaseReference
+        .child("Reservation")
+        .orderByChild('email')
+        .equalTo(email);
+
+    return query.onValue.map((event) {
+      List<String> reservations = [];
+      Map<dynamic, dynamic>? reservationsData =
+          event.snapshot.value as Map<dynamic, dynamic>?;
+      reservationsData?.forEach((key, value) {
+        reservations.add(value as String);
+      });
+      return reservations;
+    });
+  }
+
   Future<void> addReservation(
       String vin, DateTime pickupTime, DateTime returnTime) async {
     String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
@@ -144,7 +162,8 @@ class ReservationService implements ReservationRepository {
       return false;
     }
   }
-   Future<bool> checkReservation(String email, String vinCar) async {
+
+  Future<bool> checkReservation(String email, String vinCar) async {
     final databaseReference = FirebaseDatabase.instance.ref();
     var query = databaseReference
         .child("Reservation")
@@ -181,5 +200,4 @@ class ReservationService implements ReservationRepository {
 
     return false;
   }
-
 }
