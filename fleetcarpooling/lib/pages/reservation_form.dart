@@ -38,10 +38,12 @@ class _ReservationScreenState extends State<ReservationScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "WHEN ARE YOU PLANNING TO TRAVEL?",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.mainTextColor, fontSize: 20),
+            const Center(
+              child: Text(
+                "WHEN ARE YOU PLANNING TO TRAVEL?",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: AppColors.mainTextColor, fontSize: 20),
+              ),
             ),
             const Padding(
               padding: EdgeInsets.only(left: 24.0),
