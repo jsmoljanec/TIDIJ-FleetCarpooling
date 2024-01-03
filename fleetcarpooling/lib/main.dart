@@ -1,3 +1,4 @@
+import 'package:core/ui_elements/colors';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
@@ -6,7 +7,6 @@ import 'package:fleetcarpooling/chat/provider/firebase_provider.dart';
 import 'package:fleetcarpooling/pages/login_form.dart';
 import 'package:fleetcarpooling/pages/navigation.dart';
 import 'package:provider/provider.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/pages/reservation_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

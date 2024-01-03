@@ -3,10 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/handlers/udp_manager.dart';
-import 'package:fleetcarpooling/ui_elements/custom_toast.dart';
+import 'package:core/ui_elements/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:fleetcarpooling/ui_elements/vehicle_controller.dart';
+import 'package:core/ui_elements/vehicle_controller.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});

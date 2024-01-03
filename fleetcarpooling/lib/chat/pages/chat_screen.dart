@@ -1,10 +1,10 @@
+import 'package:core/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/chat/widgets/message_bubble.dart';
 import 'package:provider/provider.dart';
 import 'package:fleetcarpooling/chat/provider/firebase_provider.dart';
 import 'package:fleetcarpooling/chat/widgets/chat_messages.dart';
 import 'package:fleetcarpooling/chat/widgets/chat_text_field.dart';
-import 'package:fleetcarpooling/ui_elements/buttons.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {

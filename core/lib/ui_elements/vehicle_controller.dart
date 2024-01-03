@@ -1,5 +1,5 @@
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
-import 'package:fleetcarpooling/ui_elements/custom_toast.dart';
+import 'package:core/ui_elements/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'colors' as my_defined_colors;
 

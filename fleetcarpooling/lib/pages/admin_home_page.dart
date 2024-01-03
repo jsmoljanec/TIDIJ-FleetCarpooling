@@ -1,9 +1,10 @@
 import 'package:core/add_vehicle_selection.dart';
+import 'package:core/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/pages/delete_disable_form.dart';
 import 'package:fleetcarpooling/pages/profileForm.dart';
 import 'package:fleetcarpooling/pages/user_registration_form.dart';
-import 'package:fleetcarpooling/ui_elements/buttons.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
+
+import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 // ignore: use_key_in_widget_constructors
