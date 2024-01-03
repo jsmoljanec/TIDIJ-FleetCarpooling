@@ -1,8 +1,8 @@
+import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
-import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/auth/authReservationNotification.dart';
 import 'package:fleetcarpooling/pages/notify_me_page.dart';

@@ -1,4 +1,4 @@
-import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
+import 'package:core/vehicle.dart';
 
 abstract class VehicleEvent {}
 

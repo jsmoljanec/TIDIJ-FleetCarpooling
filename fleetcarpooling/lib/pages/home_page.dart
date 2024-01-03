@@ -1,4 +1,4 @@
-import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
+import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/pages/profileForm.dart';
