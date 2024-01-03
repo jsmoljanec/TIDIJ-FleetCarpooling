@@ -1,4 +1,4 @@
-import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
+import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/pages/admin_selected_vehicle_page.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';

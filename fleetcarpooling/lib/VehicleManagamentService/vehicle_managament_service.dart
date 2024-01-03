@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'package:core/vehicle.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 
 Stream<List<Vehicle>> getVehicles() {
   DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles");
