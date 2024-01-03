@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/auth/send_email.dart';
-import 'package:fleetcarpooling/Models/reservation_model.dart';
-import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/Models/terms_model.dart';
 
 abstract class ReservationRepository {
@@ -144,7 +142,8 @@ class ReservationService implements ReservationRepository {
       return false;
     }
   }
-   Future<bool> checkReservation(String email, String vinCar) async {
+
+  Future<bool> checkReservation(String email, String vinCar) async {
     final databaseReference = FirebaseDatabase.instance.ref();
     var query = databaseReference
         .child("Reservation")
@@ -181,5 +180,4 @@ class ReservationService implements ReservationRepository {
 
     return false;
   }
-
 }

@@ -17,6 +17,14 @@ class Reservation {
     required this.returnTime,
   });
 
-
-
+  Map<String, dynamic> toMap() {
+    return {
+      'vin': vin,
+      'email': email,
+      'pickupDate': pickupDate,
+      'returnDate': returnDate,
+      'pickupTime': pickupTime,
+      'returnTime': returnTime,
+    };
+  }
 }

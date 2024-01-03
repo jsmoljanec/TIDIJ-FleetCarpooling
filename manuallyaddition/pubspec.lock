@@ -129,7 +129,7 @@ packages:
     source: hosted
     version: "7.0.0"
   dropdown_button2:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: dropdown_button2
       sha256: b0fe8d49a030315e9eef6c7ac84ca964250155a6224d491c1365061bc974a9e1
@@ -265,7 +265,7 @@ packages:
     source: hosted
     version: "0.2.3+16"
   firebase_storage:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_storage
       sha256: "8126e80210c0841a5b8204590b40d6b9e87cded3d342a92833f484a564dcddb3"
@@ -301,7 +301,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_bloc:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_bloc
       sha256: e74efb89ee6945bcbce74a5b3a5a3376b088e5f21f55c263fc38cbdc6237faae
@@ -423,7 +423,7 @@ packages:
     source: hosted
     version: "4.0.2"
   image_picker:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image_picker
       sha256: fc712337719239b0b6e41316aa133350b078fa39b6cbd706b61f3fd421b03c77

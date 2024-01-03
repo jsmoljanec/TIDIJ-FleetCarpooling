@@ -1,7 +1,7 @@
+import 'package:core/ui_elements/colors';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:core/ui_elements/custom_toast.dart';
 import 'package:flutter/material.dart';
-import 'colors' as my_defined_colors;
 
 class VehicleController extends StatefulWidget {
   final Function(String) onCommand;
@@ -40,7 +40,7 @@ class _VehicleControllerState extends State<VehicleController> {
               bottomRight: Radius.circular(19.0),
             ),
             child: Container(
-              color: my_defined_colors.AppColors.primaryColor,
+              color: AppColors.primaryColor,
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
@@ -56,11 +56,11 @@ class _VehicleControllerState extends State<VehicleController> {
                           decoration: const InputDecoration(
                             hintText: 'Enter destination',
                             hintStyle: TextStyle(
-                              color: my_defined_colors.AppColors.buttonColor,
+                              color: AppColors.buttonColor,
                             ),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
-                                color: my_defined_colors.AppColors.buttonColor,
+                                color: AppColors.buttonColor,
                               ),
                             ),
                           ),
@@ -91,12 +91,11 @@ class _VehicleControllerState extends State<VehicleController> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              my_defined_colors.AppColors.buttonColor,
+                          backgroundColor: AppColors.buttonColor,
                         ),
                         child: const Icon(
                           Icons.change_circle,
-                          color: my_defined_colors.AppColors.primaryColor,
+                          color: AppColors.primaryColor,
                         ),
                       ),
                     ],
@@ -107,36 +106,33 @@ class _VehicleControllerState extends State<VehicleController> {
                       ElevatedButton(
                         onPressed: () => widget.onCommand("start"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              my_defined_colors.AppColors.buttonColor,
+                          backgroundColor: AppColors.buttonColor,
                         ),
                         child: const Icon(
                           Icons.send,
-                          color: my_defined_colors.AppColors.primaryColor,
+                          color: AppColors.primaryColor,
                         ),
                       ),
                       const SizedBox(width: 8.0),
                       ElevatedButton(
                         onPressed: () => widget.onCommand("stop"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              my_defined_colors.AppColors.buttonColor,
+                          backgroundColor: AppColors.buttonColor,
                         ),
                         child: const Icon(
                           Icons.stop,
-                          color: my_defined_colors.AppColors.primaryColor,
+                          color: AppColors.primaryColor,
                         ),
                       ),
                       const SizedBox(width: 8.0),
                       ElevatedButton(
                         onPressed: () => widget.onCommand("restart"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              my_defined_colors.AppColors.buttonColor,
+                          backgroundColor: AppColors.buttonColor,
                         ),
                         child: const Icon(
                           Icons.restart_alt,
-                          color: my_defined_colors.AppColors.primaryColor,
+                          color: AppColors.primaryColor,
                         ),
                       ),
                       const SizedBox(width: 8.0),
@@ -145,12 +141,11 @@ class _VehicleControllerState extends State<VehicleController> {
                           widget.onCommand("lock");
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              my_defined_colors.AppColors.buttonColor,
+                          backgroundColor: AppColors.buttonColor,
                         ),
                         child: Icon(
                           isLocked ? Icons.lock : Icons.lock_open,
-                          color: my_defined_colors.AppColors.primaryColor,
+                          color: AppColors.primaryColor,
                         ),
                       ),
                     ],
