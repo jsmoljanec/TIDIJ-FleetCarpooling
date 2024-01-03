@@ -1,8 +1,7 @@
 import 'package:core/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/pages/navigation.dart';
-
 import 'package:core/ui_elements/colors';
-import 'package:core/ui_elements/custom_slider.dart';
+import 'package:fleetcarpooling/ui_elements/custom_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 

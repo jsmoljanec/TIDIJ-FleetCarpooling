@@ -29,9 +29,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   core:
     path: ../core
-  fleetcarpooling:
-    path: ../fleetcarpooling
   qr_mobile_vision: ^4.1.4
+  flutter_bloc: ^8.1.3
    
 dev_dependencies:
   flutter_test:
