@@ -1,8 +1,8 @@
+import 'package:core/add_vehicle_interface.dart';
+import 'package:core/bloc/vehicle_bloc.dart';
 import 'package:core/event/vehicle_event.dart';
 import 'package:core/state/vehicle_state.dart';
 import 'package:core/vehicle.dart';
-import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_interface.dart';
-import 'package:fleetcarpooling/Modularity/bloc/vehicle_bloc.dart';
 import 'package:fleetcarpooling/Modularity/service/image_service.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';

@@ -26,7 +26,7 @@ packages:
     source: hosted
     version: "2.11.0"
   bloc:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: bloc
       sha256: "3820f15f502372d979121de1f6b97bfcf1630ebff8fe1d52fb2b0bfa49be5b49"
@@ -366,7 +366,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_bloc:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_bloc
       sha256: e74efb89ee6945bcbce74a5b3a5a3376b088e5f21f55c263fc38cbdc6237faae
@@ -808,7 +808,7 @@ packages:
     source: hosted
     version: "6.1.1"
   qr_mobile_vision:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: qr_mobile_vision
       sha256: "346fffa7067d234af75debb0716152657c11346706ce57811fa85a9c6f0fbfe0"
@@ -823,6 +823,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.27.7"
+  qraddition:
+    dependency: transitive
+    description:
+      path: "../qraddition"
+      relative: true
+    source: path
+    version: "1.0.0+1"
   sanitize_html:
     dependency: transitive
     description:

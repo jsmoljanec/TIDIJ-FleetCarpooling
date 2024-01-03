@@ -1,12 +1,12 @@
+import 'package:core/add_vehicle_interface.dart';
+import 'package:core/bloc/vehicle_bloc.dart';
+import 'package:fleetcarpooling/Modularity/service/vehicle_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_interface.dart';
-import 'package:fleetcarpooling/Modularity/bloc/vehicle_bloc.dart';
-import 'package:fleetcarpooling/Modularity/pages/add_vehicle_QR_form.dart';
 import 'package:fleetcarpooling/Modularity/pages/add_vehicle_manually_form.dart';
-import 'package:fleetcarpooling/Modularity/service/vehicle_service.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:qraddition/add_vehicle_QR_form.dart';
 
 class AddVehicleSelection extends StatelessWidget {
   final VehicleRepository _vehicleRepository = VehicleService();
