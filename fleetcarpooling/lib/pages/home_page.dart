@@ -4,7 +4,7 @@ import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_serv
 import 'package:fleetcarpooling/pages/profile_form.dart';
 import 'package:fleetcarpooling/pages/selected_vehicle_page.dart';
 import 'package:fleetcarpooling/pages/reservation_form.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {

@@ -1,7 +1,7 @@
+import 'package:core/ui_elements/buttons.dart';
 import 'package:flutter/material.dart';
-import 'package:fleetcarpooling/ui_elements/buttons.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
-import 'package:fleetcarpooling/ui_elements/text_field.dart';
+import 'package:core/ui_elements/colors';
+import 'package:core/ui_elements/text_field.dart';
 import 'package:fleetcarpooling/auth/user_repository.dart';
 
 class ChangePasswordForm extends StatefulWidget {

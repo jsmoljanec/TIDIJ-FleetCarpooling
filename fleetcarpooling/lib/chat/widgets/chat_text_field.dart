@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/chat/service/firebase_firestore_service.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:fleetcarpooling/chat/widgets/custom_text_form_field.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

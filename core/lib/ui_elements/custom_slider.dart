@@ -1,4 +1,4 @@
-import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 class MyCustomSlider extends StatefulWidget {
@@ -8,7 +8,8 @@ class MyCustomSlider extends StatefulWidget {
   final String time;
   final ValueChanged<double> onChanged;
 
-  const MyCustomSlider({super.key, 
+  const MyCustomSlider({
+    super.key,
     required this.min,
     required this.max,
     required this.initialValue,

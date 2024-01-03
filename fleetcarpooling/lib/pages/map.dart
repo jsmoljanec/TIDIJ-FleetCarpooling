@@ -3,10 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/handlers/udp_manager.dart';
-import 'package:fleetcarpooling/ui_elements/custom_toast.dart';
+import 'package:core/ui_elements/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:fleetcarpooling/ui_elements/vehicle_controller.dart';
+import 'package:core/ui_elements/vehicle_controller.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MapPage extends StatefulWidget {
@@ -96,7 +96,7 @@ class _MapPageState extends State<MapPage> {
                 } else {
                   return snapshot.data == true
                       ? VehicleController(
-                        selectedMarkerId: selectedMarkerId,
+                          selectedMarkerId: selectedMarkerId,
                           onCommand: (command) {
                             udpManager.sendCommand(command, selectedMarkerId);
                           },
@@ -111,7 +111,7 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  initializeAssets(){
+  initializeAssets() {
     selectedMarkerId = const MarkerId('');
     getIcons();
   }

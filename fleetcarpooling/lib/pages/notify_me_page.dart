@@ -1,5 +1,5 @@
 import 'package:fleetcarpooling/auth/auth_notify_me.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 class NotifyMe extends StatelessWidget {
@@ -7,7 +7,8 @@ class NotifyMe extends StatelessWidget {
   final DateTime pickupDateTime;
   final DateTime returnDateTime;
 
-  const NotifyMe({super.key, 
+  const NotifyMe({
+    super.key,
     required this.vinCar,
     required this.pickupDateTime,
     required this.returnDateTime,
@@ -38,6 +39,7 @@ class NotifyMe extends StatelessWidget {
         returnTime,
       );
     }
+
     saveNotifyMeData();
 
     return Scaffold(

@@ -1,8 +1,9 @@
+import 'package:core/ui_elements/buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/auth/auth_registration_service.dart';
-import 'package:fleetcarpooling/ui_elements/buttons.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
-import 'package:fleetcarpooling/ui_elements/text_field.dart';
+
+import 'package:core/ui_elements/colors';
+import 'package:core/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
 
 enum UserType { Administrator, Employee }

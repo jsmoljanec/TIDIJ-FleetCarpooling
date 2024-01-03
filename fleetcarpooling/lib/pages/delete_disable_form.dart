@@ -1,8 +1,8 @@
+import 'package:core/ui_elements/buttons.dart';
 import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/pages/admin_selected_vehicle_page.dart';
-import 'package:fleetcarpooling/ui_elements/buttons.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 class DeleteDisableForm extends StatelessWidget {
