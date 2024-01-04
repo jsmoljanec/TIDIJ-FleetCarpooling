@@ -151,11 +151,11 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
                                           height: 0.5,
                                           color: AppColors.mainTextColor,
                                         ),
-                                        const Padding(
-                                            padding: EdgeInsets.only(
+                                        Padding(
+                                            padding: const EdgeInsets.only(
                                                 top: 12, bottom: 24),
                                             child: InkWell(
-                                              child: Text(
+                                              child: const Text(
                                                 "Cancel reservation",
                                                 style: TextStyle(
                                                     color:
@@ -164,6 +164,57 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
                                                     fontWeight:
                                                         FontWeight.w600),
                                               ),
+                                              onTap: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        backgroundColor:
+                                                            AppColors
+                                                                .backgroundColor,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      30.0),
+                                                        ),
+                                                        content: const Text(
+                                                          'ARE YOU SURE?',
+                                                          style: TextStyle(
+                                                              color: AppColors
+                                                                  .mainTextColor,
+                                                              fontSize: 24),
+                                                        ),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              _service.deleteReservation(
+                                                                  snapshot
+                                                                      .data![
+                                                                          index]
+                                                                      .id!);
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child: const Text(
+                                                                'YES'),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child: const Text(
+                                                                'NO'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    });
+                                              },
                                             ))
                                       ]),
                                     ),

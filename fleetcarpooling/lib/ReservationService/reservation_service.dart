@@ -53,6 +53,7 @@ class ReservationService implements ReservationRepository {
           event.snapshot.value as Map<dynamic, dynamic>?;
       values?.forEach((key, value) {
         try {
+          String id = key;
           String vin = value['VinCar'] ?? '';
           String email = value['email'] ?? '';
           DateTime pickupDate = DateTime.parse(value['pickupDate'] ?? '');
@@ -67,6 +68,7 @@ class ReservationService implements ReservationRepository {
           TimeOfDay returnTime = parseTimeOfDay(value['returnTime'] ?? '');
 
           userReservations.add(Reservation(
+            id: id,
             vin: vin,
             email: email,
             pickupDate: pickupDate,
@@ -83,7 +85,6 @@ class ReservationService implements ReservationRepository {
 
       controller.add(userReservations);
     });
-
     return controller.stream;
   }
 
@@ -232,5 +233,11 @@ class ReservationService implements ReservationRepository {
     }
 
     return false;
+  }
+
+  Future<void> deleteReservation(String vin) async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Reservation/$vin");
+
+    await ref.remove();
   }
 }
