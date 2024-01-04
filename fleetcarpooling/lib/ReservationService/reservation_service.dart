@@ -79,6 +79,9 @@ class ReservationService implements ReservationRepository {
         }
       });
 
+      // Sort reservations by pickupDate in descending order
+      userReservations.sort((a, b) => b.pickupDate.compareTo(a.pickupDate));
+
       controller.add(userReservations);
     });
 
