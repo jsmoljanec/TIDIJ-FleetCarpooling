@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/Models/reservation_model.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
+import 'package:fleetcarpooling/ui_elements/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
@@ -229,6 +230,10 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
                                                                     Navigator.of(
                                                                             context)
                                                                         .pop();
+
+                                                                    CustomToast()
+                                                                        .showFlutterToast(
+                                                                            "You succesfully canceled reservation");
                                                                   },
                                                                   child:
                                                                       const Padding(
