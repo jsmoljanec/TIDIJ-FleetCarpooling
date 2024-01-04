@@ -166,54 +166,128 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
                                               ),
                                               onTap: () {
                                                 showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        backgroundColor:
-                                                            AppColors
-                                                                .backgroundColor,
-                                                        shape:
-                                                            RoundedRectangleBorder(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return Center(
+                                                      child: Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(16.0),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: AppColors
+                                                              .backgroundColor,
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(
                                                                       30.0),
                                                         ),
-                                                        content: const Text(
-                                                          'ARE YOU SURE?',
-                                                          style: TextStyle(
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            const Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .fromLTRB(
+                                                                          80,
+                                                                          28,
+                                                                          80,
+                                                                          28),
+                                                              child: Text(
+                                                                'ARE YOU SURE?',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: AppColors
+                                                                      .mainTextColor,
+                                                                  fontSize: 24,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            const Divider(
+                                                              height: 0.5,
                                                               color: AppColors
                                                                   .mainTextColor,
-                                                              fontSize: 24),
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceAround,
+                                                              children: [
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    _service.deleteReservation(snapshot
+                                                                        .data![
+                                                                            index]
+                                                                        .id!);
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  },
+                                                                  child:
+                                                                      const Padding(
+                                                                    padding: EdgeInsets.only(
+                                                                        top: 20,
+                                                                        bottom:
+                                                                            20),
+                                                                    child: Text(
+                                                                      'YES',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: AppColors
+                                                                            .mainTextColor,
+                                                                        fontSize:
+                                                                            24,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  height: 70,
+                                                                  width: 0.5,
+                                                                  decoration: BoxDecoration(
+                                                                      border: Border.all(
+                                                                          color:
+                                                                              AppColors.mainTextColor)),
+                                                                ),
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  },
+                                                                  child:
+                                                                      const Padding(
+                                                                    padding: EdgeInsets.only(
+                                                                        top: 20,
+                                                                        bottom:
+                                                                            20),
+                                                                    child: Text(
+                                                                      'NO',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: AppColors
+                                                                            .mainTextColor,
+                                                                        fontSize:
+                                                                            24,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
                                                         ),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              _service.deleteReservation(
-                                                                  snapshot
-                                                                      .data![
-                                                                          index]
-                                                                      .id!);
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: const Text(
-                                                                'YES'),
-                                                          ),
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: const Text(
-                                                                'NO'),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    });
+                                                      ),
+                                                    );
+                                                  },
+                                                );
                                               },
                                             ))
                                       ]),
