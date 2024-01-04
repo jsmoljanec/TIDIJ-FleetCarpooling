@@ -96,6 +96,7 @@ class _MapPageState extends State<MapPage> {
                 } else {
                   return snapshot.data == true
                       ? VehicleController(
+                        selectedMarkerId: selectedMarkerId,
                           onCommand: (command) {
                             udpManager.sendCommand(command, selectedMarkerId);
                           },

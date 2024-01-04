@@ -1,17 +1,18 @@
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/ui_elements/custom_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'colors' as my_defined_colors;
 
 class VehicleController extends StatefulWidget {
   final Function(String) onCommand;
-  final selectedMarkerId;
+  final MarkerId selectedMarkerId;
   final bool refreshUI;
 
   const VehicleController(
       {super.key,
       required this.onCommand,
-      this.selectedMarkerId,
+      required this.selectedMarkerId,
       required this.refreshUI});
 
   @override
@@ -29,7 +30,7 @@ class _VehicleControllerState extends State<VehicleController> {
       bottom: 10.0,
       left: 10.0,
       child: StreamBuilder<bool>(
-        stream: getLockStateStream("556XYZ789LMN123OP"),
+        stream: getLockStateStream(widget.selectedMarkerId.value),
         builder: (context, snapshot) {
           bool isLocked = snapshot.data ?? false;
           return ClipRRect(
