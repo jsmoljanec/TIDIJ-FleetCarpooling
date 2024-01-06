@@ -1,3 +1,4 @@
+import 'package:fleetcarpooling/profileService/profileService.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
@@ -7,6 +8,7 @@ import 'package:fleetcarpooling/pages/changePasswordForm.dart';
 import 'package:fleetcarpooling/pages/login_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -45,7 +47,25 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  Future<void> selectImage() async {}
+  Future<void> selectImage() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    ImagePicker imagePickerGallery = ImagePicker();
+    XFile? file =
+        await imagePickerGallery.pickImage(source: ImageSource.gallery);
+
+    if (file != null) {
+      ProfileService profileService = ProfileService();
+      await profileService.addStorage(file: file);
+      await fetchUserData();
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   Future<void> deleteProfileImage() async {}
 
