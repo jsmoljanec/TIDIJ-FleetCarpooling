@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:fleetcarpooling/auth/send_email.dart';
 import 'package:fleetcarpooling/Models/reservation_model.dart';
-import 'package:flutter/material.dart';
+import 'package:fleetcarpooling/auth/send_email.dart';
 import 'package:fleetcarpooling/Models/terms_model.dart';
+import 'package:flutter/material.dart';
 
 abstract class ReservationRepository {
   Stream<List<Terms>> getReservationStream(String vinCar);
@@ -34,6 +35,57 @@ class ReservationService implements ReservationRepository {
       });
       return termini;
     });
+  }
+
+  Stream<List<Reservation>> getUserReservations(String userEmail) {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Reservation");
+    final StreamController<List<Reservation>> controller =
+        StreamController<List<Reservation>>();
+
+    ref
+        .orderByChild('email')
+        .equalTo(userEmail)
+        .onValue
+        .listen((DatabaseEvent event) {
+      List<Reservation> userReservations = [];
+
+      Map<dynamic, dynamic>? values =
+          event.snapshot.value as Map<dynamic, dynamic>?;
+      values?.forEach((key, value) {
+        try {
+          String id = key;
+          String vin = value['VinCar'] ?? '';
+          String email = value['email'] ?? '';
+          DateTime pickupDate = DateTime.parse(value['pickupDate'] ?? '');
+          DateTime returnDate = DateTime.parse(value['returnDate'] ?? '');
+
+          TimeOfDay parseTimeOfDay(String time) {
+            List<int> parts = time.split(':').map(int.parse).toList();
+            return TimeOfDay(hour: parts[0], minute: parts[1]);
+          }
+
+          TimeOfDay pickupTime = parseTimeOfDay(value['pickupTime'] ?? '');
+          TimeOfDay returnTime = parseTimeOfDay(value['returnTime'] ?? '');
+
+          userReservations.add(Reservation(
+            id: id,
+            vin: vin,
+            email: email,
+            pickupDate: pickupDate,
+            returnDate: returnDate,
+            pickupTime: pickupTime,
+            returnTime: returnTime,
+          ));
+        } catch (e) {
+          print('Error processing reservation data: $e');
+        }
+      });
+
+      userReservations.sort((a, b) => b.pickupDate.compareTo(a.pickupDate));
+
+      controller.add(userReservations);
+    });
+    return controller.stream;
   }
 
   Future<void> addReservation(
@@ -144,7 +196,8 @@ class ReservationService implements ReservationRepository {
       return false;
     }
   }
-   Future<bool> checkReservation(String email, String vinCar) async {
+
+  Future<bool> checkReservation(String email, String vinCar) async {
     final databaseReference = FirebaseDatabase.instance.ref();
     var query = databaseReference
         .child("Reservation")
@@ -182,4 +235,9 @@ class ReservationService implements ReservationRepository {
     return false;
   }
 
+  Future<void> deleteReservation(String vin) async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Reservation/$vin");
+
+    await ref.remove();
+  }
 }

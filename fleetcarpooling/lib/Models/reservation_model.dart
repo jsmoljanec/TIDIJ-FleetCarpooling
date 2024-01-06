@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Reservation {
+  final String? id;
   final String vin;
   final String email;
   final DateTime pickupDate;
@@ -9,6 +10,7 @@ class Reservation {
   final TimeOfDay returnTime;
 
   Reservation({
+    this.id,
     required this.vin,
     required this.email,
     required this.pickupDate,
@@ -16,7 +18,4 @@ class Reservation {
     required this.pickupTime,
     required this.returnTime,
   });
-
-
-
 }
