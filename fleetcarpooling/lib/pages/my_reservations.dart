@@ -48,11 +48,14 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
         padding: const EdgeInsets.only(top: 25),
         child: Stack(
           children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/logo.png'),
-                  fit: BoxFit.cover,
+            Padding(
+              padding: const EdgeInsets.only(top: 450),
+              child: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/logo.png'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
