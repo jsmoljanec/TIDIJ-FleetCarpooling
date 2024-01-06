@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/auth/user_model.dart' as usermod;
@@ -6,7 +7,6 @@ import 'package:fleetcarpooling/pages/changePasswordForm.dart';
 import 'package:fleetcarpooling/pages/login_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
-import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -25,8 +25,8 @@ class _ProfilePageState extends State<ProfilePage> {
     profileImage: '',
     statusActivity: '',
   );
-
   final UserRepository userRepository = UserRepository();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -44,6 +44,10 @@ class _ProfilePageState extends State<ProfilePage> {
       print("Error fetching user data: $e");
     }
   }
+
+  Future<void> selectImage() async {}
+
+  Future<void> deleteProfileImage() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +85,49 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              alignment: Alignment.center,
+              child: Stack(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: userProfile.profileImage != ''
+                        ? NetworkImage(userProfile.profileImage)
+                        : null,
+                    backgroundColor: Colors.white,
+                    radius: 65,
+                    child: userProfile.profileImage == ''
+                        ? Image.asset("assets/images/profileImage.png")
+                        : null,
+                  ),
+                  if (isLoading)
+                    const Positioned.fill(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  Positioned(
+                    bottom: -10,
+                    left: 80,
+                    child: IconButton(
+                      onPressed: selectImage,
+                      icon: const Icon(Icons.add_a_photo),
+                      color: Colors.grey,
+                    ),
+                  ),
+                  if (userProfile.profileImage != '')
+                    Positioned(
+                      bottom: -10,
+                      child: IconButton(
+                        onPressed: deleteProfileImage,
+                        icon: const Icon(Icons.delete),
+                        color: Colors.grey,
+                      ),
+                    ),
+                ],
+              ),
+            ),
             const Text(
               "Name",
               style: TextStyle(
@@ -126,7 +173,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        ChangePasswordForm(),
+                        const ChangePasswordForm(),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
                       const begin = Offset(1.0, 0.0);
