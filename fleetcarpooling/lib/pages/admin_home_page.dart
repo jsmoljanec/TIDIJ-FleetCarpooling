@@ -7,7 +7,6 @@ import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
-// ignore: use_key_in_widget_constructors
 class AdminHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
