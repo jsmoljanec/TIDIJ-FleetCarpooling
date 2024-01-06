@@ -165,133 +165,148 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
                                                         FontWeight.w600),
                                               ),
                                               onTap: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return Center(
-                                                      child: Container(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.8,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(16.0),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: AppColors
-                                                              .backgroundColor,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      30.0),
-                                                        ),
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: [
-                                                            const Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .fromLTRB(
-                                                                          80,
-                                                                          28,
-                                                                          80,
-                                                                          28),
-                                                              child: Text(
-                                                                'ARE YOU SURE?',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: AppColors
-                                                                      .mainTextColor,
-                                                                  fontSize: 24,
+                                                DateTime currentDate =
+                                                    DateTime.now();
+                                                if (snapshot
+                                                    .data![index].pickupDate
+                                                    .isAfter(currentDate)) {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Center(
+                                                        child: Container(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.8,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(16.0),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: AppColors
+                                                                .backgroundColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        30.0),
+                                                          ),
+                                                          child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              const Padding(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .fromLTRB(
+                                                                            80,
+                                                                            28,
+                                                                            80,
+                                                                            28),
+                                                                child: Text(
+                                                                  'ARE YOU SURE?',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: AppColors
+                                                                        .mainTextColor,
+                                                                    fontSize:
+                                                                        24,
+                                                                  ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                            const Divider(
-                                                              height: 0.5,
-                                                              color: AppColors
-                                                                  .mainTextColor,
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceAround,
-                                                              children: [
-                                                                GestureDetector(
-                                                                  onTap: () {
-                                                                    _service.deleteReservation(snapshot
-                                                                        .data![
-                                                                            index]
-                                                                        .id!);
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
+                                                              const Divider(
+                                                                height: 0.5,
+                                                                color: AppColors
+                                                                    .mainTextColor,
+                                                              ),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceAround,
+                                                                children: [
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      _service.deleteReservation(snapshot
+                                                                          .data![
+                                                                              index]
+                                                                          .id!);
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
 
-                                                                    CustomToast()
-                                                                        .showFlutterToast(
-                                                                            "You succesfully canceled reservation");
-                                                                  },
-                                                                  child:
-                                                                      const Padding(
-                                                                    padding: EdgeInsets.only(
-                                                                        top: 20,
-                                                                        bottom:
-                                                                            20),
-                                                                    child: Text(
-                                                                      'YES',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: AppColors
-                                                                            .mainTextColor,
-                                                                        fontSize:
-                                                                            24,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Container(
-                                                                  height: 70,
-                                                                  width: 0.5,
-                                                                  decoration: BoxDecoration(
-                                                                      border: Border.all(
+                                                                      CustomToast()
+                                                                          .showFlutterToast(
+                                                                              "You succesfully canceled reservation");
+                                                                    },
+                                                                    child:
+                                                                        const Padding(
+                                                                      padding: EdgeInsets.only(
+                                                                          top:
+                                                                              20,
+                                                                          bottom:
+                                                                              20),
+                                                                      child:
+                                                                          Text(
+                                                                        'YES',
+                                                                        style:
+                                                                            TextStyle(
                                                                           color:
-                                                                              AppColors.mainTextColor)),
-                                                                ),
-                                                                GestureDetector(
-                                                                  onTap: () {
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                  },
-                                                                  child:
-                                                                      const Padding(
-                                                                    padding: EdgeInsets.only(
-                                                                        top: 20,
-                                                                        bottom:
-                                                                            20),
-                                                                    child: Text(
-                                                                      'NO',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: AppColors
-                                                                            .mainTextColor,
-                                                                        fontSize:
-                                                                            24,
+                                                                              AppColors.mainTextColor,
+                                                                          fontSize:
+                                                                              24,
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
+                                                                  Container(
+                                                                    height: 70,
+                                                                    width: 0.5,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                            border:
+                                                                                Border.all(color: AppColors.mainTextColor)),
+                                                                  ),
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child:
+                                                                        const Padding(
+                                                                      padding: EdgeInsets.only(
+                                                                          top:
+                                                                              20,
+                                                                          bottom:
+                                                                              20),
+                                                                      child:
+                                                                          Text(
+                                                                        'NO',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              AppColors.mainTextColor,
+                                                                          fontSize:
+                                                                              24,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
-                                                      ),
-                                                    );
-                                                  },
-                                                );
+                                                      );
+                                                    },
+                                                  );
+                                                } else {
+                                                  CustomToast().showFlutterToast(
+                                                      "Cannot cancel past reservation");
+                                                }
                                               },
                                             ))
                                       ]),
