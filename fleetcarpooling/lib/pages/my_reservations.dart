@@ -43,10 +43,6 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
   Widget build(BuildContext context) {
     _reservationsStream = _service.getUserReservations(user!.email!);
 
-    // double screenHeight = MediaQuery.of(context).size.height;
-    // double screenWidth = MediaQuery.of(context).size.width;
-    // double padding2 = screenHeight * 0.02;
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 25),
