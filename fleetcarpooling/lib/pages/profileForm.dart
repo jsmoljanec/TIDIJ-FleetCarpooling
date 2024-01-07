@@ -1,4 +1,4 @@
-import 'package:fleetcarpooling/profileService/profileService.dart';
+import 'package:fleetcarpooling/profileService/profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
@@ -67,7 +67,15 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  Future<void> deleteProfileImage() async {}
+  Future<void> deleteProfileImage() async {
+    try {
+      ProfileService profileService = ProfileService();
+      await profileService.deleteProfileImage(userProfile.profileImage);
+      await fetchUserData();
+    } catch (e) {
+      print("Error deleting profile image: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
