@@ -16,15 +16,42 @@ class ProfileService {
     Reference referenceDirImages = referenceRoot
         .child('profile_images/${FirebaseAuth.instance.currentUser?.uid}}');
     Reference referenceImageToUpload = referenceDirImages.child(uniqueName);
-    referenceImageToUpload.putFile(File(file!.path));
+    referenceImageToUpload.putFile(File(file.path));
 
     try {
-      await referenceImageToUpload.putFile(File(file!.path));
+      await referenceImageToUpload.putFile(File(file.path));
       String downloadURL = await referenceImageToUpload.getDownloadURL();
       await UserRepository().updateUserProfileImage(downloadURL);
       return await referenceImageToUpload.getDownloadURL();
     } catch (error) {
       return "error";
+    }
+  }
+
+  Future<void> deleteProfileImage(String url) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        String uid = user.uid;
+
+        FirebaseStorage.instance.refFromURL(url).delete();
+
+        print("Profile image deleted successfully");
+
+        DatabaseReference ref = FirebaseDatabase.instance.ref("Users/$uid");
+
+        await ref.update({
+          'profileImage': '',
+        });
+
+        await UserRepository().updateUserProfileImage('');
+      } else {
+        throw Exception('User is null');
+      }
+    } catch (e) {
+      print("Error deleting profile image: $e");
+      rethrow;
     }
   }
 }
