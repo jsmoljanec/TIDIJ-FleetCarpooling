@@ -25,6 +25,7 @@ class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
       AuthReservationNotification();
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -71,6 +72,7 @@ class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
                       width: 300,
                     ),
                     Container(
+                      width: screenWidth,
                       decoration: const BoxDecoration(
                         color: AppColors.primaryColor,
                         borderRadius: BorderRadius.only(
@@ -83,6 +85,52 @@ class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
                           right: BorderSide(color: AppColors.mainTextColor),
                         ),
                       ),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Capacity: ${vehicle.capacity}",
+                            style: const TextStyle(
+                              color: AppColors.mainTextColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            "Distance traveled: ${vehicle.distanceTraveled}",
+                            style: const TextStyle(
+                              color: AppColors.mainTextColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            "Fuel consumption: ${vehicle.fuelConsumption}l/100km",
+                            style: const TextStyle(
+                              color: AppColors.mainTextColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            "Registration: ${vehicle.registration}",
+                            style: const TextStyle(
+                              color: AppColors.mainTextColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            "Transtype: ${vehicle.transType}",
+                            style: const TextStyle(
+                              color: AppColors.mainTextColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            "Year: ${vehicle.year}",
+                            style: const TextStyle(
+                              color: AppColors.mainTextColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 );
@@ -94,3 +142,55 @@ class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
     );
   }
 }
+
+
+
+
+
+                      // child: Column(
+                      //   children: [
+                      //     Padding(
+                      //       padding: const EdgeInsets.fromLTRB(32, 28, 32, 20),
+                      //       child: Row(
+                      //         children: [
+                      //           SizedBox(
+                      //             height: 20,
+                      //             width: 20,
+                      //             child: Image.asset("assets/icons/fuel.png"),
+                      //           ),
+                      //           Padding(
+                      //             padding:
+                      //                 const EdgeInsets.only(left: 8.0, top: 4),
+                      //             child: Text(
+                      //               "${vehicle.fuelConsumption} l/100km",
+                      //               style: const TextStyle(
+                      //                 fontSize: 20,
+                      //                 fontWeight: FontWeight.w700,
+                      //                 color: AppColors.mainTextColor,
+                      //               ),
+                      //             ),
+                      //           ),
+                      //           const Spacer(),
+                      //           SizedBox(
+                      //             width: 20,
+                      //             height: 20,
+                      //             child:
+                      //                 Image.asset("assets/icons/distance.png"),
+                      //           ),
+                      //           Padding(
+                      //             padding:
+                      //                 const EdgeInsets.only(left: 8.0, top: 4),
+                      //             child: Text(
+                      //               "${vehicle.distanceTraveled} km",
+                      //               style: const TextStyle(
+                      //                 fontSize: 20,
+                      //                 fontWeight: FontWeight.w700,
+                      //                 color: AppColors.mainTextColor,
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
