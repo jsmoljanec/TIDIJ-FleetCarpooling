@@ -19,6 +19,19 @@ class AdminSelectedVehiclePage extends StatefulWidget {
       _AdminSelectedVehiclePageState();
 }
 
+Widget buildText(String label, String value) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Text(
+      "$label: $value",
+      style: const TextStyle(
+        color: AppColors.mainTextColor,
+        fontSize: 16,
+      ),
+    ),
+  );
+}
+
 class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
   final ReservationService service = ReservationService();
   final AuthReservationNotification authReservationNotification =
@@ -87,48 +100,14 @@ class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
                       ),
                       child: Column(
                         children: [
-                          Text(
-                            "Capacity: ${vehicle.capacity}",
-                            style: const TextStyle(
-                              color: AppColors.mainTextColor,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Text(
-                            "Distance traveled: ${vehicle.distanceTraveled}",
-                            style: const TextStyle(
-                              color: AppColors.mainTextColor,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Text(
-                            "Fuel consumption: ${vehicle.fuelConsumption}l/100km",
-                            style: const TextStyle(
-                              color: AppColors.mainTextColor,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Text(
-                            "Registration: ${vehicle.registration}",
-                            style: const TextStyle(
-                              color: AppColors.mainTextColor,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Text(
-                            "Transtype: ${vehicle.transType}",
-                            style: const TextStyle(
-                              color: AppColors.mainTextColor,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Text(
-                            "Year: ${vehicle.year}",
-                            style: const TextStyle(
-                              color: AppColors.mainTextColor,
-                              fontSize: 16,
-                            ),
-                          ),
+                          buildText("Capacity", "${vehicle.capacity}"),
+                          buildText("Distance traveled",
+                              "${vehicle.distanceTraveled}"),
+                          buildText(
+                              "Fuel consumption", "${vehicle.fuelConsumption}"),
+                          buildText("Registration", vehicle.registration),
+                          buildText("Transmission type", vehicle.transType),
+                          buildText("Year", "${vehicle.year}"),
                         ],
                       ),
                     ),
@@ -142,55 +121,3 @@ class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
     );
   }
 }
-
-
-
-
-
-                      // child: Column(
-                      //   children: [
-                      //     Padding(
-                      //       padding: const EdgeInsets.fromLTRB(32, 28, 32, 20),
-                      //       child: Row(
-                      //         children: [
-                      //           SizedBox(
-                      //             height: 20,
-                      //             width: 20,
-                      //             child: Image.asset("assets/icons/fuel.png"),
-                      //           ),
-                      //           Padding(
-                      //             padding:
-                      //                 const EdgeInsets.only(left: 8.0, top: 4),
-                      //             child: Text(
-                      //               "${vehicle.fuelConsumption} l/100km",
-                      //               style: const TextStyle(
-                      //                 fontSize: 20,
-                      //                 fontWeight: FontWeight.w700,
-                      //                 color: AppColors.mainTextColor,
-                      //               ),
-                      //             ),
-                      //           ),
-                      //           const Spacer(),
-                      //           SizedBox(
-                      //             width: 20,
-                      //             height: 20,
-                      //             child:
-                      //                 Image.asset("assets/icons/distance.png"),
-                      //           ),
-                      //           Padding(
-                      //             padding:
-                      //                 const EdgeInsets.only(left: 8.0, top: 4),
-                      //             child: Text(
-                      //               "${vehicle.distanceTraveled} km",
-                      //               style: const TextStyle(
-                      //                 fontSize: 20,
-                      //                 fontWeight: FontWeight.w700,
-                      //                 color: AppColors.mainTextColor,
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
