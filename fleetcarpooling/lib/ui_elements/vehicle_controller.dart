@@ -130,18 +130,6 @@ class _VehicleControllerState extends State<VehicleController> {
                       ),
                       const SizedBox(width: 8.0),
                       ElevatedButton(
-                        onPressed: () => widget.onCommand("restart"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              my_defined_colors.AppColors.buttonColor,
-                        ),
-                        child: const Icon(
-                          Icons.restart_alt,
-                          color: my_defined_colors.AppColors.primaryColor,
-                        ),
-                      ),
-                      const SizedBox(width: 8.0),
-                      ElevatedButton(
                         onPressed: () {
                           widget.onCommand("lock");
                         },
