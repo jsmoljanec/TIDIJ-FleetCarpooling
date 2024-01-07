@@ -17,7 +17,6 @@ class UDPManager {
 
   Future<void> connectUDP() async {
     _clientSocket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
-
     _clientSocket.listen((RawSocketEvent event) {
       if (event == RawSocketEvent.read) {
         Datagram dg = _clientSocket.receive()!;

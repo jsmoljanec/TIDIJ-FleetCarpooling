@@ -7,6 +7,7 @@ import 'package:fleetcarpooling/ui_elements/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fleetcarpooling/ui_elements/vehicle_controller.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -37,32 +38,32 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void initState() {
-    String deviceIpAddress = const String.fromEnvironment('DEVICE_IP_ADDRESS');
-    String finalIpAddress =
-        deviceIpAddress.isNotEmpty ? deviceIpAddress : "10.0.2.2";
-    udpManager = UDPManager(
-      finalIpAddress,
-      port,
-      udpMessageHandler: (message) {
-        RegExp bracketsRegExp = RegExp(r'\[([^\]]*)\]');
-        Iterable<RegExpMatch> matches = bracketsRegExp.allMatches(message);
-
-        if (matches.isNotEmpty) {
-          flagContent = matches.elementAt(0).group(1) ?? '';
-          vehicleIdContent =
-              matches.length > 1 ? matches.elementAt(1).group(1) ?? '' : '';
-          CustomToast().showStatusToast(
-              message, flagContent, vehicleIdContent, selectedMarkerId.value);
-        } else {
-          print('Uglate zagrade nisu pronađene u tekstu.');
-        }
-      },
-    );
-    udpManager.connectUDP();
-    updateMapWithVehicleMarkers();
-    selectedMarkerId = const MarkerId('');
-    getIcons();
     super.initState();
+    initializeUDP();
+    initializeAssets();
+    updateMapWithVehicleMarkers();
+  }
+
+  void initializeUDP() {
+    String finalIpAddress = dotenv.env['DEVICE_IP_ADRESS']!;
+    udpManager =
+        UDPManager(finalIpAddress, port, udpMessageHandler: handleUDPMessage);
+    udpManager.connectUDP();
+  }
+
+  void handleUDPMessage(String message) {
+    RegExp bracketsRegExp = RegExp(r'\[([^\]]*)\]');
+    Iterable<RegExpMatch> matches = bracketsRegExp.allMatches(message);
+
+    if (matches.isNotEmpty) {
+      flagContent = matches.elementAt(0).group(1) ?? '';
+      vehicleIdContent =
+          matches.length > 1 ? matches.elementAt(1).group(1) ?? '' : '';
+      CustomToast().showStatusToast(
+          message, flagContent, vehicleIdContent, selectedMarkerId.value);
+    } else {
+      print('Uglate zagrade nisu pronađene u tekstu.');
+    }
   }
 
   @override
@@ -95,6 +96,7 @@ class _MapPageState extends State<MapPage> {
                 } else {
                   return snapshot.data == true
                       ? VehicleController(
+                        selectedMarkerId: selectedMarkerId,
                           onCommand: (command) {
                             udpManager.sendCommand(command, selectedMarkerId);
                           },
@@ -107,6 +109,11 @@ class _MapPageState extends State<MapPage> {
         ],
       ),
     );
+  }
+
+  initializeAssets(){
+    selectedMarkerId = const MarkerId('');
+    getIcons();
   }
 
   getIcons() async {
@@ -141,18 +148,8 @@ class _MapPageState extends State<MapPage> {
             CustomToast().showFlutterToast(
                 "You dont have reservation for this vehicle!");
           } else {
-            if (selectedMarkerId.value == vehicle.vin) {
-              if (showController != true) {
-                showController = false;
-                selectedMarkerId = const MarkerId('');
-              } else {
-                showController = true;
-                selectedMarkerId = MarkerId(vehicle.vin);
-              }
-            } else {
-              showController = true;
-              selectedMarkerId = MarkerId(vehicle.vin);
-            }
+            showController = true;
+            selectedMarkerId = MarkerId(vehicle.vin);
           }
         });
       },
