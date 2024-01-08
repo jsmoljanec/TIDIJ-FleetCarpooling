@@ -1,5 +1,3 @@
-import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
-import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/auth/user_model.dart';
 import 'package:fleetcarpooling/auth/user_repository.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
@@ -8,6 +6,8 @@ import 'package:flutter/material.dart';
 
 class AllUsersForm extends StatelessWidget {
   List<User> users = List.empty();
+
+  AllUsersForm({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,9 +28,10 @@ class AllUsersForm extends StatelessWidget {
         title: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Here you can manage all users",
-                style:
-                    TextStyle(color: AppColors.mainTextColor, fontSize: 25.0)),
+            Text(
+              "ALL USERS",
+              style: TextStyle(color: AppColors.mainTextColor, fontSize: 25.0),
+            ),
           ],
         ),
         centerTitle: true,
@@ -49,26 +50,32 @@ class AllUsersForm extends StatelessWidget {
 
 class UsersList extends StatelessWidget {
   final UserRepository _userRepository = UserRepository();
+
+  UsersList({super.key});
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<User>>(
       stream: _userRepository.getUsers(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('No users is database.'));
+          return const Center(child: Text('No users is database.'));
         }
 
         return SingleChildScrollView(
-          child: ListView.builder(
+          child: ListView.separated(
             shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               return CardWidget(user: snapshot.data![index]);
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(
+                  height: 10); // Postavite željeni razmak između kartica
             },
           ),
         );
@@ -80,38 +87,81 @@ class UsersList extends StatelessWidget {
 class CardWidget extends StatelessWidget {
   final User user;
 
-  CardWidget({required this.user});
+  const CardWidget({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Card(
-      elevation: 5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+        side: const BorderSide(
+          color: AppColors.mainTextColor,
+          width: 1,
+        ),
+      ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
-        child: ListTile(
-          leading: CircleAvatar(
-            radius: 30,
-            backgroundImage: user.profileImage.isNotEmpty ? NetworkImage(user.profileImage) : const AssetImage('assets/images/profile_image_placeholder.jpg') as ImageProvider,
-          ),
-          title: Text(
-            user.firstName + ' ' + user.lastName,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+                height: 10), // Postavite željeni razmak između elemenata
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundImage: user.profileImage.isNotEmpty
+                      ? NetworkImage(user.profileImage)
+                      : const AssetImage(
+                              'assets/images/profile_image_placeholder.jpg')
+                          as ImageProvider,
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  '${user.firstName} ${user.lastName}',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: AppColors.mainTextColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  user.role,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: AppColors.mainTextColor,
+                  ),
+                ),
+              ],
             ),
-          ),
-          subtitle: Text(
-            user.email,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
+            const SizedBox(height: 12),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+              height: 1, // Visina linije
+              color: AppColors.mainTextColor,
             ),
-          ),
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-            ],
-          ),
+            const SizedBox(height: 6),
+            GestureDetector(
+              onTap: () {
+                // Logika za brisanje korisnika
+              },
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                alignment: Alignment
+                    .center, // Dodajte ovu liniju za centriranje teksta
+                child: const Text(
+                  'Delete User',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: AppColors.mainTextColor,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
