@@ -2,6 +2,7 @@ import 'package:fleetcarpooling/auth/user_model.dart';
 import 'package:fleetcarpooling/auth/user_repository.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:fleetcarpooling/ui_elements/custom_toast.dart';
 import 'package:flutter/material.dart';
 
 class AllUsersForm extends StatelessWidget {
@@ -146,7 +147,87 @@ class CardWidget extends StatelessWidget {
             const SizedBox(height: 6),
             GestureDetector(
               onTap: () {
-                // Logika za brisanje korisnika
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Center(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        padding: const EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: AppColors.backgroundColor,
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(80, 28, 80, 28),
+                              child: Text(
+                                'ARE YOU SURE?',
+                                style: TextStyle(
+                                  color: AppColors.mainTextColor,
+                                  fontSize: 24,
+                                ),
+                              ),
+                            ),
+                            const Divider(
+                              height: 0.5,
+                              color: AppColors.mainTextColor,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+
+                                    CustomToast().showFlutterToast(
+                                        "You succesfully deleted user");
+                                  },
+                                  child: const Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 20, bottom: 20),
+                                    child: Text(
+                                      'YES',
+                                      style: TextStyle(
+                                        color: AppColors.mainTextColor,
+                                        fontSize: 24,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 70,
+                                  width: 0.5,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: AppColors.mainTextColor)),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 20, bottom: 20),
+                                    child: Text(
+                                      'NO',
+                                      style: TextStyle(
+                                        color: AppColors.mainTextColor,
+                                        fontSize: 24,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
               },
               child: Container(
                 padding: const EdgeInsets.all(12),
