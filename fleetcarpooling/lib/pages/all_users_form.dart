@@ -5,10 +5,23 @@ import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/ui_elements/custom_toast.dart';
 import 'package:flutter/material.dart';
 
-class AllUsersForm extends StatelessWidget {
-  List<User> users = List.empty();
+class AllUsersForm extends StatefulWidget {
+  const AllUsersForm({Key? key}) : super(key: key);
 
-  AllUsersForm({super.key});
+  @override
+  _AllUsersFormState createState() => _AllUsersFormState();
+}
+
+class _AllUsersFormState extends State<AllUsersForm> {
+  late List<User> users;
+  String searchQuery = "";
+
+  @override
+  void initState() {
+    super.initState();
+    users = List.empty();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,10 +52,43 @@ class AllUsersForm extends StatelessWidget {
       ),
       body: Padding(
         padding:
-            const EdgeInsets.only(right: 10, left: 10, top: 20, bottom: 20),
-        child: Container(
-          color: Colors.white,
-          child: UsersList(),
+            const EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 20),
+        child: Column(
+          children: [
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value.toLowerCase();
+                });
+              },
+              decoration: const InputDecoration(
+                labelText: 'Search..',
+                labelStyle: TextStyle(color: AppColors.mainTextColor),
+                prefixIcon: Icon(Icons.search, color: AppColors.mainTextColor),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color:
+                        AppColors.mainTextColor, // Set the border color to blue
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: AppColors
+                        .mainTextColor, // Set the focused border color to blue
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: Container(
+                color: Colors.white,
+                child: UsersList(searchQuery: searchQuery),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -51,8 +97,10 @@ class AllUsersForm extends StatelessWidget {
 
 class UsersList extends StatelessWidget {
   final UserRepository _userRepository = UserRepository();
+  final String searchQuery;
 
-  UsersList({super.key});
+  UsersList({Key? key, required this.searchQuery}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<User>>(
@@ -63,20 +111,25 @@ class UsersList extends StatelessWidget {
         }
 
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No users is database.'));
+          return const Center(child: Text('No users in the database.'));
         }
+
+        var filteredUsers = snapshot.data!
+            .where((user) =>
+                user.firstName.toLowerCase().contains(searchQuery) ||
+                user.lastName.toLowerCase().contains(searchQuery))
+            .toList();
 
         return SingleChildScrollView(
           child: ListView.separated(
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
-            itemCount: snapshot.data!.length,
+            itemCount: filteredUsers.length,
             itemBuilder: (context, index) {
-              return CardWidget(user: snapshot.data![index]);
+              return CardWidget(user: filteredUsers[index]);
             },
             separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(
-                  height: 10); // Postavite željeni razmak između kartica
+              return const SizedBox(height: 10);
             },
           ),
         );
@@ -96,9 +149,9 @@ class CardWidget extends StatelessWidget {
     final UserRepository _userRepository = UserRepository();
 
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
-        side: const BorderSide(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(30.0)),
+        side: BorderSide(
           color: AppColors.mainTextColor,
           width: 1,
         ),
@@ -108,8 +161,7 @@ class CardWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-                height: 10),
+            const SizedBox(height: 10),
             Row(
               children: [
                 CircleAvatar(
@@ -141,7 +193,7 @@ class CardWidget extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+              margin: EdgeInsets.symmetric(horizontal: 20),
               height: 1,
               color: AppColors.mainTextColor,
             ),
@@ -155,9 +207,9 @@ class CardWidget extends StatelessWidget {
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.8,
                         padding: const EdgeInsets.all(16.0),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: AppColors.backgroundColor,
-                          borderRadius: BorderRadius.circular(30.0),
+                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -240,8 +292,7 @@ class CardWidget extends StatelessWidget {
               },
               child: Container(
                 padding: const EdgeInsets.all(12),
-                alignment: Alignment
-                    .center,
+                alignment: Alignment.center,
                 child: const Text(
                   'Delete User',
                   style: TextStyle(
