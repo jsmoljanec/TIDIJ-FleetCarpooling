@@ -1,4 +1,5 @@
 import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_selection.dart';
+import 'package:fleetcarpooling/pages/all_users_form.dart';
 import 'package:fleetcarpooling/pages/delete_disable_form.dart';
 import 'package:fleetcarpooling/pages/profileForm.dart';
 import 'package:fleetcarpooling/pages/user_registration_form.dart';
@@ -81,6 +82,17 @@ class AdminHomePage extends StatelessWidget {
               );
             },
             label: 'LIST ALL CARS',
+          ),
+          MyElevatedButton(
+            onPressed: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AllUsersForm(),
+                ),
+              );
+            },
+            label: 'LIST ALL USERS',
           ),
           Expanded(
             child: Image.asset(
