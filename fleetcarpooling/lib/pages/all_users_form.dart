@@ -84,7 +84,12 @@ class _AllUsersFormState extends State<AllUsersForm> {
             const SizedBox(height: 20),
             Expanded(
               child: Container(
-                color: Colors.white,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/logo.png'),
+                    fit: BoxFit.contain
+                  ),
+                ),
                 child: UsersList(searchQuery: searchQuery),
               ),
             ),
@@ -173,19 +178,21 @@ class CardWidget extends StatelessWidget {
                           as ImageProvider,
                 ),
                 const SizedBox(width: 10),
-                Text(
-                  '${user.firstName} ${user.lastName}',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: AppColors.mainTextColor,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    '${user.firstName} ${user.lastName}',
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width < 350 ? 16 : 20,
+                      color: AppColors.mainTextColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const Spacer(),
                 Text(
                   user.role,
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width < 350 ? 13 : 16,
                     color: AppColors.mainTextColor,
                   ),
                 ),
