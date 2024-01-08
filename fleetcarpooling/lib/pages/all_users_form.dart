@@ -93,6 +93,7 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    final UserRepository _userRepository = UserRepository();
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -108,7 +109,7 @@ class CardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
-                height: 10), // Postavite željeni razmak između elemenata
+                height: 10),
             Row(
               children: [
                 CircleAvatar(
@@ -141,7 +142,7 @@ class CardWidget extends StatelessWidget {
             const SizedBox(height: 12),
             Container(
               margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-              height: 1, // Visina linije
+              height: 1,
               color: AppColors.mainTextColor,
             ),
             const SizedBox(height: 6),
@@ -180,10 +181,18 @@ class CardWidget extends StatelessWidget {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.of(context).pop();
-
-                                    CustomToast().showFlutterToast(
-                                        "You succesfully deleted user");
+                                    _userRepository
+                                        .deleteUser(user.email)
+                                        .then((value) {
+                                      Navigator.of(context).pop();
+                                      if (value == true) {
+                                        CustomToast().showFlutterToast(
+                                            "You succesfully deleted user");
+                                      } else {
+                                        CustomToast().showFlutterToast(
+                                            "Something went wrong, it wasnt possible to delete user");
+                                      }
+                                    });
                                   },
                                   child: const Padding(
                                     padding:
@@ -232,7 +241,7 @@ class CardWidget extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(12),
                 alignment: Alignment
-                    .center, // Dodajte ovu liniju za centriranje teksta
+                    .center,
                 child: const Text(
                   'Delete User',
                   style: TextStyle(
