@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fleetcarpooling/profileService/profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -119,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   CircleAvatar(
                     backgroundImage: userProfile.profileImage != ''
-                        ? NetworkImage(userProfile.profileImage)
+                        ? CachedNetworkImageProvider(userProfile.profileImage)
                         : null,
                     backgroundColor: Colors.white,
                     radius: 65,
