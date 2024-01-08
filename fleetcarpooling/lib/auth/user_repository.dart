@@ -94,4 +94,23 @@ class UserRepository {
     });
     return controller.stream;
   }
+
+  Future<bool> deleteUser(String email) async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Users");
+
+    DatabaseEvent snapshot = await FirebaseDatabase.instance
+        .ref("Users")
+        .orderByChild('email')
+        .equalTo(email)
+        .once();
+
+    if (snapshot.snapshot.value != null) {
+      Map<dynamic, dynamic>? users =
+          snapshot.snapshot.value as Map<dynamic, dynamic>?;
+      String? key = users?.keys.first;
+      await ref.child(key!).remove();
+      return true;
+    }
+    return false;
+  }
 }
