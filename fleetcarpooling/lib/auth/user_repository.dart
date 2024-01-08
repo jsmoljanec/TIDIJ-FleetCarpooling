@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/auth/user_model.dart' as usermod;
@@ -65,5 +67,31 @@ class UserRepository {
       print(e);
       throw e;
     }
+  }
+
+  Stream<List<usermod.User>> getUsers() {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Users");
+    final StreamController<List<usermod.User>> controller =
+        StreamController<List<usermod.User>>();
+    ref.onValue.listen((DatabaseEvent event) {
+      List<usermod.User> allUsers = [];
+
+      Map<dynamic, dynamic>? values =
+          event.snapshot.value as Map<dynamic, dynamic>?;
+      values?.forEach((key, value) {
+        allUsers.add(usermod.User(
+          firstName: value?['firstName'] ?? '',
+          lastName: value?['lastName'] ?? '',
+          email: value?['email'] ?? '',
+          username: value?['username'] ?? '',
+          role: value?['role'] ?? '',
+          profileImage: value?['profileImage'] ?? '',
+          statusActivity: value?['isOnline'] ?? '',
+        ));
+      });
+
+      controller.add(allUsers);
+    });
+    return controller.stream;
   }
 }
