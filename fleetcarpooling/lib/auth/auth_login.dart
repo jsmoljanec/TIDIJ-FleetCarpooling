@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:fleetcarpooling/chat/service/notification_service.dart';
 
 class AuthLogin {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  final notificationService = NotificationsService();
   void updateOnlineStatus(String? uid, String state) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Users/${uid}");
 
@@ -45,6 +46,7 @@ class AuthLogin {
         email: email,
         password: password,
       );
+      notificationService.requestPermission();
       print("Login successful: ${userCredential.user?.email}");
       updateOnlineStatus(userCredential.user!.uid, "online");
       return true;
