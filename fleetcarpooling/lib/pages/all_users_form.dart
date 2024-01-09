@@ -125,6 +125,10 @@ class UsersList extends StatelessWidget {
                 user.lastName.toLowerCase().contains(searchQuery))
             .toList();
 
+        filteredUsers = filteredUsers
+            .where((user) => user.firstName.isNotEmpty)
+            .toList();
+
         return SingleChildScrollView(
           child: ListView.separated(
             shrinkWrap: true,
