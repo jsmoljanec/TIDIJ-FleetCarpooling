@@ -209,6 +209,7 @@ class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
                             right: BorderSide(color: AppColors.mainTextColor),
                           ),
                         ),
+                        padding: const EdgeInsets.only(top: 10),
                         child: Column(
                           children: [
                             buildText("Capacity", "${vehicle.capacity}"),
