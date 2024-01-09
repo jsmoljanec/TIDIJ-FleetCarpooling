@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/pages/admin_home_page.dart';
 import 'package:fleetcarpooling/chat/provider/firebase_provider.dart';
@@ -10,6 +11,20 @@ import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:fleetcarpooling/pages/reservation_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+Future<void> _backgroundMessageHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: 'AIzaSyAiAzExpBKwIfaYhntOua3f7qNMJ5ecdA0',
+      appId: '1:956285703635:android:1faaaa1cfb6be0d4d58b26',
+      messagingSenderId: '956285703635',
+      projectId: 'fleetcarpooling-cd243',
+      storageBucket: 'gs://fleetcarpooling-cd243.appspot.com',
+      databaseURL:
+          'https://fleetcarpooling-cd243-default-rtdb.europe-west1.firebasedatabase.app/',
+    ),
+  );
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +39,8 @@ Future<void> main() async {
           'https://fleetcarpooling-cd243-default-rtdb.europe-west1.firebasedatabase.app/',
     ),
   );
+  await FirebaseMessaging.instance.getInitialMessage();
+  FirebaseMessaging.onBackgroundMessage(_backgroundMessageHandler);
   await dotenv.load(fileName: ".env");
 
   User? user = FirebaseAuth.instance.currentUser;
