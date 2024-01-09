@@ -147,6 +147,7 @@ class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Column(
         children: [
@@ -163,84 +164,89 @@ class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
 
               Vehicle vehicle = snapshot.data!;
 
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Row(
-                      children: [
-                        CircularIconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        Text(
-                          "${vehicle.brand} ${vehicle.model}",
-                          style: const TextStyle(
-                            fontSize: 24,
-                            color: AppColors.mainTextColor,
+              return SizedBox(
+                height: screenHeight,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Row(
+                        children: [
+                          CircularIconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          Text(
+                            "${vehicle.brand} ${vehicle.model}",
+                            style: const TextStyle(
+                              fontSize: 24,
+                              color: AppColors.mainTextColor,
+                            ),
+                          ),
+                          const Spacer(),
+                        ],
+                      ),
+                    ),
+                    Image.network(
+                      vehicle.imageUrl,
+                      fit: BoxFit.cover,
+                      height: 150,
+                      width: 300,
+                    ),
+                    Expanded(
+                      child: Container(
+                        width: screenWidth,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primaryColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          ),
+                          border: Border(
+                            top: BorderSide(color: AppColors.mainTextColor),
+                            left: BorderSide(color: AppColors.mainTextColor),
+                            right: BorderSide(color: AppColors.mainTextColor),
                           ),
                         ),
-                        const Spacer(),
-                      ],
-                    ),
-                  ),
-                  Image.network(
-                    vehicle.imageUrl,
-                    fit: BoxFit.cover,
-                    height: 150,
-                    width: 300,
-                  ),
-                  Container(
-                    width: screenWidth,
-                    decoration: const BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      ),
-                      border: Border(
-                        top: BorderSide(color: AppColors.mainTextColor),
-                        left: BorderSide(color: AppColors.mainTextColor),
-                        right: BorderSide(color: AppColors.mainTextColor),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        buildText("Capacity", "${vehicle.capacity}"),
-                        buildText(
-                            "Distance traveled", "${vehicle.distanceTraveled}"),
-                        buildText(
-                            "Fuel consumption", "${vehicle.fuelConsumption}"),
-                        buildText("Registration", vehicle.registration),
-                        buildText("Transmission type", vehicle.transType),
-                        buildText("Year", "${vehicle.year}"),
-                        MyElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return buildDialog(context, vehicle.vin,
-                                      vehicle.active, "disable");
+                        child: Column(
+                          children: [
+                            buildText("Capacity", "${vehicle.capacity}"),
+                            buildText("Distance traveled",
+                                "${vehicle.distanceTraveled}"),
+                            buildText("Fuel consumption",
+                                "${vehicle.fuelConsumption}"),
+                            buildText("Registration", vehicle.registration),
+                            buildText("Transmission type", vehicle.transType),
+                            buildText("Year", "${vehicle.year}"),
+                            MyElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return buildDialog(context, vehicle.vin,
+                                          vehicle.active, "disable");
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                            label: vehicle.active ? "DISABLE" : "ACTIVATE"),
-                        MyElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return buildDialog(context, vehicle.vin,
-                                      vehicle.active, "delete");
+                                label: vehicle.active ? "DISABLE" : "ACTIVATE"),
+                            MyElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return buildDialog(context, vehicle.vin,
+                                          vehicle.active, "delete");
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                            label: "DELETE")
-                      ],
+                                label: "DELETE")
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           ),
