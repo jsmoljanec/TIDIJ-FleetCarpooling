@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/auth/user_model.dart' as usermod;
 import 'package:fleetcarpooling/auth/user_repository.dart';
+import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:fleetcarpooling/pages/changePasswordForm.dart';
 import 'package:fleetcarpooling/pages/login_form.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
@@ -27,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
   );
 
   final UserRepository userRepository = UserRepository();
-
+  final notificationService = NotificationsService();
   @override
   void initState() {
     super.initState();
@@ -153,6 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   MyElevatedButton(
                     onPressed: () {
                       FirebaseAuth.instance.signOut();
+                      notificationService.deleteToken();
                       AuthLogin().updateOnlineStatus(
                           FirebaseAuth.instance.currentUser?.uid, "offline");
                       Navigator.pushAndRemoveUntil(

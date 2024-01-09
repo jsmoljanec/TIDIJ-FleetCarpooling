@@ -13,7 +13,7 @@ class Vehicle {
   double latitude;
   double longitude;
   bool locked;
-  String? token;
+  Map<String, String>? token;
 
   Vehicle(
       {required this.vin,

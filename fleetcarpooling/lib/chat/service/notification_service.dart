@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
 import 'package:http/http.dart' as http;
@@ -108,6 +109,7 @@ class NotificationsService {
   List<String> receiverToken = [];
 
   Future<void> getReceiverToken(String? receiverId) async {
+    List<String> token = [];
     print(receiverId);
     DatabaseReference ref = FirebaseDatabase.instance
         .ref()
@@ -117,10 +119,13 @@ class NotificationsService {
     DatabaseEvent snapshot = await ref.once();
     Map<dynamic, dynamic>? values =
         snapshot.snapshot.value as Map<dynamic, dynamic>?;
-
     values?.forEach((key, value) {
-      receiverToken.add(value.toString());
+      String tokenValue = value.toString();
+      if (!token.contains(tokenValue)) {
+        token.add(tokenValue);
+      }
     });
+    receiverToken = token;
   }
 
   Future<void> sendNotification(
@@ -149,10 +154,38 @@ class NotificationsService {
               }
             }),
           );
-          print("poslan poruka na $receiverToken");
+          print("poslan poruka na ${receiverToken[i]}");
         } catch (e) {
           debugPrint(e.toString());
         }
+      }
+    }
+  }
+
+  Future<void> deleteToken() async {
+    final DatabaseReference ref = FirebaseDatabase.instance.ref();
+    final token = await FirebaseMessaging.instance.getToken();
+    var query = await ref
+        .child("Vehicles")
+        .orderByChild('token/${token}')
+        .equalTo(token)
+        .once();
+    print(token);
+    DataSnapshot snapshot = query.snapshot;
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
+      if (values != null) {
+        values.forEach((key, value) {
+          print(key);
+          if (value is Map && value['token'][token] == token) {
+            ref
+                .child('Vehicles')
+                .child(key)
+                .child('token')
+                .child(token!)
+                .remove();
+          }
+        });
       }
     }
   }

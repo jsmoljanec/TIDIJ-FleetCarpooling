@@ -19,13 +19,6 @@ class _ChatTextFieldState extends State<ChatTextField> {
   final controller = TextEditingController();
   final notification = NotificationsService();
   Uint8List? file;
-
-  @override
-  void initState() {
-    notification.getReceiverToken(widget.receiverId);
-    super.initState();
-  }
-
   @override
   void dispose() {
     controller.dispose();
@@ -65,6 +58,7 @@ class _ChatTextFieldState extends State<ChatTextField> {
         ),
       );
   Future<void> _sendText(BuildContext context) async {
+    notification.getReceiverToken(widget.receiverId);
     if (controller.text.isNotEmpty) {
       String tekst = controller.text;
       controller.clear();
@@ -82,6 +76,7 @@ class _ChatTextFieldState extends State<ChatTextField> {
   }
 
   Future<void> _sendImage() async {
+    notification.getReceiverToken(widget.receiverId);
     ImagePicker imagePickerGallery = ImagePicker();
     XFile? file =
         await imagePickerGallery.pickImage(source: ImageSource.gallery);

@@ -28,7 +28,7 @@ class VehicleService implements VehicleRepository {
         latitude: event.vehicle.latitude,
         longitude: event.vehicle.longitude,
         locked: event.vehicle.locked,
-        token: "");
+        token: {"1": "1"});
 
     newCarRef.set(vehicle.toMap());
   }
