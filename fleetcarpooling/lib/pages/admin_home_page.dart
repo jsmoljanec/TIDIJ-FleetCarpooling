@@ -1,4 +1,5 @@
 import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_selection.dart';
+import 'package:fleetcarpooling/pages/all_reservations.dart';
 import 'package:fleetcarpooling/pages/all_users_form.dart';
 import 'package:fleetcarpooling/pages/delete_disable_form.dart';
 import 'package:fleetcarpooling/pages/profile_form.dart';
@@ -31,7 +32,7 @@ class AdminHomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfilePage(),
+                    builder: (context) => const ProfilePage(),
                   ),
                 );
               },
@@ -45,60 +46,80 @@ class AdminHomePage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          const SizedBox(height: 50),
-          MyElevatedButton(
-            onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => UserRegistrationForm(),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 450),
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/logo.png'),
+                  fit: BoxFit.cover,
                 ),
-              );
-            },
-            label: 'ADD NEW USER',
-          ),
-          MyElevatedButton(
-            onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddVehicleSelection(),
-                ),
-              );
-            },
-            label: 'ADD NEW CAR',
-          ),
-          MyElevatedButton(
-            onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DeleteDisableForm(),
-                ),
-              );
-            },
-            label: 'LIST ALL CARS',
-          ),
-          MyElevatedButton(
-            onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AllUsersForm(),
-                ),
-              );
-            },
-            label: 'LIST ALL USERS',
-          ),
-          Expanded(
-            child: Image.asset(
-              'assets/images/logo.png',
-              fit: BoxFit.cover,
+              ),
             ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(height: 50),
+              MyElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserRegistrationForm(),
+                    ),
+                  );
+                },
+                label: 'ADD NEW USER',
+              ),
+              MyElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddVehicleSelection(),
+                    ),
+                  );
+                },
+                label: 'ADD NEW CAR',
+              ),
+              MyElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DeleteDisableForm(),
+                    ),
+                  );
+                },
+                label: 'LIST ALL CARS',
+              ),
+              MyElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AllUsersForm(),
+                    ),
+                  );
+                },
+                label: 'LIST ALL USERS',
+              ),
+              MyElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AllReservations(),
+                    ),
+                  );
+                },
+                label: 'LIST ALL RESERVATIONS',
+              ),
+            ],
           ),
         ],
       ),
