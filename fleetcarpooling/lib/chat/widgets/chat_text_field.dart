@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/chat/service/firebase_firestore_service.dart';
+import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:fleetcarpooling/chat/widgets/custom_text_form_field.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
@@ -15,7 +17,7 @@ class ChatTextField extends StatefulWidget {
 
 class _ChatTextFieldState extends State<ChatTextField> {
   final controller = TextEditingController();
-
+  final notification = NotificationsService();
   Uint8List? file;
   @override
   void dispose() {
@@ -56,18 +58,25 @@ class _ChatTextFieldState extends State<ChatTextField> {
         ),
       );
   Future<void> _sendText(BuildContext context) async {
+    notification.getReceiverToken(widget.receiverId);
     if (controller.text.isNotEmpty) {
+      String tekst = controller.text;
+      controller.clear();
       await FirebaseFirestoreService.addTextMessage(
         receiverId: widget.receiverId,
-        content: controller.text,
+        content: tekst,
       );
-      controller.clear();
+      await notification.sendNotification(
+        body: tekst,
+        senderId: FirebaseAuth.instance.currentUser!.uid,
+      );
       FocusScope.of(context).unfocus();
     }
     FocusScope.of(context).unfocus();
   }
 
   Future<void> _sendImage() async {
+    notification.getReceiverToken(widget.receiverId);
     ImagePicker imagePickerGallery = ImagePicker();
     XFile? file =
         await imagePickerGallery.pickImage(source: ImageSource.gallery);
@@ -75,6 +84,10 @@ class _ChatTextFieldState extends State<ChatTextField> {
       await FirebaseFirestoreService.addImageMessage(
         receiverId: widget.receiverId,
         file: file,
+      );
+      await notification.sendNotification(
+        body: 'image........',
+        senderId: FirebaseAuth.instance.currentUser!.uid,
       );
     }
   }
