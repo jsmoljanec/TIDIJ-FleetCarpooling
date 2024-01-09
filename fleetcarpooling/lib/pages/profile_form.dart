@@ -1,18 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fleetcarpooling/profileService/profile_service.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/auth/user_model.dart' as usermod;
 import 'package:fleetcarpooling/auth/user_repository.dart';
 import 'package:fleetcarpooling/pages/changePasswordForm.dart';
 import 'package:fleetcarpooling/pages/login_form.dart';
+import 'package:fleetcarpooling/profileService/profile_service.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -77,6 +77,34 @@ class _ProfilePageState extends State<ProfilePage> {
     } catch (e) {
       print("Error deleting profile image: $e");
     }
+  }
+
+  Future<void> confirmDeleteProfileImage() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Confirm Delete"),
+          content: const Text(
+              "Are you sure you want to delete your profile picture?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                await deleteProfileImage();
+                Navigator.of(context).pop();
+              },
+              child: const Text("Delete"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -150,7 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Positioned(
                       bottom: -10,
                       child: IconButton(
-                        onPressed: deleteProfileImage,
+                        onPressed: confirmDeleteProfileImage,
                         icon: const Icon(Icons.delete),
                         color: Colors.grey,
                       ),
