@@ -8,6 +8,7 @@ class Reservation {
   final DateTime returnDate;
   final TimeOfDay pickupTime;
   final TimeOfDay returnTime;
+  final String? name;
 
   Reservation({
     this.id,
@@ -17,5 +18,6 @@ class Reservation {
     required this.returnDate,
     required this.pickupTime,
     required this.returnTime,
+    this.name,
   });
 }
