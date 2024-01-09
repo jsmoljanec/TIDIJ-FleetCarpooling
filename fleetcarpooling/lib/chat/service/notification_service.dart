@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -15,7 +16,7 @@ class NotificationsService {
       'AAAA3qcR1dM:APA91bHXwf9Efc-9arDjVLTUnC6tIf7Ultk_uCkc6WVahtKx8xe-dEdcnICRPjoGBDNIlXrOM6TZ74wrus7bcLugZ-M3_-ttOu7iSD6FHGU6RT3GXYpDNbKpkrNo47wnbCG0X_w8WYJq';
 
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
+  final DatabaseReference _database = FirebaseDatabase.instance.ref();
   void _initLocalNotification() {
     const androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -88,5 +89,16 @@ class NotificationsService {
     } else {
       debugPrint('User declined or has not accepted permission');
     }
+  }
+
+  Future<void> getToken(String receiverId) async {
+    final token = await FirebaseMessaging.instance.getToken();
+    _saveToken(token!, receiverId);
+  }
+
+  Future<void> _saveToken(String token, String receiverId) async {
+    DatabaseReference vehicleRef =
+        _database.child("Vehicles").child(receiverId).child("token");
+    vehicleRef.update({token: token});
   }
 }

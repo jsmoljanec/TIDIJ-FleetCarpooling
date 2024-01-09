@@ -13,6 +13,7 @@ class Vehicle {
   double latitude;
   double longitude;
   bool locked;
+  String? token;
 
   Vehicle(
       {required this.vin,
@@ -28,7 +29,8 @@ class Vehicle {
       this.distanceTraveled = 0,
       required this.latitude,
       required this.longitude,
-      required this.locked});
+      required this.locked,
+      this.token});
 
   Map<String, dynamic> toMap() {
     return {
@@ -46,6 +48,7 @@ class Vehicle {
       'latitude': latitude,
       'longitude': longitude,
       'locked': locked,
+      'token': token,
     };
   }
 }
