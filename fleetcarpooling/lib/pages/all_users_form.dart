@@ -53,45 +53,53 @@ class _AllUsersFormState extends State<AllUsersForm> {
       body: Padding(
         padding:
             const EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 20),
-        child: Column(
+        child: Stack(
           children: [
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  searchQuery = value.toLowerCase();
-                });
-              },
-              decoration: const InputDecoration(
-                labelText: 'Search..',
-                labelStyle: TextStyle(color: AppColors.mainTextColor),
-                prefixIcon: Icon(Icons.search, color: AppColors.mainTextColor),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color:
-                        AppColors.mainTextColor, // Set the border color to blue
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: AppColors
-                        .mainTextColor, // Set the focused border color to blue
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
+            Padding(
+              padding: const EdgeInsets.only(top: 450),
               child: Container(
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/logo.png'),
-                    fit: BoxFit.contain
+                    fit: BoxFit.fill,
                   ),
                 ),
-                child: UsersList(searchQuery: searchQuery),
               ),
+            ),
+            Column(
+              children: [
+                TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value.toLowerCase();
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Search..',
+                    labelStyle: TextStyle(color: AppColors.mainTextColor),
+                    prefixIcon:
+                        Icon(Icons.search, color: AppColors.mainTextColor),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors
+                            .mainTextColor, // Set the border color to blue
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors
+                            .mainTextColor, // Set the focused border color to blue
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: UsersList(searchQuery: searchQuery),
+                ),
+              ],
             ),
           ],
         ),
@@ -126,7 +134,8 @@ class UsersList extends StatelessWidget {
             .toList();
 
         filteredUsers = filteredUsers
-            .where((user) => user.firstName.isNotEmpty)
+            .where(
+                (user) => user.firstName != null && user.firstName!.isNotEmpty)
             .toList();
 
         return SingleChildScrollView(
@@ -186,7 +195,8 @@ class CardWidget extends StatelessWidget {
                   child: Text(
                     '${user.firstName} ${user.lastName}',
                     style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width < 350 ? 16 : 20,
+                      fontSize:
+                          MediaQuery.of(context).size.width < 350 ? 16 : 20,
                       color: AppColors.mainTextColor,
                       fontWeight: FontWeight.bold,
                     ),
