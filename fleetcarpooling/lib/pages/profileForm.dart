@@ -59,6 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     if (file != null) {
       ProfileService profileService = ProfileService();
+      await deleteProfileImage();
       await profileService.addStorage(file: file);
       await fetchUserData();
     }
