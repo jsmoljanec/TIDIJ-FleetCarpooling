@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -100,5 +102,57 @@ class NotificationsService {
     DatabaseReference vehicleRef =
         _database.child("Vehicles").child(receiverId).child("token");
     vehicleRef.update({token: token});
+  }
+
+  List<String> receiverToken = [];
+
+  Future<void> getReceiverToken(String? receiverId) async {
+    print(receiverId);
+    DatabaseReference ref = FirebaseDatabase.instance
+        .ref()
+        .child("Vehicles")
+        .child(receiverId!)
+        .child("token");
+    DatabaseEvent snapshot = await ref.once();
+    Map<dynamic, dynamic>? values =
+        snapshot.snapshot.value as Map<dynamic, dynamic>?;
+
+    values?.forEach((key, value) {
+      receiverToken.add(value.toString());
+    });
+  }
+
+  Future<void> sendNotification(
+      {required String body, required String senderId}) async {
+    for (int i = 0; i < receiverToken.length; i++) {
+      if (receiverToken[i] == await FirebaseMessaging.instance.getToken()) {
+      } else {
+        try {
+          await http.post(
+            Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'Authorization': 'key=$key',
+            },
+            body: jsonEncode(<String, dynamic>{
+              "to": receiverToken[i],
+              'priority': 'high',
+              'notification': <String, dynamic>{
+                'body': body,
+                'title': 'New Message !',
+              },
+              'data': <String, String>{
+                'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+                'status': 'done',
+                'senderId': senderId,
+              }
+            }),
+          );
+          print("poslan poruka na $receiverToken");
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+      }
+    }
   }
 }
