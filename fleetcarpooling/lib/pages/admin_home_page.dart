@@ -1,4 +1,5 @@
 import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_selection.dart';
+import 'package:fleetcarpooling/pages/all_reservations.dart';
 import 'package:fleetcarpooling/pages/all_users_form.dart';
 import 'package:fleetcarpooling/pages/delete_disable_form.dart';
 import 'package:fleetcarpooling/pages/profile_form.dart';
@@ -7,6 +8,7 @@ import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
+// ignore: use_key_in_widget_constructors
 class AdminHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -100,7 +102,7 @@ class AdminHomePage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AllUsersForm(),
+                      builder: (context) => const AllUsersForm(),
                     ),
                   );
                 },
@@ -111,7 +113,7 @@ class AdminHomePage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AdminHomePage(),
+                      builder: (context) => AllReservations(),
                     ),
                   );
                 },
