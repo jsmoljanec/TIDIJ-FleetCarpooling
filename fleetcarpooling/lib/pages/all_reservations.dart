@@ -3,6 +3,8 @@ import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 class AllReservations extends StatefulWidget {
+  const AllReservations({super.key});
+
   @override
   State<AllReservations> createState() => _AllReservationsState();
 }
@@ -21,7 +23,7 @@ class _AllReservationsState extends State<AllReservations> {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 20),
+        padding: const EdgeInsets.only(top: 20),
         child: Stack(
           children: [
             Padding(
@@ -52,10 +54,13 @@ class _AllReservationsState extends State<AllReservations> {
                         SizedBox(
                           width: 51.34, 
                           height: 49.51,
-                          child: CircularIconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: CircularIconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
                           ),
                         ),
                         const SizedBox(width: 10.0),
@@ -82,12 +87,15 @@ class _AllReservationsState extends State<AllReservations> {
                         ),
                         const SizedBox(width: 10.0),
                         Expanded(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Image.asset(
-                              'assets/icons/profile.png',
-                              width: 30,
-                              height: 30,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Image.asset(
+                                'assets/icons/profile.png',
+                                width: 30,
+                                height: 30,
+                              ),
                             ),
                           ),
                         ),
