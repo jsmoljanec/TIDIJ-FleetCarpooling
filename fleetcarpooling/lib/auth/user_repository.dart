@@ -163,32 +163,4 @@ class UserRepository {
       throw e;
     }
   }
-
-  Future<String?> getUserNameByEmail(String email) async {
-    try {
-      DatabaseEvent snapshot = await FirebaseDatabase.instance
-          .ref("Users")
-          .orderByChild('email')
-          .equalTo(email)
-          .once();
-
-      if (snapshot.snapshot.value != null) {
-        Map<dynamic, dynamic>? users =
-            snapshot.snapshot.value as Map<dynamic, dynamic>?;
-
-        String? key = users?.keys.first;
-        Map<dynamic, dynamic>? userData = users?[key];
-
-        String firstName = userData?['firstName'] ?? '';
-        String lastName = userData?['lastName'] ?? '';
-
-        return '$firstName $lastName';
-      }
-
-      return null;
-    } catch (e) {
-      print("Error fetching full name: $e");
-      throw e;
-    }
-  }
 }
