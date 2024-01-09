@@ -1,3 +1,4 @@
+import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,9 +31,16 @@ class SelectedVehiclePage extends StatefulWidget {
 }
 
 class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
+  final notification = NotificationsService();
   final ReservationService service = ReservationService();
   final AuthReservationNotification authReservationNotification =
       AuthReservationNotification();
+  @override
+  void initState() {
+    super.initState();
+    notification.firebaseNotification(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     String email = FirebaseAuth.instance.currentUser!.email!;

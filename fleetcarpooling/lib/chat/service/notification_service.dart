@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -154,5 +155,25 @@ class NotificationsService {
         }
       }
     }
+  }
+
+  void firebaseNotification(BuildContext context) {
+    _initLocalNotification();
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => ChatScreen(
+            vin: "",
+            brand: "",
+            model: "",
+          ),
+        ),
+      );
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      await _showLocalNotification(message);
+    });
   }
 }
