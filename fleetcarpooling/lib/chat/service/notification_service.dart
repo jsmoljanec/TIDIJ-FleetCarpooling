@@ -193,16 +193,20 @@ class NotificationsService {
   void firebaseNotification(BuildContext context) {
     _initLocalNotification();
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => ChatScreen(
-            vin: "",
-            brand: "",
-            model: "",
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
+      if (message != null) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => ChatScreen(
+              vin: message.data['receiverId'],
+              brand: "",
+              model: "",
+            ),
           ),
-        ),
-      );
+        );
+      }
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
