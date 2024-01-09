@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/auth/user_model.dart' as usermod;
@@ -112,5 +111,28 @@ class UserRepository {
       return true;
     }
     return false;
+  }
+
+  Future<void> updateUserProfileImage(String imageUrl) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        String uid = user.uid;
+
+        DatabaseReference ref = FirebaseDatabase.instance.ref("Users/$uid");
+
+        await ref.update({
+          'profileImage': imageUrl,
+        });
+
+        print("Profile image updated successfully");
+      } else {
+        throw Exception('User is null');
+      }
+    } catch (e) {
+      print("Error updating profile image: $e");
+      throw e;
+    }
   }
 }

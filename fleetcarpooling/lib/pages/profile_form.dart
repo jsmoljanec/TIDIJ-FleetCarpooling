@@ -1,15 +1,18 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/auth/user_model.dart' as usermod;
 import 'package:fleetcarpooling/auth/user_repository.dart';
 import 'package:fleetcarpooling/pages/changePasswordForm.dart';
 import 'package:fleetcarpooling/pages/login_form.dart';
+import 'package:fleetcarpooling/profileService/profile_service.dart';
 import 'package:fleetcarpooling/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -25,8 +28,8 @@ class _ProfilePageState extends State<ProfilePage> {
     profileImage: '',
     statusActivity: '',
   );
-
   final UserRepository userRepository = UserRepository();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -43,6 +46,65 @@ class _ProfilePageState extends State<ProfilePage> {
     } catch (e) {
       print("Error fetching user data: $e");
     }
+  }
+
+  Future<void> selectImage() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    ImagePicker imagePickerGallery = ImagePicker();
+    XFile? file =
+        await imagePickerGallery.pickImage(source: ImageSource.gallery);
+
+    if (file != null) {
+      ProfileService profileService = ProfileService();
+      await deleteProfileImage();
+      await profileService.addStorage(file: file);
+      await fetchUserData();
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> deleteProfileImage() async {
+    try {
+      ProfileService profileService = ProfileService();
+      await profileService.deleteProfileImage(userProfile.profileImage);
+      await fetchUserData();
+    } catch (e) {
+      print("Error deleting profile image: $e");
+    }
+  }
+
+  Future<void> confirmDeleteProfileImage() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Confirm Delete"),
+          content: const Text(
+              "Are you sure you want to delete your profile picture?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                await deleteProfileImage();
+                Navigator.of(context).pop();
+              },
+              child: const Text("Delete"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -81,6 +143,49 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              alignment: Alignment.center,
+              child: Stack(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: userProfile.profileImage != ''
+                        ? CachedNetworkImageProvider(userProfile.profileImage)
+                        : null,
+                    backgroundColor: Colors.white,
+                    radius: 65,
+                    child: userProfile.profileImage == ''
+                        ? Image.asset("assets/images/profileImage.png")
+                        : null,
+                  ),
+                  if (isLoading)
+                    const Positioned.fill(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  Positioned(
+                    bottom: -10,
+                    left: 80,
+                    child: IconButton(
+                      onPressed: selectImage,
+                      icon: const Icon(Icons.add_a_photo),
+                      color: Colors.grey,
+                    ),
+                  ),
+                  if (userProfile.profileImage != '')
+                    Positioned(
+                      bottom: -10,
+                      child: IconButton(
+                        onPressed: confirmDeleteProfileImage,
+                        icon: const Icon(Icons.delete),
+                        color: Colors.grey,
+                      ),
+                    ),
+                ],
+              ),
+            ),
             const Text(
               "Name",
               style: TextStyle(
@@ -126,7 +231,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        ChangePasswordForm(),
+                        const ChangePasswordForm(),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
                       const begin = Offset(1.0, 0.0);
