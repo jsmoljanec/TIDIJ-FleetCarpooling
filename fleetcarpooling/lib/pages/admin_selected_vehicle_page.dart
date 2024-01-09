@@ -219,6 +219,7 @@ class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
                             buildText("Registration", vehicle.registration),
                             buildText("Transmission type", vehicle.transType),
                             buildText("Year", "${vehicle.year}"),
+                            const Spacer(),
                             MyElevatedButton(
                                 onPressed: () {
                                   showDialog(
@@ -240,7 +241,7 @@ class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
                                     },
                                   );
                                 },
-                                label: "DELETE")
+                                label: "DELETE"),
                           ],
                         ),
                       ),
