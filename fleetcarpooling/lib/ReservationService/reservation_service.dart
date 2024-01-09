@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/Models/reservation_model.dart';
 import 'package:fleetcarpooling/auth/send_email.dart';
 import 'package:fleetcarpooling/Models/terms_model.dart';
+import 'package:fleetcarpooling/auth/user_repository.dart';
 import 'package:flutter/material.dart';
 
 abstract class ReservationRepository {
@@ -240,4 +241,64 @@ class ReservationService implements ReservationRepository {
 
     await ref.remove();
   }
+
+  Stream<List<Reservation>> getAllReservations() {
+  DatabaseReference ref = FirebaseDatabase.instance.ref("Reservation");
+  final StreamController<List<Reservation>> controller =
+      StreamController<List<Reservation>>();
+
+  ref.onValue.listen((DatabaseEvent event) async {
+    List<Reservation> userReservations = [];
+
+    Map<dynamic, dynamic>? values =
+        event.snapshot.value as Map<dynamic, dynamic>?;
+
+    if (values != null) {
+      await Future.forEach(values.entries, (entry) async {
+        try {
+          String id = entry.key;
+          String vin = entry.value['VinCar'] ?? '';
+          String email = entry.value['email'] ?? '';
+
+          UserRepository userRepository = UserRepository();
+          String? name = await userRepository.getUserNameByEmail(email);
+
+          DateTime pickupDate =
+              DateTime.parse(entry.value['pickupDate'] ?? '');
+          DateTime returnDate =
+              DateTime.parse(entry.value['returnDate'] ?? '');
+
+          TimeOfDay parseTimeOfDay(String time) {
+            List<int> parts = time.split(':').map(int.parse).toList();
+            return TimeOfDay(hour: parts[0], minute: parts[1]);
+          }
+
+          TimeOfDay pickupTime =
+              parseTimeOfDay(entry.value['pickupTime'] ?? '');
+          TimeOfDay returnTime =
+              parseTimeOfDay(entry.value['returnTime'] ?? '');
+
+          userReservations.add(Reservation(
+            id: id,
+            vin: vin,
+            email: email,
+            pickupDate: pickupDate,
+            returnDate: returnDate,
+            pickupTime: pickupTime,
+            returnTime: returnTime,
+            name: name,
+          ));
+        } catch (e) {
+          print('Error processing reservation data: $e');
+        }
+      });
+    }
+
+    userReservations.sort((a, b) => b.pickupDate.compareTo(a.pickupDate));
+
+    controller.add(userReservations);
+  });
+
+  return controller.stream;
+}
 }
