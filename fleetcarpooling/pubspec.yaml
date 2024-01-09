@@ -53,6 +53,8 @@ dependencies:
   fluttertoast: ^8.0.8
   timeago: ^3.6.0
   cloud_firestore: ^4.13.6
+  flutter_local_notifications: ^16.3.0
+  firebase_messaging: ^14.7.10
   cached_network_image: ^3.3.1
 
 dev_dependencies:
