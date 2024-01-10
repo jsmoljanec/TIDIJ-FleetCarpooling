@@ -1,4 +1,4 @@
-import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/auth/Notification.dart';
 

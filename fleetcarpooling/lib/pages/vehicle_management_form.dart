@@ -1,7 +1,7 @@
-import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_selection.dart';
+import 'package:core/add_vehicle_selection.dart';
+import 'package:core/ui_elements/buttons.dart';
+import 'package:core/ui_elements/colors';
 import 'package:fleetcarpooling/pages/delete_disable_form.dart';
-import 'package:fleetcarpooling/ui_elements/buttons.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 
 class VehicleManagementForm extends StatelessWidget {

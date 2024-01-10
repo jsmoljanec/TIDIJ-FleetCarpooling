@@ -1,9 +1,9 @@
+import 'package:core/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/pages/admin_home_page.dart';
 import 'package:fleetcarpooling/pages/reset_password_form.dart';
-import 'package:fleetcarpooling/ui_elements/buttons.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
-import 'package:fleetcarpooling/ui_elements/text_field.dart';
+import 'package:core/ui_elements/colors';
+import 'package:core/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/pages/navigation.dart';
 
@@ -120,7 +120,9 @@ class _LoginFormState extends State<LoginForm> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>  NavigationPage(returnTime: DateTime.now(), pickupTime: DateTime.now()),
+                            builder: (context) => NavigationPage(
+                                returnTime: DateTime.now(),
+                                pickupTime: DateTime.now()),
                           ),
                         );
                       }

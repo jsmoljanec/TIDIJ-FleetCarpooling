@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:core/ui_elements/buttons.dart';
+import 'package:core/ui_elements/colors';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/auth/user_model.dart' as usermod;
@@ -6,8 +8,6 @@ import 'package:fleetcarpooling/auth/user_repository.dart';
 import 'package:fleetcarpooling/pages/changePasswordForm.dart';
 import 'package:fleetcarpooling/pages/login_form.dart';
 import 'package:fleetcarpooling/profileService/profile_service.dart';
-import 'package:fleetcarpooling/ui_elements/buttons.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';

@@ -1,15 +1,15 @@
-import 'package:fleetcarpooling/Modularity/Pages/add_vehicle_interface.dart';
-import 'package:fleetcarpooling/Modularity/bloc/vehicle_bloc.dart';
-import 'package:fleetcarpooling/Modularity/event/vehicle_event.dart';
-import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
-import 'package:fleetcarpooling/Modularity/service/image_service.dart';
-import 'package:fleetcarpooling/Modularity/state/vehicle_state.dart';
-import 'package:fleetcarpooling/ui_elements/buttons.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:core/add_vehicle_interface.dart';
+import 'package:core/bloc/vehicle_bloc.dart';
+import 'package:core/event/vehicle_event.dart';
+import 'package:core/state/vehicle_state.dart';
+import 'package:core/ui_elements/buttons.dart';
+import 'package:core/ui_elements/colors';
+import 'package:core/ui_elements/text_field.dart';
+import 'package:core/vehicle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fleetcarpooling/ui_elements/text_field.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:manuallyaddition/image_service.dart';
 
 class AddVehicleManuallyForm extends AddVehicleInteface {
   @override

@@ -1,16 +1,15 @@
+import 'package:core/ui_elements/buttons.dart';
+import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:core/ui_elements/colors';
+import 'package:fleetcarpooling/ui_elements/calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
-import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/auth/authReservationNotification.dart';
 import 'package:fleetcarpooling/pages/notify_me_page.dart';
 import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
-import 'package:fleetcarpooling/pages/reservation_form.dart';
-import 'package:fleetcarpooling/ui_elements/buttons.dart';
-import 'package:fleetcarpooling/ui_elements/calendar.dart';
 
 class SelectedVehiclePage extends StatefulWidget {
   final String vin;

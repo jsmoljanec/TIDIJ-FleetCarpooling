@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:fleetcarpooling/chat/models/message.dart';
 import 'package:fleetcarpooling/chat/provider/firebase_provider.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
+import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:provider/provider.dart';

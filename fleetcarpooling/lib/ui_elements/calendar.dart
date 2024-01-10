@@ -1,11 +1,10 @@
+import 'package:core/ui_elements/colors';
 import 'package:fleetcarpooling/Models/terms_model.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/ReservationService/terms_service.dart';
-import 'package:fleetcarpooling/pages/selected_vehicle_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'colors' as my_defined_colors;
 
 class MyCalendar extends StatelessWidget {
   final double height;
@@ -56,34 +55,32 @@ class MyCalendar extends StatelessWidget {
                     outsideDaysVisible: false,
                     todayDecoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: my_defined_colors.AppColors.primaryColor,
+                      color: AppColors.primaryColor,
                     ),
                     todayTextStyle: TextStyle(
-                      color: my_defined_colors.AppColors.activeDays,
+                      color: AppColors.activeDays,
                     ),
-                    weekendTextStyle: TextStyle(
-                        color: my_defined_colors.AppColors.mainTextColor),
+                    weekendTextStyle: TextStyle(color: AppColors.mainTextColor),
                     disabledTextStyle: TextStyle(
-                      color: my_defined_colors.AppColors.unavailableColor,
+                      color: AppColors.unavailableColor,
                     ),
                     selectedTextStyle: TextStyle(
-                      color: my_defined_colors.AppColors.activeDays,
+                      color: AppColors.activeDays,
                     ),
-                    defaultTextStyle: TextStyle(
-                        color: my_defined_colors.AppColors.activeDays)),
+                    defaultTextStyle: TextStyle(color: AppColors.activeDays)),
                 headerStyle: HeaderStyle(
                   titleCentered: true,
                   formatButtonVisible: false,
                   titleTextStyle: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: my_defined_colors.AppColors.mainTextColor),
+                      color: AppColors.mainTextColor),
                   leftChevronIcon: const Icon(Icons.arrow_back_ios_new_rounded,
-                      color: my_defined_colors.AppColors.mainTextColor),
+                      color: AppColors.mainTextColor),
                   rightChevronIcon: Transform.rotate(
                     angle: 3.141592,
                     child: const Icon(Icons.arrow_back_ios_new_rounded,
-                        color: my_defined_colors.AppColors.mainTextColor),
+                        color: AppColors.mainTextColor),
                   ),
                 ),
                 daysOfWeekStyle: DaysOfWeekStyle(
@@ -109,10 +106,8 @@ class MyCalendar extends StatelessWidget {
                         return formattedDay;
                     }
                   },
-                  weekdayStyle: const TextStyle(
-                      color: my_defined_colors.AppColors.activeDays),
-                  weekendStyle: const TextStyle(
-                      color: my_defined_colors.AppColors.activeDays),
+                  weekdayStyle: const TextStyle(color: AppColors.activeDays),
+                  weekendStyle: const TextStyle(color: AppColors.activeDays),
                 ),
                 enabledDayPredicate: (day) {
                   return day.isAfter(
@@ -125,8 +120,8 @@ class MyCalendar extends StatelessWidget {
                         child: Center(
                           child: Text(
                             '${day.day}',
-                            style: TextStyle().copyWith(
-                                color: my_defined_colors.AppColors.activeDays),
+                            style: TextStyle()
+                                .copyWith(color: AppColors.activeDays),
                           ),
                         ),
                       );
@@ -134,15 +129,14 @@ class MyCalendar extends StatelessWidget {
                         .any((termin) => isSameDay(termin, day))) {
                       return Container(
                         decoration: BoxDecoration(
-                          color: my_defined_colors.AppColors.reservedInCalendar,
+                          color: AppColors.reservedInCalendar,
                           shape: BoxShape.circle,
                         ),
                         child: Center(
                           child: Text(
                             '${day.day}',
-                            style: TextStyle().copyWith(
-                                color:
-                                    my_defined_colors.AppColors.mainTextColor),
+                            style: TextStyle()
+                                .copyWith(color: AppColors.mainTextColor),
                           ),
                         ),
                       );
@@ -173,9 +167,8 @@ class MyCalendar extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return Theme(
-          data: Theme.of(context).copyWith(
-              dialogBackgroundColor:
-                  my_defined_colors.AppColors.backgroundColor),
+          data: Theme.of(context)
+              .copyWith(dialogBackgroundColor: AppColors.backgroundColor),
           child: AlertDialog(
             content: Container(
               padding: EdgeInsets.all(16),
@@ -185,7 +178,7 @@ class MyCalendar extends StatelessWidget {
                   Text(
                     'Available Hours on ${DateFormat.yMMMd().format(selectedDay)}\n\nAvailable hours for pick up: $availableHoursString',
                     style: TextStyle(
-                      color: my_defined_colors.AppColors.mainTextColor,
+                      color: AppColors.mainTextColor,
                       fontSize: 18,
                     ),
                   ),
