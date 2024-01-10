@@ -1,12 +1,12 @@
+import 'package:core/ui_elements/buttons.dart';
+import 'package:core/ui_elements/colors';
+import 'package:core/ui_elements/custom_toast.dart';
+import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/pages/admin_home_page.dart';
-import 'package:fleetcarpooling/ui_elements/colors';
-import 'package:fleetcarpooling/ui_elements/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
-import 'package:fleetcarpooling/Modularity/models/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/auth/authReservationNotification.dart';
-import 'package:fleetcarpooling/ui_elements/buttons.dart';
 
 class AdminSelectedVehiclePage extends StatefulWidget {
   final String vin;
