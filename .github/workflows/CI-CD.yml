@@ -46,6 +46,8 @@ jobs:
             cd ..
           done
 
+      - name: Move to Fleetcarpooling Directory
+        run: cd fleetcarpooling
+
       - name: Flutter Build APK --Release for Fleetcarpooling
-        if: ${{ matrix.project == 'fleetcarpooling' }}
         run: flutter build apk --release
