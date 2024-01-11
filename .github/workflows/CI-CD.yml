@@ -38,8 +38,14 @@ jobs:
           cond: ${{ steps.branch.outputs.branch == 'feature/CI_CD' }}
           if_true: ${{secrets.DRIOD_FOLDER_ID}}
 
-      - name: Flutter Pub Get and Build APK
+      - name: Flutter Pub Get for All Projects
         run: |
-          cd ${{ matrix.project }}
-          flutter pub get
-          flutter build apk --release
+          for project in ${{ matrix.project }}; do
+            cd $project
+            flutter pub get
+            cd ..
+          done
+
+      - name: Flutter Build APK --Release for Fleetcarpooling
+        if: ${{ matrix.project == 'fleetcarpooling' }}
+        run: flutter build apk --release
