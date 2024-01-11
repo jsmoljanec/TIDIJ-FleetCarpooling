@@ -46,8 +46,17 @@ jobs:
             cd ..
           done
 
+      - name: Print Current Directory
+        run: pwd
+
       - name: Move to Fleetcarpooling Directory
         run: cd fleetcarpooling
+
+      - name: Print Current Directory
+        run: pwd
+
+      - name: Print files from Directory
+        run: ls
 
       - name: Flutter Build APK --Release for Fleetcarpooling
         run: flutter build apk --release
