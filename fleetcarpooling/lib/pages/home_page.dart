@@ -52,7 +52,8 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _vehiclesStream = getVehicles().map((vehicles) => vehicles
           .where((vehicle) =>
-              vehicle.model.toLowerCase().contains(input.toLowerCase()))
+              vehicle.model.toLowerCase().contains(input.toLowerCase()) ||
+              vehicle.brand.toLowerCase().contains(input.toLowerCase()))
           .toList());
     });
   }
@@ -374,14 +375,16 @@ class _HomePageState extends State<HomePage> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Text(
-                                                  snapshot.data![index].model,
-                                                  style: const TextStyle(
-                                                      color: AppColors
-                                                          .mainTextColor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 24),
+                                                Expanded(
+                                                  child: Text(
+                                                    "${snapshot.data![index].brand} ${snapshot.data![index].model}",
+                                                    style: const TextStyle(
+                                                        color: AppColors
+                                                            .mainTextColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 24),
+                                                  ),
                                                 ),
                                                 Text(
                                                   snapshot

@@ -52,11 +52,11 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
               stream: getVehicle(widget.vin),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 if (!snapshot.hasData) {
-                  return Center(child: Text('No data available'));
+                  return const Center(child: Text('No data available'));
                 }
 
                 Vehicle vehicle = snapshot.data!;
@@ -72,30 +72,34 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                               Navigator.pop(context);
                             },
                           ),
-                          Text(
-                            "${vehicle.brand} ${vehicle.model}",
-                            style: const TextStyle(
-                              fontSize: 24,
-                              color: AppColors.mainTextColor,
+                          Expanded(
+                            child: Text(
+                              "${vehicle.brand} ${vehicle.model}",
+                              style: const TextStyle(
+                                fontSize: 24,
+                                color: AppColors.mainTextColor,
+                              ),
                             ),
                           ),
-                          Spacer(),
                           Align(
                             alignment: Alignment.centerRight,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ChatScreen(
-                                      vin: vehicle.vin,
-                                      brand: vehicle.brand,
-                                      model: vehicle.model,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ChatScreen(
+                                        vin: vehicle.vin,
+                                        brand: vehicle.brand,
+                                        model: vehicle.model,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                              child: Image.asset("assets/icons/chat.png"),
+                                  );
+                                },
+                                child: Image.asset("assets/icons/chat.png"),
+                              ),
                             ),
                           ),
                         ],
@@ -143,7 +147,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                                     ),
                                   ),
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 SizedBox(
                                   width: 20,
                                   height: 20,
