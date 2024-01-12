@@ -1,6 +1,6 @@
 import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
-import 'package:fleetcarpooling/auth/Notification.dart';
+import 'package:fleetcarpooling/auth/notification.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -149,16 +149,21 @@ class _NotificationPageState extends State<NotificationPage> {
     BuildContext context,
     Map<String, dynamic> notification,
   ) async {
+    String vinCar = notification['VinCar'].toString();
+    Map<String, dynamic>? carDetails = await authNotification.getCarDetails(vinCar);
+
     String pickupDate = notification['pickupDate'].toString();
     String pickupTime = notification['pickupTime'].toString();
     String returnDate = notification['returnDate'].toString();
     String returnTime = notification['returnTime'].toString();
-    String model = notification['model'].toString();
-    String brand = notification['brand'].toString();
-    String year = notification['year'].toString();
+    String model = carDetails?['model'].toString() ?? '';
+    String brand = carDetails?['brand'].toString() ?? '';
+    String year = carDetails?['year'].toString() ?? '';
 
+    // ignore: use_build_context_synchronously
     double notificationWidth = MediaQuery.of(context).size.width * 1.5;
 
+    // ignore: use_build_context_synchronously
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -194,18 +199,21 @@ class _NotificationPageState extends State<NotificationPage> {
           actions: [
             Container(
               margin: const EdgeInsets.only(right: 8.0, bottom: 8.0),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'Close',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: AppColors.mainTextColor,
+              child: Align(
+                alignment: Alignment.center,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Close',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: AppColors.mainTextColor,
+                      ),
                     ),
                   ),
                 ),
