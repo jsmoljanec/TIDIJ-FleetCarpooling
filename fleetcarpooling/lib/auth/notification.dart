@@ -1,5 +1,4 @@
 // ignore_for_file: non_constant_identifier_names
-
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -36,24 +35,46 @@ class AuthNotification {
             var key = entry.key;
             var value = entry.value;
 
-            if (value['email'] == currentUser?.email) {
-              // Dohvati dodatne informacije o automobilu iz tablice Vehicles
-              Map<String, dynamic>? carDetails =
+            //Map<String, dynamic>? carDetails =
                   await getCarDetails(value['VinCar']);
 
-              if (carDetails != null) {
-                userNotifications.add({
-                  'key': key,
-                  'message': value['message'],
-                  'VinCar': value['VinCar'],
-                  'pickupDate': value['pickupDate'],
-                  'pickupTime': value['pickupTime'],
-                  'returnDate': value['returnDate'],
-                  'returnTime': value['returnTime'],
-                  'model': carDetails['model'],
-                  'brand': carDetails['brand'],
-                  'year': carDetails['year'],
-                });
+            if (value['email'] == currentUser?.email) {
+              DateTime now = DateTime.now();
+              DateTime pickupDate = DateTime.parse(value['pickupDate']);
+              String message = value['message'];
+
+              if (message.startsWith('You')) {
+                DateTime twoDaysFromNow = now.add(const Duration(days: 2));
+                if (pickupDate.isBefore(twoDaysFromNow) &&
+                    pickupDate.isAfter(now)) {
+                  userNotifications.add({
+                    'key': key,
+                    'message': message,
+                    'VinCar': value['VinCar'],
+                    'pickupDate': value['pickupDate'],
+                    'pickupTime': value['pickupTime'],
+                    'returnDate': value['returnDate'],
+                    'returnTime': value['returnTime'],
+                    //'model': carDetails?['model'],
+                    //'brand': carDetails?['brand'],
+                    //'year': carDetails?['year'],
+                  });
+                }
+              } else if (message.startsWith('Someone')) {
+                if (pickupDate.isAfter(now)) {
+                  userNotifications.add({
+                    'key': key,
+                    'message': message,
+                    'VinCar': value['VinCar'],
+                    'pickupDate': value['pickupDate'],
+                    'pickupTime': value['pickupTime'],
+                    'returnDate': value['returnDate'],
+                    'returnTime': value['returnTime'],
+                    //'model': carDetails?['model'],
+                    //'brand': carDetails?['brand'],
+                    //'year': carDetails?['year'],
+                  });
+                }
               }
             }
           }
@@ -87,7 +108,7 @@ class AuthNotification {
                 'pickupDate': value['pickupDate'],
                 'pickupTime': value['pickupTime'],
                 'returnDate': value['returnDate'],
-                'returnTime': value['returnTime']
+                'returnTime': value['returnTime'],
               });
             }
           });
