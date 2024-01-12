@@ -53,12 +53,13 @@ jobs:
           flutter build apk --release
           cd ..
 
-      - name: google-drive-upload-git-action
+      - name: Google Drive Upload for Fleetcarpooling
         uses: adityak74/google-drive-upload-git-action@v0.3
+        if: ${{ matrix.project == 'fleetcarpooling'}}
         with:
           credentials: ${{ secrets.GCP_CREDENTIAL }}
-          filename: "fleetcarpooling/build/app/outputs/flutter-apk/app-release.apk"
           folder_id: ${{ steps.folder_Id.outputs.result }}
-          name: ${{ steps.branch.outputs.branch }}_apk_${{ steps.date.outputs.date }}.apk
+          filename: "fleetcarpooling/build/app/outputs/flutter-apk/app-release.apk"
           overwrite: true
+          name: ${{ steps.branch.outputs.branch }}_apk_${{ steps.date.outputs.date }}.apk
           mimetype: application/vnd.android.package-archive
