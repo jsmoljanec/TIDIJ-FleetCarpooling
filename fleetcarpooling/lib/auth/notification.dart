@@ -35,9 +35,6 @@ class AuthNotification {
             var key = entry.key;
             var value = entry.value;
 
-            //Map<String, dynamic>? carDetails =
-                  await getCarDetails(value['VinCar']);
-
             if (value['email'] == currentUser?.email) {
               DateTime now = DateTime.now();
               DateTime pickupDate = DateTime.parse(value['pickupDate']);
@@ -55,9 +52,6 @@ class AuthNotification {
                     'pickupTime': value['pickupTime'],
                     'returnDate': value['returnDate'],
                     'returnTime': value['returnTime'],
-                    //'model': carDetails?['model'],
-                    //'brand': carDetails?['brand'],
-                    //'year': carDetails?['year'],
                   });
                 }
               } else if (message.startsWith('Someone')) {
@@ -70,9 +64,6 @@ class AuthNotification {
                     'pickupTime': value['pickupTime'],
                     'returnDate': value['returnDate'],
                     'returnTime': value['returnTime'],
-                    //'model': carDetails?['model'],
-                    //'brand': carDetails?['brand'],
-                    //'year': carDetails?['year'],
                   });
                 }
               }
