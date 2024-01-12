@@ -58,7 +58,7 @@ jobs:
         if: ${{ matrix.project == 'fleetcarpooling'}}
         with:
           credentials: ${{ secrets.GCP_CREDENTIAL }}
-          folder_id: ${{ secrets.DRIOD_FOLDER_ID }}
+          folderId: ${{ secrets.DRIOD_FOLDER_ID }}
           filename: "fleetcarpooling/build/app/outputs/flutter-apk/app-release.apk"
           overwrite: true
           name: ${{ steps.branch.outputs.branch }}_apk_${{ steps.date.outputs.date }}.apk
