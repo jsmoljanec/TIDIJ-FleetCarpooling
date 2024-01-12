@@ -1,6 +1,6 @@
 import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
-import 'package:fleetcarpooling/auth/Notification.dart';
+import 'package:fleetcarpooling/auth/notification.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
