@@ -13,11 +13,11 @@ import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
 
 class SelectedVehiclePage extends StatefulWidget {
   final String vin;
-  final bool isFree;
+  bool isFree;
   final DateTime pickupTime;
   final DateTime returnTime;
 
-  const SelectedVehiclePage({
+  SelectedVehiclePage({
     Key? key,
     required this.vin,
     required this.isFree,
@@ -83,23 +83,20 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                           ),
                           Align(
                             alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ChatScreen(
-                                        vin: vehicle.vin,
-                                        brand: vehicle.brand,
-                                        model: vehicle.model,
-                                      ),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatScreen(
+                                      vin: vehicle.vin,
+                                      brand: vehicle.brand,
+                                      model: vehicle.model,
                                     ),
-                                  );
-                                },
-                                child: Image.asset("assets/icons/chat.png"),
-                              ),
+                                  ),
+                                );
+                              },
+                              child: Image.asset("assets/icons/chat.png"),
                             ),
                           ),
                         ],
@@ -252,6 +249,9 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                         'pickupTime': widget.pickupTime.toLocal().toString(),
                         'returnDate': widget.returnTime.toLocal().toString(),
                         'returnTime': widget.returnTime.toLocal().toString(),
+                      });
+                      setState(() {
+                        widget.isFree = false;
                       });
                     } else {
                       Navigator.push(
