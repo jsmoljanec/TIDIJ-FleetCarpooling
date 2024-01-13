@@ -336,14 +336,21 @@ class _HomePageState extends State<HomePage> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                SelectedVehiclePage(
-                                                  vin: vinCar,
-                                                  isFree: isFree,
-                                                  pickupTime: widget.pickupTime,
-                                                  returnTime: widget.returnTime,
-                                                )),
-                                      );
+                                          builder: (context) =>
+                                              SelectedVehiclePage(
+                                            vin: vinCar,
+                                            isFree: isFree,
+                                            pickupTime: widget.pickupTime,
+                                            returnTime: widget.returnTime,
+                                          ),
+                                        ),
+                                      ).then((result) {
+                                        if (result != null) {
+                                          setState(() {
+                                            isFree = result;
+                                          });
+                                        }
+                                      });
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(

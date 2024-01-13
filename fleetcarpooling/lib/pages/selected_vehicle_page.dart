@@ -69,7 +69,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                         children: [
                           CircularIconButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              Navigator.pop(context, widget.isFree);
                             },
                           ),
                           Expanded(
