@@ -47,7 +47,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
   @override
   void initState() {
     super.initState();
-    notification.firebaseNotification(context);
+    notification.firebaseNotification();
     checkReservationStatus();
   }
 

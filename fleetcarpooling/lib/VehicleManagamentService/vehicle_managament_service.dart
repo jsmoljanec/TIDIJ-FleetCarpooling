@@ -158,3 +158,35 @@ Stream<bool> getLockStateStream(String vinCar) {
 
   return controller.stream;
 }
+
+Future<Vehicle?> getVehicleByVin(String vin) async {
+  final databaseReference = FirebaseDatabase.instance.ref();
+  var query = await databaseReference
+      .child("Vehicles")
+      .orderByChild('vin')
+      .equalTo(vin)
+      .limitToFirst(1);
+
+  DatabaseEvent event = await query.once();
+  Map<dynamic, dynamic>? values =
+      event.snapshot.value as Map<dynamic, dynamic>?;
+  Vehicle? vehicle;
+  values?.forEach((key, value) {
+    vehicle = Vehicle(
+        vin: value['vin'],
+        model: value['model'],
+        brand: value['brand'],
+        capacity: value['capacity'],
+        transType: value['transtype'],
+        fuelConsumption: value['fuelConsumption'],
+        registration: value['registration'],
+        year: value['year'],
+        active: value['active'],
+        imageUrl: value['imageUrl'],
+        latitude: value['latitude'],
+        longitude: value['longitude'],
+        distanceTraveled: value['distanceTraveled'],
+        locked: value['locked']);
+  });
+  return vehicle;
+}

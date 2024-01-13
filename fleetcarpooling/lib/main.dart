@@ -39,7 +39,8 @@ Future<void> main() async {
   await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(_backgroundMessageHandler);
   await dotenv.load(fileName: ".env");
-
+  AuthLogin()
+      .updateOnlineStatus(FirebaseAuth.instance.currentUser?.uid, "online");
   User? user = FirebaseAuth.instance.currentUser;
   Widget initialScreen = user != null
       ? NavigationPage(returnTime: DateTime.now(), pickupTime: DateTime.now())
