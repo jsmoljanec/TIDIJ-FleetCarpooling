@@ -37,7 +37,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
   @override
   void initState() {
     super.initState();
-    notification.firebaseNotification();
+    notification.firebaseNotification(context);
   }
 
   @override
