@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:provider/provider.dart';
 
-bool isSameChat = false;
-
 class MessageBubble extends StatefulWidget {
   const MessageBubble({
     Key? key,
@@ -49,10 +47,6 @@ class _MessageBubbleState extends State<MessageBubble> {
           else
             statusActivity = false;
         });
-        if (!isSameChat) {
-          Provider.of<FirebaseProvider>(context, listen: false).scrollDown();
-          isSameChat = true;
-        }
       }
     }).catchError((error) {
       print("Error fetching user data: $error");
