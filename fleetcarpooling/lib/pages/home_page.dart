@@ -1,6 +1,7 @@
 import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
+import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:fleetcarpooling/pages/profile_form.dart';
 import 'package:fleetcarpooling/pages/selected_vehicle_page.dart';
 import 'package:fleetcarpooling/pages/reservation_form.dart';
@@ -22,6 +23,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final notification = NotificationsService();
   final TextEditingController _searchController = TextEditingController();
   late Stream<List<Vehicle>> _vehiclesStream;
   String vinCar = "";
@@ -61,6 +63,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    notification.firebaseNotification();
     _vehiclesStream = getVehicles();
     if (widget.pickupTime.day == widget.returnTime.day &&
         widget.pickupTime.month == widget.returnTime.month &&

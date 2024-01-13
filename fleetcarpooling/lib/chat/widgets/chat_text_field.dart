@@ -68,7 +68,7 @@ class _ChatTextFieldState extends State<ChatTextField> {
       );
       await notification.sendNotification(
         body: tekst,
-        senderId: FirebaseAuth.instance.currentUser!.uid,
+        senderId: widget.receiverId,
       );
       FocusScope.of(context).unfocus();
     }
