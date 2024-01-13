@@ -21,7 +21,7 @@ const channel = AndroidNotificationChannel(
 class NotificationsService {
   static const key =
       'AAAA3qcR1dM:APA91bHXwf9Efc-9arDjVLTUnC6tIf7Ultk_uCkc6WVahtKx8xe-dEdcnICRPjoGBDNIlXrOM6TZ74wrus7bcLugZ-M3_-ttOu7iSD6FHGU6RT3GXYpDNbKpkrNo47wnbCG0X_w8WYJq';
-
+  final navigatorKey = GlobalKey<NavigatorState>();
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
   void _initLocalNotification() {
@@ -184,56 +184,14 @@ class NotificationsService {
     }
   }
 
-  void firebaseNotification() {
+  void firebaseNotification(BuildContext context) {
     _initLocalNotification();
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       await _showLocalNotification(message);
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      _navigateToChatScreen(message);
-    });
-
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      FirebaseMessaging.instance
-          .getInitialMessage()
-          .then((RemoteMessage? message) async {
-        if (message != null) {
-          _navigateToChatScreen(message);
-        }
-      });
-    });
-  }
-
-  void _navigateToChatScreen(RemoteMessage message) {
-    if (message.data['senderId'] != null) {
-      getVehicleByVin(message.data['senderId']).then((Vehicle? vehicle) {
-        if (vehicle != null) {
-          runApp(MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: Builder(builder: (context) {
-              return Navigator(
-                pages: [
-                  MaterialPage(
-                      child: NavigationPage(
-                    returnTime: DateTime.now(),
-                    pickupTime: DateTime.now(),
-                  )),
-                  MaterialPage(
-                    child: ChatScreen(
-                      vin: message.data['senderId'],
-                      brand: vehicle.brand,
-                      model: vehicle.model,
-                    ),
-                  ),
-                ],
-                onPopPage: (route, result) => route.didPop(result),
-              );
-            }),
-          ));
-        }
-      });
-    }
+    FirebaseMessaging.onMessageOpenedApp
+        .listen((RemoteMessage message) async {});
   }
 }

@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    notification.firebaseNotification();
+    notification.firebaseNotification(context);
     _vehiclesStream = getVehicles();
     if (widget.pickupTime.day == widget.returnTime.day &&
         widget.pickupTime.month == widget.returnTime.month &&
