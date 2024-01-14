@@ -253,6 +253,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                       setState(() {
                         widget.isFree = false;
                       });
+                      Navigator.pop(context, widget.isFree);
                     } else {
                       Navigator.push(
                         context,
