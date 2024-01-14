@@ -1,7 +1,8 @@
 import 'package:core/ui_elements/buttons.dart';
 import 'package:core/ui_elements/colors';
 import 'package:core/ui_elements/custom_toast.dart';
-import 'package:fleetcarpooling/auth/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fleetcarpooling/auth/user_model.dart' as usermod;
 import 'package:fleetcarpooling/auth/user_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class AllUsersForm extends StatefulWidget {
 }
 
 class _AllUsersFormState extends State<AllUsersForm> {
-  late List<User> users;
+  late List<usermod.User> users;
   String searchQuery = "";
 
   @override
@@ -111,12 +112,13 @@ class _AllUsersFormState extends State<AllUsersForm> {
 class UsersList extends StatelessWidget {
   final UserRepository _userRepository = UserRepository();
   final String searchQuery;
+  User? usermoduser = FirebaseAuth.instance.currentUser;
 
   UsersList({Key? key, required this.searchQuery}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<User>>(
+    return StreamBuilder<List<usermod.User>>(
       stream: _userRepository.getUsers(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -130,12 +132,10 @@ class UsersList extends StatelessWidget {
         var filteredUsers = snapshot.data!
             .where((user) =>
                 user.firstName.toLowerCase().contains(searchQuery) ||
-                user.lastName.toLowerCase().contains(searchQuery))
-            .toList();
-
-        filteredUsers = filteredUsers
-            .where(
-                (user) => user.firstName != null && user.firstName!.isNotEmpty)
+                user.lastName.toLowerCase().contains(searchQuery) &&
+                    user.firstName.isNotEmpty &&
+                    user.lastName.isNotEmpty &&
+                    user.email != usermoduser!.email)
             .toList();
 
         return SingleChildScrollView(
@@ -157,7 +157,7 @@ class UsersList extends StatelessWidget {
 }
 
 class CardWidget extends StatelessWidget {
-  final User user;
+  final usermod.User user;
 
   const CardWidget({Key? key, required this.user}) : super(key: key);
 
