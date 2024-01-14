@@ -132,10 +132,14 @@ class UsersList extends StatelessWidget {
         var filteredUsers = snapshot.data!
             .where((user) =>
                 user.firstName.toLowerCase().contains(searchQuery) ||
-                user.lastName.toLowerCase().contains(searchQuery) &&
-                    user.firstName.isNotEmpty &&
-                    user.lastName.isNotEmpty &&
-                    user.email != usermoduser!.email)
+                user.lastName.toLowerCase().contains(searchQuery))
+            .toList();
+
+        filteredUsers = filteredUsers
+            .where((user) =>
+                user.firstName.isNotEmpty &&
+                user.lastName.isNotEmpty &&
+                user.email != usermoduser!.email)
             .toList();
 
         return SingleChildScrollView(
@@ -167,6 +171,7 @@ class CardWidget extends StatelessWidget {
     final UserRepository _userRepository = UserRepository();
 
     return Card(
+      color: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(30.0)),
         side: BorderSide(
@@ -254,18 +259,25 @@ class CardWidget extends StatelessWidget {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    _userRepository
-                                        .deleteUser(user.email)
-                                        .then((value) {
+                                    if (user.statusActivity == "true") {
+                                      CustomToast().showFlutterToast(
+                                          "You can't delete an active user");
                                       Navigator.of(context).pop();
-                                      if (value == true) {
-                                        CustomToast().showFlutterToast(
-                                            "You succesfully deleted user");
-                                      } else {
-                                        CustomToast().showFlutterToast(
-                                            "Something went wrong, it wasnt possible to delete user");
-                                      }
-                                    });
+                                      return;
+                                    } else {
+                                      _userRepository
+                                          .deleteUser(user.email)
+                                          .then((value) {
+                                        Navigator.of(context).pop();
+                                        if (value == true) {
+                                          CustomToast().showFlutterToast(
+                                              "You succesfully deleted user");
+                                        } else {
+                                          CustomToast().showFlutterToast(
+                                              "Something went wrong, it wasnt possible to delete user");
+                                        }
+                                      });
+                                    }
                                   },
                                   child: const Padding(
                                     padding:
