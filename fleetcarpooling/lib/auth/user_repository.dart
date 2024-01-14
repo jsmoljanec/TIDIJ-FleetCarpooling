@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/auth/user_model.dart' as usermod;
 
 class UserRepository {
@@ -95,6 +96,8 @@ class UserRepository {
   }
 
   Future<bool> deleteUser(String email) async {
+    late final ReservationService service = ReservationService();
+
     DatabaseReference ref = FirebaseDatabase.instance.ref("Users");
 
     DatabaseEvent snapshot = await FirebaseDatabase.instance
@@ -108,6 +111,7 @@ class UserRepository {
           snapshot.snapshot.value as Map<dynamic, dynamic>?;
       String? key = users?.keys.first;
       await ref.child(key!).remove();
+      await service.deleteAllUserReservations(email);
       return true;
     }
     return false;

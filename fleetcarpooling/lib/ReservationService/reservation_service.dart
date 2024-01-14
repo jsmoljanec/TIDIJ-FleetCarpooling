@@ -242,6 +242,30 @@ class ReservationService implements ReservationRepository {
     await ref.remove();
   }
 
+  Future<void> deleteAllUserReservations(String email) async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Reservation");
+    var query = ref.orderByChild('email').equalTo(email);
+
+    var snapshot = await query.once();
+
+    Map<dynamic, dynamic>? reservations =
+        snapshot.snapshot.value as Map<dynamic, dynamic>?;
+
+    if (reservations != null) {
+      for (var entry in reservations.entries) {
+        var reservationData = entry.value as Map<dynamic, dynamic>;
+
+        if (reservationData['email'] == email) {
+          String id = entry.key;
+          DatabaseReference ref =
+              FirebaseDatabase.instance.ref("Reservation/$id");
+
+          await ref.remove();
+        }
+      }
+    }
+  }
+
   Stream<List<Reservation>> getAllReservations() {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Reservation");
     final StreamController<List<Reservation>> controller =
