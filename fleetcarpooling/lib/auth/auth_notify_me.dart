@@ -166,8 +166,7 @@ class AuthNotifyMe {
       String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
       await notifyMeNotificationRef.child(uniqueName).set(data);
     } catch (e) {
-      throw Exception(
-          "Error transferring data to NotifyMeNotification table");
+      throw Exception("Error transferring data to NotifyMeNotification table");
     }
   }
 
@@ -215,6 +214,29 @@ class AuthNotifyMe {
       return [];
     } catch (e) {
       return [];
+    }
+  }
+
+  Future<void> deleteAllUserNotifyMeNotifications(String userEmail) async {
+    try {
+      DatabaseEvent snapshot = await _database
+          .child("NotifyMe")
+          .orderByChild('email')
+          .equalTo(userEmail)
+          .once();
+
+      if (snapshot.snapshot.value != null) {
+        Map<dynamic, dynamic>? notifications =
+            snapshot.snapshot.value as Map<dynamic, dynamic>?;
+
+        if (notifications != null) {
+          notifications.forEach((key, value) async {
+            await _database.child('NotifyMe').child(key).remove();
+          });
+        }
+      }
+    } catch (e) {
+      throw Exception('Error deleting all user NotifyMeNotifications: $e');
     }
   }
 }
