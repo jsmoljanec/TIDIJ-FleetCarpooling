@@ -1,4 +1,5 @@
 import 'package:core/ui_elements/buttons.dart';
+import 'package:core/ui_elements/custom_toast.dart';
 import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:core/ui_elements/colors';
@@ -34,7 +35,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
   final ReservationService service = ReservationService();
   final AuthReservationNotification authReservationNotification =
       AuthReservationNotification();
-  bool postoji = false;
+  late bool postoji;
   String email = FirebaseAuth.instance.currentUser!.email!;
 
   void checkReservationStatus() async {
@@ -239,40 +240,54 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                 padding: const EdgeInsets.only(bottom: 15),
                 child: MyElevatedButton(
                   onPressed: () async {
-                    if (widget.isFree == true) {
-                      await service.addReservation(
-                        widget.vin,
-                        widget.pickupTime,
-                        widget.returnTime,
-                      );
-                      await service.confirmRegistration(
-                        email,
-                        widget.pickupTime,
-                        widget.returnTime,
-                      );
-                      await authReservationNotification
-                          .saveNotificationToDatabase({
-                        'vinCar': widget.vin,
-                        'pickupDate': widget.pickupTime.toLocal().toString(),
-                        'pickupTime': widget.pickupTime.toLocal().toString(),
-                        'returnDate': widget.returnTime.toLocal().toString(),
-                        'returnTime': widget.returnTime.toLocal().toString(),
-                      });
+                    if (postoji) {
+                      service.checkAndDeleteReservation(widget.vin,
+                          widget.pickupTime, widget.returnTime, email);
                       setState(() {
-                        widget.isFree = false;
+                        widget.isFree = true;
+                        postoji = false;
                       });
-                      Navigator.pop(context, widget.isFree);
+                      CustomToast().showFlutterToast(
+                          "You succesfully canceled reservation.");
                     } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NotifyMe(
-                            vinCar: widget.vin,
-                            pickupDateTime: widget.pickupTime.toLocal(),
-                            returnDateTime: widget.returnTime.toLocal(),
+                      if (widget.isFree == true) {
+                        await service.addReservation(
+                          widget.vin,
+                          widget.pickupTime,
+                          widget.returnTime,
+                        );
+                        await service.confirmRegistration(
+                          email,
+                          widget.pickupTime,
+                          widget.returnTime,
+                        );
+                        await authReservationNotification
+                            .saveNotificationToDatabase({
+                          'vinCar': widget.vin,
+                          'pickupDate': widget.pickupTime.toLocal().toString(),
+                          'pickupTime': widget.pickupTime.toLocal().toString(),
+                          'returnDate': widget.returnTime.toLocal().toString(),
+                          'returnTime': widget.returnTime.toLocal().toString(),
+                        });
+                        setState(() {
+                          widget.isFree = false;
+                          postoji = true;
+                        });
+                        CustomToast().showFlutterToast(
+                            "You succesfully reserved vehicle.");
+                        // Navigator.pop(context, widget.isFree);
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NotifyMe(
+                              vinCar: widget.vin,
+                              pickupDateTime: widget.pickupTime.toLocal(),
+                              returnDateTime: widget.returnTime.toLocal(),
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     }
                   },
                   label: postoji
