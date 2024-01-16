@@ -5,6 +5,7 @@ import 'package:fleetcarpooling/pages/admin_selected_vehicle_page.dart';
 import 'package:core/ui_elements/colors';
 import 'package:fleetcarpooling/pages/profile_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DeleteDisableForm extends StatefulWidget {
   List<Vehicle> cars = List.empty();
@@ -71,7 +72,11 @@ class _DeleteDisableForm extends State<DeleteDisableForm> {
                             children: [
                               CircularIconButton(
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  Future.delayed(Duration(milliseconds: 50),
+                                      () {
+                                    Navigator.pop(context);
+                                  });
                                 },
                               ),
                               Row(
@@ -106,12 +111,15 @@ class _DeleteDisableForm extends State<DeleteDisableForm> {
                             alignment: Alignment.centerRight,
                             child: InkWell(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const ProfilePage(),
-                                  ),
-                                );
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                Future.delayed(Duration(milliseconds: 50), () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const ProfilePage(),
+                                    ),
+                                  );
+                                });
                               },
                               child: SizedBox(
                                 child: Image.asset("assets/icons/profile.png"),
