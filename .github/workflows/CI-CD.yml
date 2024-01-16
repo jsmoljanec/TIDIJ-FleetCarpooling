@@ -62,4 +62,4 @@ jobs:
           filename: "fleetcarpooling/build/app/outputs/flutter-apk/app-release.apk"
           overwrite: true
           name: ${{ steps.branch.outputs.branch }}_apk_${{ steps.date.outputs.date }}.apk
-          mimetype: application/vnd.android.package-archive
+          mimeType: application/vnd.android.package-archive
