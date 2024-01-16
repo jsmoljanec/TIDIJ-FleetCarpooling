@@ -275,7 +275,6 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                         });
                         CustomToast().showFlutterToast(
                             "You succesfully reserved vehicle.");
-                        // Navigator.pop(context, widget.isFree);
                       } else {
                         Navigator.push(
                           context,
