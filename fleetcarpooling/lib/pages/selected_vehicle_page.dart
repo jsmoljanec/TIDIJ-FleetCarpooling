@@ -34,16 +34,24 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
   final ReservationService service = ReservationService();
   final AuthReservationNotification authReservationNotification =
       AuthReservationNotification();
+  bool postoji = false;
+  String email = FirebaseAuth.instance.currentUser!.email!;
+
+  void checkReservationStatus() async {
+    postoji = await service.checkReservationForUserAndCar(
+        widget.vin, widget.pickupTime, widget.returnTime, email);
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
     notification.firebaseNotification(context);
+    checkReservationStatus();
   }
 
   @override
   Widget build(BuildContext context) {
-    String email = FirebaseAuth.instance.currentUser!.email!;
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -267,7 +275,9 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                       );
                     }
                   },
-                  label: widget.isFree ? "MAKE A RESERVATION" : "NOTIFY ME",
+                  label: postoji
+                      ? "CANCEL RESERVATION"
+                      : (widget.isFree ? "MAKE A RESERVATION" : "NOTIFY ME"),
                 ),
               ),
             ),
