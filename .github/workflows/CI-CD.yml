@@ -3,7 +3,7 @@ name: build_upload
 on:
   push:
     branches:
-      - feature/CI_CD
+      - develop
 
 jobs:
   build_upload:
