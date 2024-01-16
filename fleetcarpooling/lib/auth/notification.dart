@@ -114,6 +114,27 @@ class AuthNotification {
     }
   }
 
+  Future<void> deleteAllUserNotifications(String email) async {
+    try {
+      DatabaseEvent snapshot = await _databaseReference
+          .child('Notifications')
+          .orderByChild('email')
+          .equalTo(email)
+          .once();
+
+      if (snapshot.snapshot.value != null) {
+        Map<dynamic, dynamic>? notifications =
+            snapshot.snapshot.value as Map<dynamic, dynamic>?;
+
+        notifications?.forEach((key, value) async {
+          await _databaseReference.child('Notifications').child(key).remove();
+        });
+      }
+    } catch (e) {
+      throw Exception('Error deleting notifications: $e');
+    }
+  }
+
   Future<Map<String, dynamic>?> getCarDetails(String vinCar) async {
     try {
       DatabaseEvent snapshot =
