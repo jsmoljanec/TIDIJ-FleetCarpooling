@@ -35,7 +35,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
   final ReservationService service = ReservationService();
   final AuthReservationNotification authReservationNotification =
       AuthReservationNotification();
-  late bool postoji;
+  bool postoji = false;
   String email = FirebaseAuth.instance.currentUser!.email!;
 
   void checkReservationStatus() async {
