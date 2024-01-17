@@ -70,9 +70,7 @@ class _ChatTextFieldState extends State<ChatTextField> {
         body: tekst,
         senderId: widget.receiverId,
       );
-      FocusScope.of(context).unfocus();
     }
-    FocusScope.of(context).unfocus();
   }
 
   Future<void> _sendImage() async {
