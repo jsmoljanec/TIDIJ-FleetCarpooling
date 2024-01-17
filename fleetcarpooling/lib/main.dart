@@ -4,11 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/pages/admin_home_page.dart';
-import 'package:fleetcarpooling/chat/provider/firebase_provider.dart';
 import 'package:fleetcarpooling/pages/login_form.dart';
 import 'package:fleetcarpooling/pages/navigation.dart';
-import 'package:provider/provider.dart';
-import 'package:fleetcarpooling/pages/reservation_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -42,7 +39,8 @@ Future<void> main() async {
   await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(_backgroundMessageHandler);
   await dotenv.load(fileName: ".env");
-
+  AuthLogin()
+      .updateOnlineStatus(FirebaseAuth.instance.currentUser?.uid, "online");
   User? user = FirebaseAuth.instance.currentUser;
   Widget initialScreen = user != null
       ? NavigationPage(returnTime: DateTime.now(), pickupTime: DateTime.now())
@@ -58,12 +56,9 @@ class MyApp extends StatelessWidget {
   MyApp({required this.initialScreen, super.key});
 
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider(
-        create: (_) => FirebaseProvider(),
-        child: MaterialApp(
-          home: AppWrapper(initialScreen: initialScreen),
-          debugShowCheckedModeBanner: false,
-        ),
+  Widget build(BuildContext context) => MaterialApp(
+        home: AppWrapper(initialScreen: initialScreen),
+        debugShowCheckedModeBanner: false,
       );
 }
 
@@ -115,41 +110,38 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
   }
 
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider(
-        create: (_) => FirebaseProvider(),
-        child: MaterialApp(
-          home: FutureBuilder<bool>(
-            future: _authLogin.isAdmin(),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                case ConnectionState.waiting:
-                  return const Scaffold(
-                    backgroundColor: AppColors.backgroundColor,
-                    body: Center(
-                      child: SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.0,
-                        ),
+  Widget build(BuildContext context) => MaterialApp(
+        home: FutureBuilder<bool>(
+          future: _authLogin.isAdmin(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return const Scaffold(
+                  backgroundColor: AppColors.backgroundColor,
+                  body: Center(
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.0,
                       ),
                     ),
-                  );
-                case ConnectionState.done:
-                  if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return snapshot.data == true
-                        ? AdminHomePage()
-                        : widget.initialScreen;
-                  }
-                default:
-                  return const Text('Unexpected ConnectionState');
-              }
-            },
-          ),
-          debugShowCheckedModeBanner: false,
+                  ),
+                );
+              case ConnectionState.done:
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return snapshot.data == true
+                      ? AdminHomePage()
+                      : widget.initialScreen;
+                }
+              default:
+                return const Text('Unexpected ConnectionState');
+            }
+          },
         ),
+        debugShowCheckedModeBanner: false,
       );
 }

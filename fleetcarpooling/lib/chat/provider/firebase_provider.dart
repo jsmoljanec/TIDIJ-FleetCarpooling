@@ -21,20 +21,16 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  List<Message> getMessages(String receiverId) {
-    FirebaseFirestore.instance
+  Stream<List<Message>> getMessages(String receiverId) {
+    return FirebaseFirestore.instance
         .collection('chat')
         .doc(receiverId)
         .collection('message')
         .orderBy('sentTime', descending: false)
         .snapshots(includeMetadataChanges: true)
-        .listen((messages) {
-      this.messages =
-          messages.docs.map((doc) => Message.fromJson(doc.data())).toList();
-      notifyListeners();
-      scrollDown();
+        .map((messages) {
+      return messages.docs.map((doc) => Message.fromJson(doc.data())).toList();
     });
-    return messages;
   }
 
   void scrollDown() => WidgetsBinding.instance.addPostFrameCallback((_) {

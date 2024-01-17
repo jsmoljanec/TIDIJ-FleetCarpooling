@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:core/vehicle.dart';
+import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
+import 'package:fleetcarpooling/pages/navigation.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -18,22 +21,15 @@ const channel = AndroidNotificationChannel(
 class NotificationsService {
   static const key =
       'AAAA3qcR1dM:APA91bHXwf9Efc-9arDjVLTUnC6tIf7Ultk_uCkc6WVahtKx8xe-dEdcnICRPjoGBDNIlXrOM6TZ74wrus7bcLugZ-M3_-ttOu7iSD6FHGU6RT3GXYpDNbKpkrNo47wnbCG0X_w8WYJq';
-
+  final navigatorKey = GlobalKey<NavigatorState>();
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
   void _initLocalNotification() {
     const androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    const iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestCriticalPermission: true,
-      requestSoundPermission: true,
-    );
-
     const initializationSettings =
-        InitializationSettings(android: androidSettings, iOS: iosSettings);
+        InitializationSettings(android: androidSettings);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: (response) {
       debugPrint(response.payload.toString());
@@ -54,14 +50,9 @@ class NotificationsService {
       styleInformation: styleInformation,
       priority: Priority.max,
     );
-    const iosDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-    );
 
     final notificationDetails = NotificationDetails(
       android: androidDetails,
-      iOS: iosDetails,
     );
     await flutterLocalNotificationsPlugin.show(
       0,
@@ -130,6 +121,7 @@ class NotificationsService {
 
   Future<void> sendNotification(
       {required String body, required String senderId}) async {
+    Vehicle? vehicle = await getVehicleByVin(senderId);
     for (int i = 0; i < receiverToken.length; i++) {
       if (receiverToken[i] == await FirebaseMessaging.instance.getToken()) {
       } else {
@@ -145,7 +137,8 @@ class NotificationsService {
               'priority': 'high',
               'notification': <String, dynamic>{
                 'body': body,
-                'title': 'New Message !',
+                'title':
+                    'New Message for ${vehicle?.brand} ${vehicle?.model} !',
               },
               'data': <String, String>{
                 'click_action': 'FLUTTER_NOTIFICATION_CLICK',
@@ -155,6 +148,7 @@ class NotificationsService {
             }),
           );
           print("poslan poruka na ${receiverToken[i]}");
+          print("OD na ${senderId}");
         } catch (e) {
           debugPrint(e.toString());
         }
@@ -170,7 +164,6 @@ class NotificationsService {
         .orderByChild('token/${token}')
         .equalTo(token)
         .once();
-    print(token);
     DataSnapshot snapshot = query.snapshot;
     if (snapshot.value != null) {
       Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
@@ -193,24 +186,11 @@ class NotificationsService {
   void firebaseNotification(BuildContext context) {
     _initLocalNotification();
 
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((RemoteMessage? message) {
-      if (message != null) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => ChatScreen(
-              vin: message.data['receiverId'],
-              brand: "",
-              model: "",
-            ),
-          ),
-        );
-      }
-    });
-
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       await _showLocalNotification(message);
     });
+
+    FirebaseMessaging.onMessageOpenedApp
+        .listen((RemoteMessage message) async {});
   }
 }

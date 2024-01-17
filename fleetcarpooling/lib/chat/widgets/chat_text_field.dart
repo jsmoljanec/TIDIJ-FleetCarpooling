@@ -68,11 +68,9 @@ class _ChatTextFieldState extends State<ChatTextField> {
       );
       await notification.sendNotification(
         body: tekst,
-        senderId: FirebaseAuth.instance.currentUser!.uid,
+        senderId: widget.receiverId,
       );
-      FocusScope.of(context).unfocus();
     }
-    FocusScope.of(context).unfocus();
   }
 
   Future<void> _sendImage() async {
@@ -87,7 +85,7 @@ class _ChatTextFieldState extends State<ChatTextField> {
       );
       await notification.sendNotification(
         body: 'image........',
-        senderId: FirebaseAuth.instance.currentUser!.uid,
+        senderId: widget.receiverId,
       );
     }
   }
