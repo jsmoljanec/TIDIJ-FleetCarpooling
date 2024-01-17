@@ -1,4 +1,5 @@
 import 'package:core/ui_elements/buttons.dart';
+import 'package:core/ui_elements/custom_toast.dart';
 import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:core/ui_elements/colors';
@@ -13,11 +14,11 @@ import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
 
 class SelectedVehiclePage extends StatefulWidget {
   final String vin;
-  final bool isFree;
+  bool isFree;
   final DateTime pickupTime;
   final DateTime returnTime;
 
-  const SelectedVehiclePage({
+  SelectedVehiclePage({
     Key? key,
     required this.vin,
     required this.isFree,
@@ -34,16 +35,24 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
   final ReservationService service = ReservationService();
   final AuthReservationNotification authReservationNotification =
       AuthReservationNotification();
+  bool postoji = false;
+  String email = FirebaseAuth.instance.currentUser!.email!;
+
+  void checkReservationStatus() async {
+    postoji = await service.checkReservationForUserAndCar(
+        widget.vin, widget.pickupTime, widget.returnTime, email);
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
     notification.firebaseNotification(context);
+    checkReservationStatus();
   }
 
   @override
   Widget build(BuildContext context) {
-    String email = FirebaseAuth.instance.currentUser!.email!;
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -69,7 +78,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                         children: [
                           CircularIconButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              Navigator.pop(context, widget.isFree);
                             },
                           ),
                           Expanded(
@@ -83,23 +92,20 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                           ),
                           Align(
                             alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ChatScreen(
-                                        vin: vehicle.vin,
-                                        brand: vehicle.brand,
-                                        model: vehicle.model,
-                                      ),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatScreen(
+                                      vin: vehicle.vin,
+                                      brand: vehicle.brand,
+                                      model: vehicle.model,
                                     ),
-                                  );
-                                },
-                                child: Image.asset("assets/icons/chat.png"),
-                              ),
+                                  ),
+                                );
+                              },
+                              child: Image.asset("assets/icons/chat.png"),
                             ),
                           ),
                         ],
@@ -234,39 +240,58 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                 padding: const EdgeInsets.only(bottom: 15),
                 child: MyElevatedButton(
                   onPressed: () async {
-                    if (widget.isFree == true) {
-                      await service.addReservation(
-                        widget.vin,
-                        widget.pickupTime,
-                        widget.returnTime,
-                      );
-                      await service.confirmRegistration(
-                        email,
-                        widget.pickupTime,
-                        widget.returnTime,
-                      );
-                      await authReservationNotification
-                          .saveNotificationToDatabase({
-                        'vinCar': widget.vin,
-                        'pickupDate': widget.pickupTime.toLocal().toString(),
-                        'pickupTime': widget.pickupTime.toLocal().toString(),
-                        'returnDate': widget.returnTime.toLocal().toString(),
-                        'returnTime': widget.returnTime.toLocal().toString(),
+                    if (postoji) {
+                      service.checkAndDeleteReservation(widget.vin,
+                          widget.pickupTime, widget.returnTime, email);
+                      setState(() {
+                        widget.isFree = true;
+                        postoji = false;
                       });
+                      CustomToast().showFlutterToast(
+                          "You succesfully canceled reservation.");
                     } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NotifyMe(
-                            vinCar: widget.vin,
-                            pickupDateTime: widget.pickupTime.toLocal(),
-                            returnDateTime: widget.returnTime.toLocal(),
+                      if (widget.isFree == true) {
+                        await service.addReservation(
+                          widget.vin,
+                          widget.pickupTime,
+                          widget.returnTime,
+                        );
+                        await service.confirmRegistration(
+                          email,
+                          widget.pickupTime,
+                          widget.returnTime,
+                        );
+                        await authReservationNotification
+                            .saveNotificationToDatabase({
+                          'vinCar': widget.vin,
+                          'pickupDate': widget.pickupTime.toLocal().toString(),
+                          'pickupTime': widget.pickupTime.toLocal().toString(),
+                          'returnDate': widget.returnTime.toLocal().toString(),
+                          'returnTime': widget.returnTime.toLocal().toString(),
+                        });
+                        setState(() {
+                          widget.isFree = false;
+                          postoji = true;
+                        });
+                        CustomToast().showFlutterToast(
+                            "You succesfully reserved vehicle.");
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NotifyMe(
+                              vinCar: widget.vin,
+                              pickupDateTime: widget.pickupTime.toLocal(),
+                              returnDateTime: widget.returnTime.toLocal(),
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     }
                   },
-                  label: widget.isFree ? "MAKE A RESERVATION" : "NOTIFY ME",
+                  label: postoji
+                      ? "CANCEL RESERVATION"
+                      : (widget.isFree ? "MAKE A RESERVATION" : "NOTIFY ME"),
                 ),
               ),
             ),

@@ -198,6 +198,39 @@ class ReservationService implements ReservationRepository {
     }
   }
 
+  Future<bool> checkReservationForUserAndCar(String vinCar, DateTime pickupTime,
+      DateTime returnTime, String email) async {
+    final databaseReference = FirebaseDatabase.instance.ref();
+    var query = databaseReference
+        .child("Reservation")
+        .orderByChild('VinCar')
+        .equalTo(vinCar);
+
+    DatabaseEvent snapshot = await query.once();
+    if (snapshot.snapshot.value != null) {
+      Map<dynamic, dynamic>? reservations =
+          snapshot.snapshot.value as Map<dynamic, dynamic>?;
+
+      for (var entry in reservations!.entries) {
+        var value = entry.value;
+        if (value['pickupDate'] != null) {
+          DateTime pickupBusyDate =
+              DateTime.parse(value['pickupDate'] + ' ' + value['pickupTime']);
+          DateTime returnBusyDate =
+              DateTime.parse(value['returnDate'] + ' ' + value['returnTime']);
+
+          if (value['email'] == email &&
+              pickupBusyDate.isAtSameMomentAs(pickupTime) &&
+              returnBusyDate.isAtSameMomentAs(returnTime)) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
   Future<bool> checkReservation(String email, String vinCar) async {
     final databaseReference = FirebaseDatabase.instance.ref();
     var query = databaseReference
@@ -234,6 +267,41 @@ class ReservationService implements ReservationRepository {
     }
 
     return false;
+  }
+
+  Future<void> checkAndDeleteReservation(String vinCar, DateTime pickupTime,
+      DateTime returnTime, String email) async {
+    final databaseReference = FirebaseDatabase.instance.ref();
+    var query = databaseReference
+        .child("Reservation")
+        .orderByChild('VinCar')
+        .equalTo(vinCar);
+
+    DatabaseEvent snapshot = await query.once();
+    if (snapshot.snapshot.value != null) {
+      Map<dynamic, dynamic>? reservations =
+          snapshot.snapshot.value as Map<dynamic, dynamic>?;
+
+      for (var entry in reservations!.entries) {
+        var value = entry.value;
+        if (value['pickupDate'] != null) {
+          DateTime pickupBusyDate =
+              DateTime.parse(value['pickupDate'] + ' ' + value['pickupTime']);
+          DateTime returnBusyDate =
+              DateTime.parse(value['returnDate'] + ' ' + value['returnTime']);
+
+          if (value['email'] == email &&
+              pickupBusyDate.isAtSameMomentAs(pickupTime) &&
+              returnBusyDate.isAtSameMomentAs(returnTime)) {
+            String reservationKey = entry.key;
+            await databaseReference
+                .child("Reservation")
+                .child(reservationKey)
+                .remove();
+          }
+        }
+      }
+    }
   }
 
   Future<void> deleteReservation(String vin) async {
