@@ -29,7 +29,7 @@ class ChatMessages extends StatelessWidget {
         } else {
           final messages = snapshot.data ?? [];
           WidgetsBinding.instance?.addPostFrameCallback((_) {
-            if (messages.isNotEmpty) {
+            if (messages.length > 3) {
               itemScrollController.scrollTo(
                   index: messages.length,
                   duration: Duration(seconds: 1),

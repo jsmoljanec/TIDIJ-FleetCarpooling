@@ -85,7 +85,7 @@ class _ChatTextFieldState extends State<ChatTextField> {
       );
       await notification.sendNotification(
         body: 'image........',
-        senderId: FirebaseAuth.instance.currentUser!.uid,
+        senderId: widget.receiverId,
       );
     }
   }
