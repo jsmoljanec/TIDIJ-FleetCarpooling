@@ -164,7 +164,6 @@ class NotificationsService {
         .orderByChild('token/${token}')
         .equalTo(token)
         .once();
-    print(token);
     DataSnapshot snapshot = query.snapshot;
     if (snapshot.value != null) {
       Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
