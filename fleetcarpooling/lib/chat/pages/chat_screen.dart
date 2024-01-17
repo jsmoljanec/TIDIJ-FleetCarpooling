@@ -25,7 +25,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.primaryColor,
         toolbarHeight: 70,
         title: Padding(
           padding: EdgeInsets.only(top: 15.0),

@@ -129,7 +129,7 @@ class _MessageBubbleState extends State<MessageBubble> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: widget.isMe
                   ? CrossAxisAlignment.end
-                  : CrossAxisAlignment.start, // Changed this line
+                  : CrossAxisAlignment.start,
               children: [
                 if (!widget.isMe)
                   Text(
@@ -167,7 +167,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                         ),
                       )
                     : Container(
-                        constraints: BoxConstraints(maxWidth: 250),
+                        constraints: BoxConstraints(maxWidth: 200),
                         child: Text(
                           widget.message.content,
                           style: TextStyle(
