@@ -157,4 +157,41 @@ class AuthNotification {
       throw Exception('Error fetching car details: $e');
     }
   }
+
+  Future<void> deleteNotifications(
+    String vinCar,
+    String returnDate,
+    String returnTime,
+    String pickupDate,
+    String pickupTime,
+  ) async {
+    try {
+      DatabaseReference notificationRef =
+          FirebaseDatabase.instance.ref('Notifications');
+
+      var notificationsQuery =
+          await notificationRef.orderByChild('VinCar').equalTo(vinCar).once();
+
+      if (notificationsQuery.snapshot.value != null) {
+        Map<dynamic, dynamic>? notifications =
+            notificationsQuery.snapshot.value as Map<dynamic, dynamic>?;
+
+        for (var entry in notifications!.entries) {
+          var value = entry.value;
+
+          if (value['message'] != null && value['message'].startsWith('You')) {
+            if (value['returnDate'] == returnDate &&
+                value['returnTime'] == returnTime &&
+                value['pickupDate'] == pickupDate &&
+                value['pickupTime'] == pickupTime) {
+              await notificationRef.child(entry.key).remove();
+            }
+          }
+        }
+      }
+    } catch (e) {
+      print('Error deleting notifications: $e');
+      rethrow;
+    }
+  }
 }

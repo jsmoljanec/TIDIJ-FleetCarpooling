@@ -280,7 +280,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => NotifyMe(
-                              vinCar: widget.vin,
+                              VinCar: widget.vin,
                               pickupDateTime: widget.pickupTime.toLocal(),
                               returnDateTime: widget.returnTime.toLocal(),
                             ),
