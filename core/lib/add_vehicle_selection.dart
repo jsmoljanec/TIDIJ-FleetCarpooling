@@ -10,7 +10,7 @@ import 'package:qraddition/add_vehicle_QR_form.dart';
 class AddVehicleSelection extends StatelessWidget {
   final List<AddVehicleInteface> _vehicleAdditionForms = [
     AddVehicleManuallyForm() as AddVehicleInteface,
-    AddVehicleQRForm() as AddVehicleInteface
+    AddVehicleQRForm() as AddVehicleInteface,
   ];
 
   @override
@@ -40,31 +40,46 @@ class AddVehicleSelection extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ..._vehicleAdditionForms.map(
-              (vehicleAdditionForm) => MyElevatedButton(
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BlocProvider(
-                        create: (context) => VehicleBloc(),
-                        child: vehicleAdditionForm,
-                      ),
-                    ),
-                  );
-                },
-                label: vehicleAdditionForm.getName(),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                ..._vehicleAdditionForms.map(
+                  (vehicleAdditionForm) => MyElevatedButton(
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                            create: (context) => VehicleBloc(),
+                            child: vehicleAdditionForm,
+                          ),
+                        ),
+                      );
+                    },
+                    label: vehicleAdditionForm.getName(),
+                  ),
+                ),
+                SizedBox(height: 500),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 450),
+              child: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/logo.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
-            Image.asset(
-              'assets/images/logo.png',
-              fit: BoxFit.cover,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
