@@ -2,8 +2,9 @@ import 'package:core/vehicle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
-import 'package:fleetcarpooling/handlers/udp_manager.dart';
+import 'package:fleetcarpooling/pages/map_functionality/udp_manager.dart';
 import 'package:core/ui_elements/custom_toast.dart';
+import 'package:fleetcarpooling/pages/map_functionality/udp_message_handler.dart';
 import 'package:fleetcarpooling/ui_elements/vehicle_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,23 +19,21 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   late GoogleMapController mapController;
-  final LatLng _center = const LatLng(46.303117, 16.324079);
-  late String actionMessage = 'Waiting for action...';
+  //prebacit u .env varijablu
+  final LatLng center = const LatLng(46.303117, 16.324079);
 
   Set<Marker> markers = {};
   bool showController = false;
-  late MarkerId selectedMarkerId;
+  late MarkerId selectedMarkerId; 
 
-  static const port = 50001;
   late UDPManager udpManager;
   late BitmapDescriptor icon;
 
-  late String flagContent;
-  late String vehicleIdContent;
   bool refreshUI = false;
   Future<bool>? reservationCheckFuture;
 
   User? user = FirebaseAuth.instance.currentUser;
+  late UDPMessageHandler udpMessageHandler = UDPMessageHandler();
 
   @override
   void initState() {
@@ -46,24 +45,9 @@ class _MapPageState extends State<MapPage> {
 
   void initializeUDP() {
     String finalIpAddress = dotenv.env['DEVICE_IP_ADRESS']!;
-    udpManager =
-        UDPManager(finalIpAddress, port, udpMessageHandler: handleUDPMessage);
+    int port = 50001;
+    udpManager = UDPManager(finalIpAddress, port);
     udpManager.connectUDP();
-  }
-
-  void handleUDPMessage(String message) {
-    RegExp bracketsRegExp = RegExp(r'\[([^\]]*)\]');
-    Iterable<RegExpMatch> matches = bracketsRegExp.allMatches(message);
-
-    if (matches.isNotEmpty) {
-      flagContent = matches.elementAt(0).group(1) ?? '';
-      vehicleIdContent =
-          matches.length > 1 ? matches.elementAt(1).group(1) ?? '' : '';
-      CustomToast().showStatusToast(
-          message, flagContent, vehicleIdContent, selectedMarkerId.value);
-    } else {
-      print('Uglate zagrade nisu pronađene u tekstu.');
-    }
   }
 
   @override
@@ -75,7 +59,7 @@ class _MapPageState extends State<MapPage> {
             child: GoogleMap(
               onMapCreated: onMapCreated,
               initialCameraPosition: CameraPosition(
-                target: _center,
+                target: center,
                 zoom: 12.0,
               ),
               onTap: (_) {
@@ -164,15 +148,18 @@ class _MapPageState extends State<MapPage> {
           .toSet();
 
       if (newMarkers.isNotEmpty) {
-        setState(() {
-          markers = newMarkers;
-        });
+        if (mounted) {
+          setState(() {
+            markers = newMarkers;
+          });
+        }
       }
     });
   }
 
   @override
   void dispose() {
+    udpManager.dispose();
     super.dispose();
   }
 }
