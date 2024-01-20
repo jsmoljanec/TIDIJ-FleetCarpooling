@@ -2,6 +2,7 @@ import 'package:core/ui_elements/buttons.dart';
 import 'package:core/ui_elements/colors';
 import 'package:core/ui_elements/custom_toast.dart';
 import 'package:core/vehicle.dart';
+import 'package:fleetcarpooling/auth/auth_notify_me.dart';
 import 'package:fleetcarpooling/pages/admin_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
@@ -47,6 +48,8 @@ Widget buildText(String label, String value) {
 
 Widget buildDialog(
     BuildContext context, String vin, bool active, String function) {
+  final ReservationService service = ReservationService();
+  AuthNotifyMe authNotifyMe = AuthNotifyMe();
   return Center(
     child: Container(
       width: MediaQuery.of(context).size.width * 0.8,
@@ -89,6 +92,9 @@ Widget buildDialog(
                           "You succesfully activated vehicle");
                     }
                   } else {
+                    service.deleteAllCarsReservation(vin);
+                    deleteCarVehicleLocations(vin);
+                    authNotifyMe.deleteAllCarsNotifyMeNotifications(vin);
                     deleteCar(vin);
                     Navigator.push(
                       context,

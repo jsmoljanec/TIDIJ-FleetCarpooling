@@ -183,4 +183,27 @@ class AuthNotifyMe {
       throw Exception('Error deleting all user NotifyMeNotifications: $e');
     }
   }
+
+  Future<void> deleteAllCarsNotifyMeNotifications(String vin) async {
+    try {
+      DatabaseEvent snapshot = await _database
+          .child("NotifyMe")
+          .orderByChild('vinCar')
+          .equalTo(vin)
+          .once();
+
+      if (snapshot.snapshot.value != null) {
+        Map<dynamic, dynamic>? notifications =
+            snapshot.snapshot.value as Map<dynamic, dynamic>?;
+
+        if (notifications != null) {
+          notifications.forEach((key, value) async {
+            await _database.child('NotifyMe').child(key).remove();
+          });
+        }
+      }
+    } catch (e) {
+      throw Exception('Error deleting all user NotifyMeNotifications: $e');
+    }
+  }
 }
