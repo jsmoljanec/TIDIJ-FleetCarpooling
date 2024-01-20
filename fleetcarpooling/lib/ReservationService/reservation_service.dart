@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/Models/reservation_model.dart';
 import 'package:fleetcarpooling/auth/auth_notify_me.dart';
+import 'package:fleetcarpooling/auth/notification.dart';
 import 'package:fleetcarpooling/auth/send_email.dart';
 import 'package:fleetcarpooling/Models/terms_model.dart';
 import 'package:fleetcarpooling/auth/user_repository.dart';
@@ -315,6 +316,9 @@ class ReservationService implements ReservationRepository {
       if (reservationData != null) {
         AuthNotifyMe notifyMe = AuthNotifyMe();
         await notifyMe.checkReservationDeletion(reservationData['VinCar'], reservationData['pickupDate'], reservationData['returnDate'], reservationData['pickupTime'], reservationData['returnTime']);
+
+        AuthNotification notifications = AuthNotification();
+        await notifications.deleteNotifications(reservationData['VinCar'], reservationData['returnDate'], reservationData['returnTime'], reservationData['pickupDate'], reservationData['pickupTime']);
       }
 
       await ref.remove();

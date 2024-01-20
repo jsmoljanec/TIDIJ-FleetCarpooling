@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NotifyMe extends StatelessWidget {
-  final String vinCar;
+  final String VinCar;
   final DateTime pickupDateTime;
   final DateTime returnDateTime;
 
   const NotifyMe({
     super.key,
-    required this.vinCar,
+    required this.VinCar,
     required this.pickupDateTime,
     required this.returnDateTime,
   });
@@ -36,7 +36,7 @@ class NotifyMe extends StatelessWidget {
 
     Future<void> saveNotifyMeData() async {
       await authNotifyMe.saveNotifyMeData(
-        vinCar,
+        VinCar,
         pickupDate,
         pickupTime,
         returnDate,

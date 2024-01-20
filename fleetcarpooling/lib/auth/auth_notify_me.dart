@@ -18,7 +18,7 @@ class AuthNotifyMe {
   }
 
   Future<void> saveNotifyMeData(
-    String vinCar,
+    String VinCar,
     String pickupDate,
     String pickupTime,
     String returnDate,
@@ -31,7 +31,7 @@ class AuthNotifyMe {
         print("");
 
         Map<String, dynamic> notifyMeData = {
-          'vinCar': vinCar,
+          'VinCar': VinCar,
           'email': user.email,
           'pickupDate': _formatDate(pickupDate),
           'pickupTime': _formatTime(pickupTime),
@@ -51,7 +51,7 @@ class AuthNotifyMe {
   }
 
   Future<void> checkReservationDeletion(
-    String vinCar,
+    String VinCar,
     String reservationDateStart,
     String reservationDateEnd,
     String reservationTimeStart,
@@ -71,13 +71,13 @@ class AuthNotifyMe {
           String notifyMeStart = entry.value['pickupDate'];
           String notifyMeEnd = entry.value['returnDate'];
 
-          print("vinCar: $vinCar");
+          print("vinCar: $VinCar");
           print("reservationDateStart: $reservationDateStart");
           print("reservationDateEnd: $reservationDateEnd");
           print("notifyMeStart: $notifyMeStart");
           print("notifyMeEnd: $notifyMeEnd");
 
-          if (entry.value['vinCar'] == vinCar &&
+          if (entry.value['VinCar'] == VinCar &&
               timeRangesOverlap(
                 reservationDateStart,
                 reservationDateEnd,
@@ -128,7 +128,7 @@ class AuthNotifyMe {
       String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
 
       Map<String, dynamic> notificationData = {
-        'vinCar': data['vinCar'],
+        'VinCar': data['VinCar'],
         'email': data['email'],
         'pickupDate': _formatDate(data['pickupDate']),
         'pickupTime': _formatTime(data['pickupTime']),
@@ -157,7 +157,7 @@ class AuthNotifyMe {
       return DateFormat('HH:mm').format(parsedTime);
     } catch (e) {
       print("Error formatting time: $e");
-      return time; // Vratite nepromijenjeno vrijeme ako dođe do problema s formatiranjem
+      return time; 
     }
   }
 
