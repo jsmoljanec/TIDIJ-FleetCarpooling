@@ -157,11 +157,14 @@ Future<void> deleteCar(String vin) async {
   DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles/${vin}");
 
   await ref.remove();
+
+  final VehicleLocationService service = VehicleLocationService();
+  service.deleteVehicleLocationRecord(vin);
 }
 
 Stream<bool> getLockStateStream(String vinCar) {
   DatabaseReference ref =
-      FirebaseDatabase.instance.ref("Vehicles/$vinCar/locked");
+      FirebaseDatabase.instance.ref("VehicleLocations/$vinCar/locked");
   final StreamController<bool> controller = StreamController<bool>();
 
   ref.onValue.listen((DatabaseEvent event) {

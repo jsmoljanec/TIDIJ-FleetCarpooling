@@ -1,10 +1,10 @@
-import 'package:core/vehicle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fleetcarpooling/Models/vehicle_location_model.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
-import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/pages/map_functionality/udp_manager.dart';
 import 'package:core/ui_elements/custom_toast.dart';
 import 'package:fleetcarpooling/pages/map_functionality/udp_message_handler.dart';
+import 'package:fleetcarpooling/services/vehicle_position_service.dart';
 import 'package:fleetcarpooling/ui_elements/vehicle_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -24,7 +24,7 @@ class _MapPageState extends State<MapPage> {
 
   Set<Marker> markers = {};
   bool showController = false;
-  late MarkerId selectedMarkerId; 
+  late MarkerId selectedMarkerId;
 
   late UDPManager udpManager;
   late BitmapDescriptor icon;
@@ -112,16 +112,16 @@ class _MapPageState extends State<MapPage> {
     mapController = controller;
   }
 
-  Marker createVehicleMarker(Vehicle vehicle) {
+  Marker createVehicleMarker(VehicleLocation vehicleLocation) {
     return Marker(
       icon: icon,
-      markerId: MarkerId(vehicle.vin),
-      position: LatLng(vehicle.latitude, vehicle.longitude),
-      infoWindow: InfoWindow(title: "${vehicle.brand} ${vehicle.model}"),
+      markerId: MarkerId(vehicleLocation.vin),
+      position: LatLng(vehicleLocation.latitude, vehicleLocation.longitude),
+      infoWindow: InfoWindow(title: "${vehicleLocation.brand} ${vehicleLocation.model}"),
       onTap: () async {
         setState(() {
           reservationCheckFuture = ReservationService()
-              .checkReservation("${user!.email}", vehicle.vin);
+              .checkReservation("${user!.email}", vehicleLocation.vin);
         });
 
         bool hasReservation = await reservationCheckFuture!;
@@ -133,7 +133,7 @@ class _MapPageState extends State<MapPage> {
                 "You dont have reservation for this vehicle!");
           } else {
             showController = true;
-            selectedMarkerId = MarkerId(vehicle.vin);
+            selectedMarkerId = MarkerId(vehicleLocation.vin);
           }
         });
       },
@@ -141,9 +141,8 @@ class _MapPageState extends State<MapPage> {
   }
 
   void updateMapWithVehicleMarkers() {
-    getVehicles().listen((vehicles) {
-      final newMarkers = vehicles
-          .where((vehicle) => vehicle.active == true)
+    VehicleLocationService().getVehicleLocations().listen((vehicleLocations) {
+      final newMarkers = vehicleLocations
           .map(createVehicleMarker)
           .toSet();
 
