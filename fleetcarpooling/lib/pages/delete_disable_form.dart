@@ -3,214 +3,270 @@ import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/pages/admin_selected_vehicle_page.dart';
 import 'package:core/ui_elements/colors';
+import 'package:fleetcarpooling/pages/profile_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class DeleteDisableForm extends StatelessWidget {
+class DeleteDisableForm extends StatefulWidget {
   List<Vehicle> cars = List.empty();
 
   DeleteDisableForm({super.key});
   @override
+  State<DeleteDisableForm> createState() => _DeleteDisableForm();
+}
+
+class _DeleteDisableForm extends State<DeleteDisableForm> {
+  late Stream<List<Vehicle>> _vehiclesStream;
+  final TextEditingController _searchController = TextEditingController();
+  String vinCar = "";
+  @override
+  void initState() {
+    super.initState();
+    _vehiclesStream = getVehicles();
+  }
+
+  void _handleSearch(String input) {
+    setState(() {
+      _vehiclesStream = getVehicles().map((vehicles) => vehicles
+          .where((vehicle) =>
+              vehicle.model.toLowerCase().contains(input.toLowerCase()) ||
+              vehicle.brand.toLowerCase().contains(input.toLowerCase()))
+          .toList());
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double padding2 = screenHeight * 0.02;
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        toolbarHeight: 80,
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: CircularIconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        title: const Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("LIST ALL CARS",
-                style:
-                    TextStyle(color: AppColors.mainTextColor, fontSize: 25.0)),
-          ],
-        ),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding:
-            const EdgeInsets.only(right: 10, left: 10, top: 20, bottom: 20),
-        child: Container(
-          color: Colors.white,
-          child: const VehicleList(),
-        ),
-      ),
-    );
-  }
-}
-
-class VehicleList extends StatelessWidget {
-  const VehicleList({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<List<Vehicle>>(
-      stream: getVehicles(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No vehicles available.'));
-        }
-
-        return SingleChildScrollView(
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              return CardWidget(vehicle: snapshot.data![index]);
-            },
-          ),
-        );
-      },
-    );
-  }
-}
-
-class CardWidget extends StatelessWidget {
-  final Vehicle vehicle;
-
-  const CardWidget({required this.vehicle});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 5),
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AdminSelectedVehiclePage(
-                      vin: vehicle.vin,
-                    )),
-          );
-        },
-        child: Card(
-          color: Colors.white,
-          child: ListTile(
-            leading: SizedBox(
-              width: 90,
-              height: 80,
-              child: Image.network(
-                vehicle.imageUrl,
-                fit: BoxFit.cover,
+        body: Padding(
+      padding: const EdgeInsets.only(top: 25.0),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 450),
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/logo.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-            title: Text(
-              '${vehicle.brand} ${vehicle.model}',
-              style: const TextStyle(color: AppColors.mainTextColor),
-            ),
-            subtitle: Text(
-              '${vehicle.year}',
-              style:
-                  const TextStyle(color: AppColors.mainTextColor, fontSize: 12),
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.blue),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Delete Car'),
-                          content: const Text(
-                              'Are you sure you want to delete this car?'),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('Cancel'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            TextButton(
-                              child: const Text('Yes'),
-                              onPressed: () {
-                                deleteCar(vehicle.vin);
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
-                      vehicle.active ? Icons.do_not_disturb_on : Icons.add,
-                      color: Colors.blue),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        if (vehicle.active == true) {
-                          return AlertDialog(
-                            title: const Text('Disable Car'),
-                            content: const Text(
-                                'Are you sure you want to disable this car?'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('Cancel'),
+          ),
+          SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: screenWidth,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          top: padding2, bottom: padding2, left: 24, right: 24),
+                      child: Stack(
+                        fit: StackFit.loose,
+                        children: [
+                          Row(
+                            children: [
+                              CircularIconButton(
                                 onPressed: () {
-                                  Navigator.of(context).pop();
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  Future.delayed(Duration(milliseconds: 50),
+                                      () {
+                                    Navigator.pop(context);
+                                  });
                                 },
                               ),
-                              TextButton(
-                                child: const Text('Yes'),
-                                onPressed: () {
-                                  disableCar(vehicle.vin, vehicle.active);
-                                  Navigator.of(context).pop();
-                                },
+                              Row(
+                                children: [
+                                  const Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Here you can manage",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: AppColors.mainTextColor,
+                                          fontSize: 24,
+                                        ),
+                                      ),
+                                      Text(
+                                        "all cars",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: AppColors.mainTextColor,
+                                          fontSize: 24,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ],
-                          );
-                        } else {
-                          return AlertDialog(
-                            title: const Text('Disable Car'),
-                            content: const Text(
-                                'Are you sure you want to activate this car?'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('Cancel'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: InkWell(
+                              onTap: () {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                Future.delayed(Duration(milliseconds: 50), () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const ProfilePage(),
+                                    ),
+                                  );
+                                });
+                              },
+                              child: SizedBox(
+                                child: Image.asset("assets/icons/profile.png"),
                               ),
-                              TextButton(
-                                child: const Text('Yes'),
-                                onPressed: () {
-                                  disableCar(vehicle.vin, vehicle.active);
-                                  Navigator.of(context).pop();
-                                },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: screenWidth,
+                    padding:
+                        const EdgeInsets.only(left: 24, right: 24, bottom: 0),
+                    child: SizedBox(
+                      height: 43,
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged: _handleSearch,
+                        style: const TextStyle(
+                            color: AppColors.mainTextColor, fontSize: 16),
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 12.0),
+                          filled: false,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(24),
+                            borderSide: const BorderSide(
+                                color: AppColors.mainTextColor),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(24),
+                            borderSide: const BorderSide(
+                              color: AppColors.buttonColor,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(24),
+                            borderSide: const BorderSide(
+                              color: AppColors.buttonColor,
+                            ),
+                          ),
+                          hintText: "Search..",
+                          hintStyle: const TextStyle(
+                            color: AppColors.unavailableColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w100,
+                            letterSpacing: 0.5,
+                          ),
+                          prefixIcon: const Icon(Icons.search),
+                          prefixIconColor: AppColors.mainTextColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  StreamBuilder<List<Vehicle>>(
+                    stream: _vehiclesStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(
+                            child: Text('No vehicles available.'));
+                      }
+
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+                            child: InkWell(
+                              onTap: () {
+                                vinCar = snapshot.data![index].vin;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AdminSelectedVehiclePage(
+                                            vin: vinCar,
+                                          )),
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  border: Border.all(
+                                    color: AppColors.mainTextColor,
+                                    width: 0.5,
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 12),
+                                      child: Image.network(
+                                        snapshot.data![index].imageUrl,
+                                        fit: BoxFit.cover,
+                                        height: 122,
+                                        width: 209,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          24, 20, 24, 20),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              "${snapshot.data![index].brand} ${snapshot.data![index].model}",
+                                              style: const TextStyle(
+                                                  color:
+                                                      AppColors.mainTextColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 24),
+                                            ),
+                                          ),
+                                          Text(
+                                            snapshot.data![index].transType,
+                                            style: const TextStyle(
+                                                color: AppColors.mainTextColor,
+                                                fontSize: 18),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
+                            ),
                           );
-                        }
-                      },
-                    );
-                  },
-                ),
-              ],
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
-    );
+    ));
   }
 }
