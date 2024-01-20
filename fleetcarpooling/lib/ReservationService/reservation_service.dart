@@ -314,13 +314,42 @@ class ReservationService implements ReservationRepository {
 
       if (reservationData != null) {
         AuthNotifyMe notifyMe = AuthNotifyMe();
-        await notifyMe.checkReservationDeletion(reservationData['VinCar'], reservationData['pickupDate'], reservationData['returnDate'], reservationData['pickupTime'], reservationData['returnTime']);
+        await notifyMe.checkReservationDeletion(
+            reservationData['VinCar'],
+            reservationData['pickupDate'],
+            reservationData['returnDate'],
+            reservationData['pickupTime'],
+            reservationData['returnTime']);
       }
 
       await ref.remove();
     } catch (error) {
       print("Error deleting reservation: $error");
       rethrow;
+    }
+  }
+
+  Future<void> deleteAllCarsReservation(String vin) async {
+    try {
+      final DatabaseReference _database = FirebaseDatabase.instance.ref();
+      DatabaseEvent snapshot = await _database
+          .child("Reservation")
+          .orderByChild('VinCar')
+          .equalTo(vin)
+          .once();
+
+      if (snapshot.snapshot.value != null) {
+        Map<dynamic, dynamic>? notifications =
+            snapshot.snapshot.value as Map<dynamic, dynamic>?;
+
+        if (notifications != null) {
+          notifications.forEach((key, value) async {
+            await _database.child('Reservation').child(key).remove();
+          });
+        }
+      }
+    } catch (e) {
+      throw Exception('Error deleting all user Reservation: $e');
     }
   }
 
