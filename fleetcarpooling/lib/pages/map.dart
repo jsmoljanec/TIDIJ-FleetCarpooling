@@ -45,7 +45,7 @@ class _MapPageState extends State<MapPage> {
 
   void initializeUDP() {
     String finalIpAddress = dotenv.env['DEVICE_IP_ADRESS']!;
-    int port = 50001;
+    int port = int.parse(dotenv.env['DEVICE_PORT']!);
     udpManager = UDPManager(finalIpAddress, port);
     udpManager.connectUDP();
   }
