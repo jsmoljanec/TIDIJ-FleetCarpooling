@@ -29,7 +29,7 @@ class _AllReservationsState extends State<AllReservations> {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 450),
+              padding: const EdgeInsets.only(top: 535),
               child: Container(
                 decoration: const BoxDecoration(
                   image: DecorationImage(
