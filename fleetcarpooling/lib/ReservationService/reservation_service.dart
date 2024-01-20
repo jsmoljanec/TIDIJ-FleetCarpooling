@@ -286,15 +286,34 @@ class ReservationService implements ReservationRepository {
 
       for (var entry in reservations!.entries) {
         var value = entry.value;
-        if (value['pickupDate'] != null) {
+        if (value['pickupDate'] != null &&
+            value['pickupTime'] != null &&
+            value['returnDate'] != null &&
+            value['returnTime'] != null &&
+            value['email'] == email) {
           DateTime pickupBusyDate =
               DateTime.parse(value['pickupDate'] + ' ' + value['pickupTime']);
           DateTime returnBusyDate =
               DateTime.parse(value['returnDate'] + ' ' + value['returnTime']);
 
-          if (value['email'] == email &&
-              pickupBusyDate.isAtSameMomentAs(pickupTime) &&
+          if (pickupBusyDate.isAtSameMomentAs(pickupTime) &&
               returnBusyDate.isAtSameMomentAs(returnTime)) {
+            AuthNotifyMe notifyMe = AuthNotifyMe();
+            await notifyMe.checkReservationDeletion(
+                value['VinCar'],
+                value['pickupDate'],
+                value['returnDate'],
+                value['pickupTime'],
+                value['returnTime']);
+
+            AuthNotification notifications = AuthNotification();
+            await notifications.deleteNotifications(
+                value['VinCar'],
+                value['returnDate'],
+                value['returnTime'],
+                value['pickupDate'],
+                value['pickupTime']);
+
             String reservationKey = entry.key;
             await databaseReference
                 .child("Reservation")
@@ -315,10 +334,20 @@ class ReservationService implements ReservationRepository {
 
       if (reservationData != null) {
         AuthNotifyMe notifyMe = AuthNotifyMe();
-        await notifyMe.checkReservationDeletion(reservationData['VinCar'], reservationData['pickupDate'], reservationData['returnDate'], reservationData['pickupTime'], reservationData['returnTime']);
+        await notifyMe.checkReservationDeletion(
+            reservationData['VinCar'],
+            reservationData['pickupDate'],
+            reservationData['returnDate'],
+            reservationData['pickupTime'],
+            reservationData['returnTime']);
 
         AuthNotification notifications = AuthNotification();
-        await notifications.deleteNotifications(reservationData['VinCar'], reservationData['returnDate'], reservationData['returnTime'], reservationData['pickupDate'], reservationData['pickupTime']);
+        await notifications.deleteNotifications(
+            reservationData['VinCar'],
+            reservationData['returnDate'],
+            reservationData['returnTime'],
+            reservationData['pickupDate'],
+            reservationData['pickupTime']);
       }
 
       await ref.remove();
