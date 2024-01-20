@@ -14,64 +14,7 @@ class AuthNotifyMe {
       _notifyMeNotificationStreamController.stream;
 
   AuthNotifyMe() {
-    _subscribeToNotifyMeNotificationChanges();
-  }
-
-  void _subscribeToNotifyMeNotificationChanges() {
-    _database.child('NotifyMeNotification').onValue.listen((event) {
-      if (event.snapshot.value != null) {
-        Map<dynamic, dynamic>? notifications =
-            event.snapshot.value as Map<dynamic, dynamic>?;
-
-        if (notifications != null) {
-          List<Map<String, dynamic>> notifyMeNotifications = [];
-          DateTime now = DateTime.now();
-          User? currentUser = _auth.currentUser;
-
-          notifications.forEach((key, value) {
-            if (value['email'] == currentUser?.email) {
-              if (value['pickupDate'] != null) {
-                DateTime pickupDate = DateTime.parse(value['pickupDate']);
-                DateTime pickupDateTime = DateTime.parse(
-                    '${value['pickupDate']} ${value['pickupTime']}');
-                if (pickupDate.isAfter(now) &&
-                    pickupDate.difference(now).inDays <= 2) {
-                  if (!(pickupDate.isAtSameMomentAs(now) &&
-                      pickupDateTime.isBefore(now))) {
-                    _transferDataToNotificationTable(
-                      value,
-                      'Someone canceled for ${value['pickupDate']}. You can book from ${value['pickupTime']} to ${value['returnDate']} ${value['returnTime']}.',
-                    );
-                  }
-                }
-              }
-            }
-          });
-
-          _notifyMeNotificationStreamController.add(notifyMeNotifications);
-        }
-      }
-    });
-  }
-
-  Future<void> _transferDataToNotificationTable(
-      Map<dynamic, dynamic> data, String message) async {
-    try {
-      DatabaseReference notificationRef = _database.child("Notification");
-
-      DataSnapshot notificationTableSnapshot =
-          (await notificationRef.once()) as DataSnapshot;
-      if (notificationTableSnapshot.value == null) {
-        await notificationRef.set({});
-      }
-
-      String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-      // Uključivanje svih informacija u poruku
-      data['message'] = message;
-      await notificationRef.child(uniqueName).set(data);
-    } catch (e) {
-      throw Exception("Error transferring data to Notification table");
-    }
+    //_subscribeToNotifyMeNotificationChanges();
   }
 
   Future<void> saveNotifyMeData(
@@ -85,14 +28,15 @@ class AuthNotifyMe {
       User? user = _auth.currentUser;
       if (user != null) {
         String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+        print("");
 
         Map<String, dynamic> notifyMeData = {
           'vinCar': vinCar,
           'email': user.email,
-          'pickupDate': pickupDate,
-          'pickupTime': formatTime(pickupTime),
-          'returnDate': returnDate,
-          'returnTime': formatTime(returnTime),
+          'pickupDate': _formatDate(pickupDate),
+          'pickupTime': _formatTime(pickupTime),
+          'returnDate': _formatDate(returnDate),
+          'returnTime': _formatTime(returnTime),
         };
 
         DatabaseReference notifyMeRef =
@@ -106,114 +50,114 @@ class AuthNotifyMe {
     }
   }
 
-  String formatTime(String time) {
-    final dateTime = DateFormat('HH:mm').parse(time);
-    return DateFormat('HH:mm').format(dateTime);
-  }
-
   Future<void> checkReservationDeletion(
     String vinCar,
+    String reservationDateStart,
+    String reservationDateEnd,
     String reservationTimeStart,
     String reservationTimeEnd,
   ) async {
+    print("checkReservationDeletion called!");
     try {
       DataSnapshot snapshot =
-          (await _database.child("Reservation").once()).snapshot;
-
+          (await _database.child("NotifyMe").once()).snapshot;
       Map<dynamic, dynamic>? data = snapshot.value as Map<dynamic, dynamic>?;
-      Map<dynamic, dynamic> reservations = data ?? {};
 
-      reservations.forEach((key, value) async {
-        String reservationStart = value['reservationTimeStart'];
-        String reservationEnd = value['reservationTimeEnd'];
+      if (data != null) {
+        print("Data is not null");
+        for (var entry in data.entries) {
+          print("Checking entry: $entry");
 
-        if (value['vinCar'] == vinCar &&
-            timeRangesOverlap(reservationTimeStart, reservationTimeEnd,
-                reservationStart, reservationEnd)) {
-          await transferDataToNotificationTable(value);
+          String notifyMeStart = entry.value['pickupDate'];
+          String notifyMeEnd = entry.value['returnDate'];
 
-          _database.child("NotifyMe").child(key).remove();
+          print("vinCar: $vinCar");
+          print("reservationDateStart: $reservationDateStart");
+          print("reservationDateEnd: $reservationDateEnd");
+          print("notifyMeStart: $notifyMeStart");
+          print("notifyMeEnd: $notifyMeEnd");
+
+          if (entry.value['vinCar'] == vinCar &&
+              timeRangesOverlap(
+                reservationDateStart,
+                reservationDateEnd,
+                notifyMeStart,
+                notifyMeEnd,
+              )) {
+            print("Condition satisfied for entry: $entry");
+            await transferDataToNotificationTable(entry.value);
+            await _database.child("NotifyMe").child(entry.key).remove();
+          } else {
+            print("Condition not satisfied for entry: $entry");
+          }
         }
-      });
+      }
     } catch (e) {
+      print("Error in checkReservationDeletion: $e");
       throw Exception("Error checking and notifying reservation deletion");
     }
   }
 
   bool timeRangesOverlap(
-      String start1, String end1, String start2, String end2) {
-    DateTime startTime1 = DateTime.parse(start1);
-    DateTime endTime1 = DateTime.parse(end1);
+    String reservationDateStart,
+    String reservationDateEnd,
+    String notifyMeStart,
+    String notifyMeEnd,
+  ) {
+    try {
+      DateTime range1StartTime = DateTime.parse(reservationDateStart);
+      DateTime range1EndTime = DateTime.parse(reservationDateEnd);
+      DateTime range2StartTime = DateTime.parse(notifyMeStart);
+      DateTime range2EndTime = DateTime.parse(notifyMeEnd);
 
-    DateTime startTime2 = DateTime.parse(start2);
-    DateTime endTime2 = DateTime.parse(end2);
-
-    return endTime1.isAfter(startTime2) && startTime1.isBefore(endTime2);
+      return range1EndTime.isAfter(range2StartTime) &&
+          range1StartTime.isBefore(range2EndTime);
+    } catch (e) {
+      print("Error parsing date: $e");
+      return false;
+    }
   }
 
   Future<void> transferDataToNotificationTable(
       Map<dynamic, dynamic> data) async {
     try {
+      print("Transferring data to NotifyMeNotification table: $data");
       DatabaseReference notifyMeNotificationRef =
-          _database.child("NotifyMeNotification");
-
-      DataSnapshot notificationTableSnapshot =
-          (await notifyMeNotificationRef.once()) as DataSnapshot;
-      if (notificationTableSnapshot.value == null) {
-        await notifyMeNotificationRef.set({});
-      }
+          _database.child("Notifications");
 
       String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-      await notifyMeNotificationRef.child(uniqueName).set(data);
+
+      Map<String, dynamic> notificationData = {
+        'vinCar': data['vinCar'],
+        'email': data['email'],
+        'pickupDate': _formatDate(data['pickupDate']),
+        'pickupTime': _formatTime(data['pickupTime']),
+        'returnDate': _formatDate(data['returnDate']),
+        'returnTime': _formatTime(data['returnTime']),
+        'message':
+            "Someone canceled for ${_formatDate(data['pickupDate'])}. You can book from ${_formatTime(data['pickupTime'])} to ${_formatDate(data['returnDate'])} ${_formatTime(data['returnTime'])}.",
+      };
+
+      await notifyMeNotificationRef.child(uniqueName).set(notificationData);
+      print("Data successfully transferred to NotifyMeNotification table.");
     } catch (e) {
+      print("Error transferring data to NotifyMeNotification table: $e");
       throw Exception("Error transferring data to NotifyMeNotification table");
     }
   }
 
-  Future<List<Map<String, dynamic>>> getNotifyMeNotifications(
-      String userEmail) async {
+  String _formatDate(String date) {
+    DateTime parsedDate = DateTime.parse(date);
+    return DateFormat('yyyy-MM-dd').format(parsedDate);
+  }
+
+  String _formatTime(String time) {
     try {
-      DateTime now = DateTime.now();
-
-      DatabaseEvent snapshot = await _database
-          .child('NotifyMeNotification')
-          .orderByChild('email')
-          .equalTo(userEmail)
-          .once();
-
-      if (snapshot.snapshot.value != null) {
-        Map<dynamic, dynamic>? notifications =
-            snapshot.snapshot.value as Map<dynamic, dynamic>?;
-
-        if (notifications != null) {
-          List<Map<String, dynamic>> notifyMeNotifications = [];
-          notifications.forEach((key, value) {
-            if (value['pickupDate'] != null) {
-              DateTime pickupDate = DateTime.parse(value['pickupDate']);
-              DateTime pickupDateTime = DateTime.parse(
-                  '${value['pickupDate']} ${value['pickupTime']}');
-              if (pickupDate.isAfter(now) &&
-                  pickupDate.difference(now).inDays <= 2) {
-                if (!(pickupDate.isAtSameMomentAs(now) &&
-                    pickupDateTime.isBefore(now))) {
-                  notifyMeNotifications.add({
-                    'key': key,
-                    'VinCar': value['VinCar'],
-                    'pickupDate': value['pickupDate'],
-                    'pickupTime': value['pickupTime'],
-                    'returnDate': value['returnDate'],
-                    'returnTime': value['returnTime'],
-                  });
-                }
-              }
-            }
-          });
-          return notifyMeNotifications;
-        }
-      }
-      return [];
+      DateTime parsedTime = DateFormat('HH:mm').parse(time);
+      return DateFormat('HH:mm').format(parsedTime);
     } catch (e) {
-      return [];
+      print("Error formatting time: $e");
+      return time; // Vratite nepromijenjeno vrijeme ako dođe do problema s formatiranjem
     }
   }
 

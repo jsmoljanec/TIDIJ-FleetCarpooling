@@ -1,6 +1,7 @@
 import 'package:fleetcarpooling/auth/auth_notify_me.dart';
 import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NotifyMe extends StatelessWidget {
   final String vinCar;
@@ -14,15 +15,18 @@ class NotifyMe extends StatelessWidget {
     required this.returnDateTime,
   });
 
-  String get pickupDate =>
-      "${pickupDateTime.year}-${pickupDateTime.month}-${pickupDateTime.day}";
-  String get pickupTime =>
-      "${pickupDateTime.hour}:${pickupDateTime.minute}${pickupDateTime.second}";
+  String _formatDate(DateTime dateTime) {
+    return DateFormat('yyyy-MM-dd').format(dateTime);
+  }
 
-  String get returnDate =>
-      "${returnDateTime.year}-${returnDateTime.month}-${returnDateTime.day}";
-  String get returnTime =>
-      "${returnDateTime.hour}:${returnDateTime.minute}${returnDateTime.second}";
+  String _formatTime(DateTime dateTime) {
+    return "${dateTime.hour}:${dateTime.minute}:${dateTime.second}";
+  }
+
+  String get pickupDate => _formatDate(pickupDateTime);
+  String get returnDate => _formatDate(returnDateTime);
+  String get pickupTime => _formatTime(pickupDateTime);
+  String get returnTime => _formatTime(returnDateTime);
 
   @override
   Widget build(BuildContext context) {

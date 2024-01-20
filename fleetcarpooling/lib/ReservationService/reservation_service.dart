@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/Models/reservation_model.dart';
+import 'package:fleetcarpooling/auth/auth_notify_me.dart';
 import 'package:fleetcarpooling/auth/send_email.dart';
 import 'package:fleetcarpooling/Models/terms_model.dart';
 import 'package:fleetcarpooling/auth/user_repository.dart';
@@ -305,9 +306,22 @@ class ReservationService implements ReservationRepository {
   }
 
   Future<void> deleteReservation(String vin) async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("Reservation/$vin");
+    try {
+      DatabaseReference ref = FirebaseDatabase.instance.ref("Reservation/$vin");
 
-    await ref.remove();
+      DatabaseEvent snapshot = await ref.once();
+      var reservationData = snapshot.snapshot.value as Map<dynamic, dynamic>?;
+
+      if (reservationData != null) {
+        AuthNotifyMe notifyMe = AuthNotifyMe();
+        await notifyMe.checkReservationDeletion(reservationData['VinCar'], reservationData['pickupDate'], reservationData['returnDate'], reservationData['pickupTime'], reservationData['returnTime']);
+      }
+
+      await ref.remove();
+    } catch (error) {
+      print("Error deleting reservation: $error");
+      rethrow;
+    }
   }
 
   Future<void> deleteAllUserReservations(String email) async {
