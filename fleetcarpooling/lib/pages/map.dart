@@ -19,8 +19,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   late GoogleMapController mapController;
-  //prebacit u .env varijablu
-  final LatLng center = const LatLng(46.303117, 16.324079);
+  final LatLng center = const LatLng(46.3904261, 16.4471181);
 
   Set<Marker> markers = {};
   bool showController = false;
@@ -154,11 +153,5 @@ class _MapPageState extends State<MapPage> {
         }
       }
     });
-  }
-
-  @override
-  void dispose() {
-    udpManager.dispose();
-    super.dispose();
   }
 }
