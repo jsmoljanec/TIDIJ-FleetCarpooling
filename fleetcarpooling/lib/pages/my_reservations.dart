@@ -105,7 +105,7 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
                               double opacity = snapshot.data![index].pickupDate
                                       .isAfter(DateTime.now())
                                   ? 1.0
-                                  : 0.5;
+                                  : 0.7;
                               return Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(24, 0, 24, 12),

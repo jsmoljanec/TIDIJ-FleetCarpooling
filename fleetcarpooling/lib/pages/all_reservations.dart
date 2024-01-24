@@ -139,7 +139,7 @@ class _AllReservationsState extends State<AllReservations> {
                               double opacity = snapshot.data![index].pickupDate
                                       .isAfter(DateTime.now())
                                   ? 1.0
-                                  : 0.5;
+                                  : 0.7;
                               return Opacity(
                                 opacity: opacity,
                                 child: Padding(
