@@ -110,8 +110,11 @@ class AuthNotifyMe {
       DateTime range2StartTime = DateTime.parse(notifyMeStart);
       DateTime range2EndTime = DateTime.parse(notifyMeEnd);
 
-      return range1EndTime.isAfter(range2StartTime) &&
-          range1StartTime.isBefore(range2EndTime);
+      return (range1EndTime.isAfter(range2StartTime) ||
+              range1EndTime.isAtSameMomentAs(range2StartTime)) &&
+          (range1StartTime.isBefore(range2EndTime) &&
+              !range2EndTime.isAtSameMomentAs(range1EndTime) &&
+              !range2EndTime.isAfter(range1EndTime));
     } catch (e) {
       print("Error parsing date: $e");
       return false;
@@ -157,7 +160,7 @@ class AuthNotifyMe {
       return DateFormat('HH:mm').format(parsedTime);
     } catch (e) {
       print("Error formatting time: $e");
-      return time; 
+      return time;
     }
   }
 
