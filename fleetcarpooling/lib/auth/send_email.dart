@@ -23,11 +23,8 @@ Future<void> sendEmail(String email, FirebaseAuth auth, String username_login,
     Future.delayed(Duration(minutes: 1), () {
       sendLinkForNewPassword(email, auth);
     });
-  } on MailerException catch (e) {
-    print('Message not sent.');
-    for (var p in e.problems) {
-      print('Problem: ${p.code}: ${p.msg}');
-    }
+  } catch (e) {
+    throw e;
   }
 }
 

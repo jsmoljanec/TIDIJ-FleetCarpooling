@@ -1,5 +1,6 @@
 import 'package:core/ui_elements/buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/auth/auth_registration_service.dart';
 
 import 'package:core/ui_elements/colors';
@@ -19,7 +20,8 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
   final TextEditingController lastNameController = TextEditingController();
   UserType _selectedUserType = UserType.Employee;
   final AuthRegistrationService _authRegistrationService =
-      new AuthRegistrationService();
+      new AuthRegistrationService(
+          FirebaseDatabase.instance, FirebaseAuth.instance);
 
   @override
   Widget build(BuildContext context) {
