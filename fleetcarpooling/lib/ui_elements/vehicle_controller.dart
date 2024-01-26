@@ -29,7 +29,7 @@ class _VehicleControllerState extends State<VehicleController> {
       bottom: 10.0,
       left: 10.0,
       child: StreamBuilder<bool>(
-        stream: getLockStateStream("556XYZ789LMN123OP"),
+        stream: getLockStateStream(widget.selectedMarkerId.value),
         builder: (context, snapshot) {
           bool isLocked = snapshot.data ?? false;
           return ClipRRect(

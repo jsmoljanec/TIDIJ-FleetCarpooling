@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:core/event/vehicle_event.dart';
 import 'package:core/vehicle.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:fleetcarpooling/Models/vehicle_location_model.dart';
+import 'package:fleetcarpooling/services/vehicle_location_service.dart';
 
 abstract class VehicleRepository {
   Future<void> addVehicle(AddVehicleEvent event);
@@ -32,6 +34,17 @@ class VehicleService implements VehicleRepository {
         token: {"1": "1"});
 
     newCarRef.set(vehicle.toMap());
+
+     VehicleLocation newVehicleLocation = VehicleLocation(
+        vin: event.vehicle.vin,
+        model: event.vehicle.model,
+        brand: event.vehicle.brand,
+        latitude: event.vehicle.latitude,
+        longitude: event.vehicle.longitude,
+        locked: event.vehicle.locked);
+
+    final VehicleLocationService service = VehicleLocationService();
+    service.initializeVehicleLocation(newVehicleLocation);
   }
 }
 
@@ -144,6 +157,9 @@ Future<void> deleteCar(String vin) async {
   DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles/${vin}");
 
   await ref.remove();
+
+  final VehicleLocationService service = VehicleLocationService();
+  service.deleteVehicleLocationRecord(vin);
 }
 
 Future<void> deleteCarVehicleLocations(String vin) async {
@@ -155,7 +171,7 @@ Future<void> deleteCarVehicleLocations(String vin) async {
 
 Stream<bool> getLockStateStream(String vinCar) {
   DatabaseReference ref =
-      FirebaseDatabase.instance.ref("Vehicles/$vinCar/locked");
+      FirebaseDatabase.instance.ref("VehicleLocations/$vinCar/locked");
   final StreamController<bool> controller = StreamController<bool>();
 
   ref.onValue.listen((DatabaseEvent event) {

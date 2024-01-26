@@ -1,7 +1,7 @@
 import 'package:fleetcarpooling/pages/reservation_form.dart';
 import 'package:flutter/material.dart';
 import 'package:core/ui_elements/colors';
-import 'package:fleetcarpooling/pages/map.dart';
+import 'package:fleetcarpooling/pages/map_functionality/map.dart';
 import 'package:fleetcarpooling/pages/my_reservations.dart';
 import 'package:fleetcarpooling/pages/notification_page.dart';
 import 'package:fleetcarpooling/pages/home_page.dart';

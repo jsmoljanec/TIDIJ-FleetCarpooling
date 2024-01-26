@@ -2,28 +2,23 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
 class CustomToast {
-  void showStatusToast(String message, String flagContent, String vehicleIdContent,
-      String selectedMarkerId) {
+  void showStatusToast(String message, String flagContent, String vehicleIdContent) {
     if (_shouldSkipToast(flagContent)) {
       return;
     }
 
-    if (_shouldShowToast(vehicleIdContent, selectedMarkerId)) {
-      String cleanedMessage = _cleanMessage(message);
-      showFlutterToast(cleanedMessage);
-    }
+    String cleanedMessage = _cleanMessage(message, vehicleIdContent);
+    showFlutterToast(cleanedMessage);
   }
 
   bool _shouldSkipToast(String flagContent) {
     return flagContent == "0000" || flagContent == "1001" || flagContent == "1010";
   }
 
-  bool _shouldShowToast(String vehicleIdContent, String selectedMarkerId) {
-    return vehicleIdContent == selectedMarkerId;
-  }
+  String _cleanMessage(String message, String vehicleIdContent) {
+    String removedFlagContent = message.replaceFirst(RegExp(r'\[.*?\]'), '').trim();
+    return removedFlagContent.replaceFirst(RegExp(r'\[.*?\]'), vehicleIdContent).trim();
 
-  String _cleanMessage(String message) {
-    return message.replaceFirst(RegExp(r'\[.*?\]'), '').trim();
   }
 
   void showFlutterToast(String cleanedMessage) {

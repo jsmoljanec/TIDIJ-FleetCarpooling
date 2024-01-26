@@ -1,9 +1,10 @@
-import 'package:core/vehicle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fleetcarpooling/Models/vehicle_location_model.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
-import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
-import 'package:fleetcarpooling/handlers/udp_manager.dart';
+import 'package:fleetcarpooling/pages/map_functionality/udp_manager.dart';
 import 'package:core/ui_elements/custom_toast.dart';
+import 'package:fleetcarpooling/pages/map_functionality/udp_message_handler.dart';
+import 'package:fleetcarpooling/services/vehicle_location_service.dart';
 import 'package:fleetcarpooling/ui_elements/vehicle_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,23 +19,20 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   late GoogleMapController mapController;
-  final LatLng _center = const LatLng(46.303117, 16.324079);
-  late String actionMessage = 'Waiting for action...';
+  final LatLng center = const LatLng(46.3904261, 16.4471181);
 
   Set<Marker> markers = {};
   bool showController = false;
   late MarkerId selectedMarkerId;
 
-  static const port = 50001;
   late UDPManager udpManager;
   late BitmapDescriptor icon;
 
-  late String flagContent;
-  late String vehicleIdContent;
   bool refreshUI = false;
   Future<bool>? reservationCheckFuture;
 
   User? user = FirebaseAuth.instance.currentUser;
+  late UDPMessageHandler udpMessageHandler = UDPMessageHandler();
 
   @override
   void initState() {
@@ -46,24 +44,9 @@ class _MapPageState extends State<MapPage> {
 
   void initializeUDP() {
     String finalIpAddress = dotenv.env['DEVICE_IP_ADRESS']!;
-    udpManager =
-        UDPManager(finalIpAddress, port, udpMessageHandler: handleUDPMessage);
+    int port = int.parse(dotenv.env['DEVICE_PORT']!);
+    udpManager = UDPManager(finalIpAddress, port);
     udpManager.connectUDP();
-  }
-
-  void handleUDPMessage(String message) {
-    RegExp bracketsRegExp = RegExp(r'\[([^\]]*)\]');
-    Iterable<RegExpMatch> matches = bracketsRegExp.allMatches(message);
-
-    if (matches.isNotEmpty) {
-      flagContent = matches.elementAt(0).group(1) ?? '';
-      vehicleIdContent =
-          matches.length > 1 ? matches.elementAt(1).group(1) ?? '' : '';
-      CustomToast().showStatusToast(
-          message, flagContent, vehicleIdContent, selectedMarkerId.value);
-    } else {
-      print('Uglate zagrade nisu pronađene u tekstu.');
-    }
   }
 
   @override
@@ -75,7 +58,7 @@ class _MapPageState extends State<MapPage> {
             child: GoogleMap(
               onMapCreated: onMapCreated,
               initialCameraPosition: CameraPosition(
-                target: _center,
+                target: center,
                 zoom: 12.0,
               ),
               onTap: (_) {
@@ -128,16 +111,16 @@ class _MapPageState extends State<MapPage> {
     mapController = controller;
   }
 
-  Marker createVehicleMarker(Vehicle vehicle) {
+  Marker createVehicleMarker(VehicleLocation vehicleLocation) {
     return Marker(
       icon: icon,
-      markerId: MarkerId(vehicle.vin),
-      position: LatLng(vehicle.latitude, vehicle.longitude),
-      infoWindow: InfoWindow(title: "${vehicle.brand} ${vehicle.model}"),
+      markerId: MarkerId(vehicleLocation.vin),
+      position: LatLng(vehicleLocation.latitude, vehicleLocation.longitude),
+      infoWindow: InfoWindow(title: "${vehicleLocation.brand} ${vehicleLocation.model}"),
       onTap: () async {
         setState(() {
           reservationCheckFuture = ReservationService()
-              .checkReservation("${user!.email}", vehicle.vin);
+              .checkReservation("${user!.email}", vehicleLocation.vin);
         });
 
         bool hasReservation = await reservationCheckFuture!;
@@ -149,7 +132,7 @@ class _MapPageState extends State<MapPage> {
                 "You dont have reservation for this vehicle!");
           } else {
             showController = true;
-            selectedMarkerId = MarkerId(vehicle.vin);
+            selectedMarkerId = MarkerId(vehicleLocation.vin);
           }
         });
       },
@@ -157,22 +140,18 @@ class _MapPageState extends State<MapPage> {
   }
 
   void updateMapWithVehicleMarkers() {
-    getVehicles().listen((vehicles) {
-      final newMarkers = vehicles
-          .where((vehicle) => vehicle.active == true)
+    VehicleLocationService().getVehicleLocations().listen((vehicleLocations) {
+      final newMarkers = vehicleLocations
           .map(createVehicleMarker)
           .toSet();
 
       if (newMarkers.isNotEmpty) {
-        setState(() {
-          markers = newMarkers;
-        });
+        if (mounted) {
+          setState(() {
+            markers = newMarkers;
+          });
+        }
       }
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }
