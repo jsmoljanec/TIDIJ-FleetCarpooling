@@ -7,6 +7,7 @@ import 'package:fleetcarpooling/pages/selected_vehicle_page.dart';
 import 'package:fleetcarpooling/pages/reservation_form.dart';
 import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
+import 'package:fleetcarpooling/utils/datetime_utils.dart';
 
 class HomePage extends StatefulWidget {
   final DateTime pickupTime;
@@ -28,27 +29,6 @@ class _HomePageState extends State<HomePage> {
   late Stream<List<Vehicle>> _vehiclesStream;
   String vinCar = "";
   bool isEqual = false;
-
-  String getShortWeekday(DateTime dateTime) {
-    switch (dateTime.weekday) {
-      case DateTime.monday:
-        return 'Mon';
-      case DateTime.tuesday:
-        return 'Tue';
-      case DateTime.wednesday:
-        return 'Wed';
-      case DateTime.thursday:
-        return 'Thu';
-      case DateTime.friday:
-        return 'Fri';
-      case DateTime.saturday:
-        return 'Sat';
-      case DateTime.sunday:
-        return 'Sun';
-      default:
-        return '';
-    }
-  }
 
   void _handleSearch(String input) {
     setState(() {
@@ -87,6 +67,8 @@ class _HomePageState extends State<HomePage> {
 
     String returnDateTime =
         '${widget.returnTime.year}-${widget.returnTime.month.toString().padLeft(2, '0')}-${widget.returnTime.day.toString().padLeft(2, '0')} ${widget.returnTime.hour.toString().padLeft(2, '0')}:${widget.returnTime.minute}${widget.returnTime.second}';
+
+    DateTimeUtils dateTimeUtils = DateTimeUtils();
 
     return Scaffold(
         body: Padding(
@@ -167,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                                         child: Column(
                                           children: [
                                             Text(
-                                              "${getShortWeekday(widget.pickupTime)}, ${widget.pickupTime.day}.${widget.pickupTime.month}",
+                                              "${dateTimeUtils.getShortWeekday(widget.pickupTime)}, ${widget.pickupTime.day}.${widget.pickupTime.month}",
                                               style: const TextStyle(
                                                 color: AppColors.mainTextColor,
                                                 fontSize: 24,
@@ -204,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                                         child: Column(
                                           children: [
                                             Text(
-                                              "${getShortWeekday(widget.returnTime)}, ${widget.returnTime.day}.${widget.returnTime.month}",
+                                              "${dateTimeUtils.getShortWeekday(widget.returnTime)}, ${widget.returnTime.day}.${widget.returnTime.month}",
                                               style: const TextStyle(
                                                 color: AppColors.mainTextColor,
                                                 fontSize: 24,
