@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:intl/intl.dart';
 
 class AuthNotifyMe {
@@ -51,7 +52,7 @@ class AuthNotifyMe {
   }
 
   Future<void> checkReservationDeletion(
-    String VinCar,
+    String vinCar,
     String reservationDateStart,
     String reservationDateEnd,
     String reservationTimeStart,
@@ -68,22 +69,28 @@ class AuthNotifyMe {
         for (var entry in data.entries) {
           print("Checking entry: $entry");
 
-          String notifyMeStart = entry.value['pickupDate'];
-          String notifyMeEnd = entry.value['returnDate'];
+          String notifyMeStart = _formatDate(entry.value['pickupDate']);
+          String notifyMeEnd = _formatDate(entry.value['returnDate']);
+          String notifyMeTimeStart = entry.value['pickupTime'];
+          String notifyMeTimeEnd = entry.value['returnTime'];
 
-          print("vinCar: $VinCar");
+          print("vinCar: $vinCar");
           print("reservationDateStart: $reservationDateStart");
           print("reservationDateEnd: $reservationDateEnd");
           print("notifyMeStart: $notifyMeStart");
           print("notifyMeEnd: $notifyMeEnd");
 
-          if (entry.value['VinCar'] == VinCar &&
-              timeRangesOverlap(
-                reservationDateStart,
-                reservationDateEnd,
-                notifyMeStart,
-                notifyMeEnd,
-              )) {
+          if (entry.value['VinCar'] == vinCar &&
+              await timeRangesOverlap(
+                  reservationDateStart,
+                  reservationDateEnd,
+                  notifyMeStart,
+                  notifyMeEnd,
+                  reservationTimeStart,
+                  reservationTimeEnd,
+                  notifyMeTimeStart,
+                  notifyMeTimeEnd,
+                  vinCar)) {
             print("Condition satisfied for entry: $entry");
             await transferDataToNotificationTable(entry.value);
             await _database.child("NotifyMe").child(entry.key).remove();
@@ -98,28 +105,68 @@ class AuthNotifyMe {
     }
   }
 
-  bool timeRangesOverlap(
-    String reservationDateStart,
-    String reservationDateEnd,
-    String notifyMeStart,
-    String notifyMeEnd,
-  ) {
-    try {
-      DateTime range1StartTime = DateTime.parse(reservationDateStart);
-      DateTime range1EndTime = DateTime.parse(reservationDateEnd);
-      DateTime range2StartTime = DateTime.parse(notifyMeStart);
-      DateTime range2EndTime = DateTime.parse(notifyMeEnd);
+  Future<bool> timeRangesOverlap(
+  String reservationDateStart,
+  String reservationDateEnd,
+  String notifyMeStart,
+  String notifyMeEnd,
+  String reservationTimeStart,
+  String reservationTimeEnd,
+  String notifyMeTimeStart,
+  String notifyMeTimeEnd,
+  String vinCar,
+) async {
+  try {
+    print("Reservation Date Start: $reservationDateStart");
+    print("Reservation Date End: $reservationDateEnd");
+    print("NotifyMe Date Start: $notifyMeStart");
+    print("NotifyMe Date End: $notifyMeEnd");
+    print("Reservation Time Start: $reservationTimeStart");
+    print("Reservation Time End: $reservationTimeEnd");
+    print("NotifyMe Time Start: $notifyMeTimeStart");
+    print("NotifyMe Time End: $notifyMeTimeEnd");
 
-      return (range1EndTime.isAfter(range2StartTime) ||
-              range1EndTime.isAtSameMomentAs(range2StartTime)) &&
-          (range1StartTime.isBefore(range2EndTime) &&
-              !range2EndTime.isAtSameMomentAs(range1EndTime) &&
-              !range2EndTime.isAfter(range1EndTime));
-    } catch (e) {
-      print("Error parsing date: $e");
-      return false;
+    DateTime range1StartDate = DateTime.parse(reservationDateStart);
+    DateTime range1EndDate = DateTime.parse(reservationDateEnd);
+    DateTime range2StartDate = DateTime.parse(notifyMeStart);
+    DateTime range2EndDate = DateTime.parse(notifyMeEnd);
+    DateTime range1EndTime = DateFormat('HH:mm').parse(reservationTimeEnd);
+    DateTime range2EndTime = DateFormat('HH:mm').parse(notifyMeTimeEnd);
+
+    ReservationService reservationService = ReservationService();
+    bool? noReservation;
+
+    print("Before checkReservationOverlap");
+    noReservation = await reservationService.checkReservationOverlap(
+      vinCar,
+      notifyMeEnd,
+      notifyMeTimeEnd,
+    );
+    print("After checkReservationOverlap");
+
+    if ((range2StartDate.isAfter(range1StartDate) ||
+            range2StartDate.isAtSameMomentAs(range1StartDate)) &&
+        range1EndDate.isBefore(range2StartDate)) {
+      if (range2EndDate.isAfter(range1EndDate)) {
+        print("Condition 1");
+      } else if (range2EndDate.isAtSameMomentAs(range1EndDate)) {
+        if (range1EndTime.isAfter(range2EndTime) ||
+            range1EndTime.isAtSameMomentAs(range2EndTime)) {
+          print("Condition 2");
+        } else if (range1EndTime.isBefore(range2EndTime)) {
+          print("Condition 3");
+        }
+      }
     }
+
+    print("Returning result: $noReservation");
+    return noReservation;
+  } catch (e) {
+    print("Error in timeRangesOverlap: $e");
+    return false;
   }
+}
+
 
   Future<void> transferDataToNotificationTable(
       Map<dynamic, dynamic> data) async {
@@ -156,7 +203,8 @@ class AuthNotifyMe {
 
   String _formatTime(String time) {
     try {
-      DateTime parsedTime = DateFormat('HH:mm').parse(time);
+      String formattedTime = time.padLeft(5, '0');
+      DateTime parsedTime = DateFormat('HH:mm').parse(formattedTime);
       return DateFormat('HH:mm').format(parsedTime);
     } catch (e) {
       print("Error formatting time: $e");

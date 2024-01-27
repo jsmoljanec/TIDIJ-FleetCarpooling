@@ -8,6 +8,7 @@ import 'package:fleetcarpooling/auth/send_email.dart';
 import 'package:fleetcarpooling/Models/terms_model.dart';
 import 'package:fleetcarpooling/auth/user_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 abstract class ReservationRepository {
   Stream<List<Terms>> getReservationStream(String vinCar);
@@ -126,7 +127,7 @@ class ReservationService implements ReservationRepository {
       print('Reservation added successfully!');
     } catch (error) {
       print("Error adding reservation: $error");
-      throw error;
+      rethrow;
     }
   }
 
@@ -340,6 +341,14 @@ class ReservationService implements ReservationRepository {
             reservationData['returnDate'],
             reservationData['pickupTime'],
             reservationData['returnTime']);
+
+        AuthNotification notifications = AuthNotification();
+        await notifications.deleteNotifications(
+            reservationData['VinCar'],
+            reservationData['returnDate'],
+            reservationData['returnTime'],
+            reservationData['pickupDate'],
+            reservationData['pickupTime']);
       }
 
       await ref.remove();
@@ -455,5 +464,68 @@ class ReservationService implements ReservationRepository {
     });
 
     return controller.stream;
+  }
+
+  Future<bool> checkReservationOverlap(
+      String vinCar, String notifyMeEnd, String notifyMeTimeEnd) async {
+    final DatabaseReference databaseReference =
+        FirebaseDatabase.instance.ref("Reservation");
+
+    try {
+      DatabaseEvent snapshot =
+          await databaseReference.orderByChild('VinCar').equalTo(vinCar).once();
+
+      if (snapshot.snapshot.value != null) {
+        Map<dynamic, dynamic>? reservations =
+            snapshot.snapshot.value as Map<dynamic, dynamic>?;
+
+        for (var entry in reservations!.entries) {
+          var value = entry.value;
+
+          if (value['pickupDate'] != null && value['pickupTime'] != null) {
+            String pickupDate = value['pickupDate'];
+            String pickupTime = value['pickupTime'];
+
+            print("NotifyMe Time End: $notifyMeTimeEnd");
+            print("Pickup Time: $pickupTime");
+
+            pickupTime = DateFormat('HH:mm')
+                .format(DateFormat('HH:mm').parse(pickupTime));
+
+            print("Formatted Pickup Time: $pickupTime");
+
+            if (pickupDate == notifyMeEnd) {
+              DateTime notifyMeTime =
+                  DateFormat('HH:mm').parse(notifyMeTimeEnd);
+              DateTime pickuptime = DateFormat('HH:mm').parse(pickupTime);
+
+              print(
+                  "NotifyMe Time: ${DateFormat('HH:mm').format(notifyMeTime)}, "
+                  "Pickup Time: ${DateFormat('HH:mm').format(pickuptime)}");
+
+              if ((pickuptime.isAtSameMomentAs(notifyMeTime) ||
+                  pickuptime.isBefore(notifyMeTime))) {
+                print("Overlap detected, returning false");
+                return false;
+              }
+              if (!(pickuptime.isAfter(notifyMeTime) ||
+                  notifyMeTime
+                      .isAfter(pickuptime.add(const Duration(hours: 1))))) {
+                print("Overlap detected, returning true");
+                return true;
+              }
+            }
+          }
+        }
+        print("No overlap detected, returning true");
+        return true;
+      }
+    } catch (e) {
+      print("Error checking reservation overlap: $e");
+      return false;
+    }
+
+    print("No matching reservation found, returning false");
+    return false;
   }
 }
