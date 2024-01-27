@@ -48,8 +48,8 @@ class VehicleService implements VehicleRepository {
   }
 }
 
-Stream<List<Vehicle>> getVehicles() {
-  DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles");
+Stream<List<Vehicle>> getVehicles(FirebaseDatabase firebaseDatabaseVehicle) {
+  DatabaseReference ref = firebaseDatabaseVehicle.ref("Vehicles");
   final StreamController<List<Vehicle>> controller =
       StreamController<List<Vehicle>>();
   ref.onValue.listen((DatabaseEvent event) {
@@ -78,7 +78,6 @@ Stream<List<Vehicle>> getVehicles() {
 
     controller.add(allVehicles);
   });
-
   return controller.stream;
 }
 
