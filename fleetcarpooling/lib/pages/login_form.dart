@@ -1,4 +1,6 @@
 import 'package:core/ui_elements/buttons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/pages/admin_home_page.dart';
 import 'package:fleetcarpooling/pages/reset_password_form.dart';
@@ -98,7 +100,9 @@ class _LoginFormState extends State<LoginForm> {
                       isLoading = true;
                     });
 
-                    logged = await AuthLogin().login(
+                    logged = await AuthLogin(
+                            FirebaseDatabase.instance, FirebaseAuth.instance)
+                        .login(
                       email: emailController.text,
                       password: passwordController.text,
                     );
@@ -108,7 +112,9 @@ class _LoginFormState extends State<LoginForm> {
                     });
 
                     if (logged == true) {
-                      adminIsLogged = await AuthLogin().isAdmin();
+                      adminIsLogged = await AuthLogin(
+                              FirebaseDatabase.instance, FirebaseAuth.instance)
+                          .isAdmin();
                       if (adminIsLogged == true) {
                         Navigator.pushReplacement(
                           context,

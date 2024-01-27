@@ -1,4 +1,5 @@
 import 'package:core/vehicle.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
@@ -23,7 +24,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final notification = NotificationsService();
+  final notification = NotificationsService(FirebaseDatabase.instance);
   final TextEditingController _searchController = TextEditingController();
   late Stream<List<Vehicle>> _vehiclesStream;
   String vinCar = "";
