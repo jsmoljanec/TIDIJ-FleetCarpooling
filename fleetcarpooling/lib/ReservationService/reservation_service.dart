@@ -486,46 +486,31 @@ class ReservationService implements ReservationRepository {
             String pickupDate = value['pickupDate'];
             String pickupTime = value['pickupTime'];
 
-            print("NotifyMe Time End: $notifyMeTimeEnd");
-            print("Pickup Time: $pickupTime");
-
             pickupTime = DateFormat('HH:mm')
                 .format(DateFormat('HH:mm').parse(pickupTime));
-
-            print("Formatted Pickup Time: $pickupTime");
 
             if (pickupDate == notifyMeEnd) {
               DateTime notifyMeTime =
                   DateFormat('HH:mm').parse(notifyMeTimeEnd);
               DateTime pickuptime = DateFormat('HH:mm').parse(pickupTime);
 
-              print(
-                  "NotifyMe Time: ${DateFormat('HH:mm').format(notifyMeTime)}, "
-                  "Pickup Time: ${DateFormat('HH:mm').format(pickuptime)}");
-
               if ((pickuptime.isAtSameMomentAs(notifyMeTime) ||
                   pickuptime.isBefore(notifyMeTime))) {
-                print("Overlap detected, returning false");
                 return false;
               }
               if (!(pickuptime.isAfter(notifyMeTime) ||
                   notifyMeTime
                       .isAfter(pickuptime.add(const Duration(hours: 1))))) {
-                print("Overlap detected, returning true");
                 return true;
               }
             }
           }
         }
-        print("No overlap detected, returning true");
         return true;
       }
     } catch (e) {
-      print("Error checking reservation overlap: $e");
       return false;
     }
-
-    print("No matching reservation found, returning false");
     return false;
   }
 }

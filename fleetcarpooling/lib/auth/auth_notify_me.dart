@@ -14,12 +14,8 @@ class AuthNotifyMe {
   Stream<List<Map<String, dynamic>>> get notifyMeNotificationStream =>
       _notifyMeNotificationStreamController.stream;
 
-  AuthNotifyMe() {
-    //_subscribeToNotifyMeNotificationChanges();
-  }
-
   Future<void> saveNotifyMeData(
-    String VinCar,
+    String vinCar,
     String pickupDate,
     String pickupTime,
     String returnDate,
@@ -29,10 +25,9 @@ class AuthNotifyMe {
       User? user = _auth.currentUser;
       if (user != null) {
         String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-        print("");
 
         Map<String, dynamic> notifyMeData = {
-          'VinCar': VinCar,
+          'VinCar': vinCar,
           'email': user.email,
           'pickupDate': _formatDate(pickupDate),
           'pickupTime': _formatTime(pickupTime),
@@ -58,27 +53,18 @@ class AuthNotifyMe {
     String reservationTimeStart,
     String reservationTimeEnd,
   ) async {
-    print("checkReservationDeletion called!");
     try {
       DataSnapshot snapshot =
           (await _database.child("NotifyMe").once()).snapshot;
       Map<dynamic, dynamic>? data = snapshot.value as Map<dynamic, dynamic>?;
 
       if (data != null) {
-        print("Data is not null");
         for (var entry in data.entries) {
-          print("Checking entry: $entry");
 
           String notifyMeStart = _formatDate(entry.value['pickupDate']);
           String notifyMeEnd = _formatDate(entry.value['returnDate']);
           String notifyMeTimeStart = entry.value['pickupTime'];
           String notifyMeTimeEnd = entry.value['returnTime'];
-
-          print("vinCar: $vinCar");
-          print("reservationDateStart: $reservationDateStart");
-          print("reservationDateEnd: $reservationDateEnd");
-          print("notifyMeStart: $notifyMeStart");
-          print("notifyMeEnd: $notifyMeEnd");
 
           if (entry.value['VinCar'] == vinCar &&
               await timeRangesOverlap(
@@ -91,16 +77,13 @@ class AuthNotifyMe {
                   notifyMeTimeStart,
                   notifyMeTimeEnd,
                   vinCar)) {
-            print("Condition satisfied for entry: $entry");
             await transferDataToNotificationTable(entry.value);
             await _database.child("NotifyMe").child(entry.key).remove();
           } else {
-            print("Condition not satisfied for entry: $entry");
           }
         }
       }
     } catch (e) {
-      print("Error in checkReservationDeletion: $e");
       throw Exception("Error checking and notifying reservation deletion");
     }
   }
@@ -117,52 +100,16 @@ class AuthNotifyMe {
   String vinCar,
 ) async {
   try {
-    print("Reservation Date Start: $reservationDateStart");
-    print("Reservation Date End: $reservationDateEnd");
-    print("NotifyMe Date Start: $notifyMeStart");
-    print("NotifyMe Date End: $notifyMeEnd");
-    print("Reservation Time Start: $reservationTimeStart");
-    print("Reservation Time End: $reservationTimeEnd");
-    print("NotifyMe Time Start: $notifyMeTimeStart");
-    print("NotifyMe Time End: $notifyMeTimeEnd");
-
-    DateTime range1StartDate = DateTime.parse(reservationDateStart);
-    DateTime range1EndDate = DateTime.parse(reservationDateEnd);
-    DateTime range2StartDate = DateTime.parse(notifyMeStart);
-    DateTime range2EndDate = DateTime.parse(notifyMeEnd);
-    DateTime range1EndTime = DateFormat('HH:mm').parse(reservationTimeEnd);
-    DateTime range2EndTime = DateFormat('HH:mm').parse(notifyMeTimeEnd);
-
     ReservationService reservationService = ReservationService();
     bool? noReservation;
 
-    print("Before checkReservationOverlap");
     noReservation = await reservationService.checkReservationOverlap(
       vinCar,
       notifyMeEnd,
       notifyMeTimeEnd,
     );
-    print("After checkReservationOverlap");
-
-    if ((range2StartDate.isAfter(range1StartDate) ||
-            range2StartDate.isAtSameMomentAs(range1StartDate)) &&
-        range1EndDate.isBefore(range2StartDate)) {
-      if (range2EndDate.isAfter(range1EndDate)) {
-        print("Condition 1");
-      } else if (range2EndDate.isAtSameMomentAs(range1EndDate)) {
-        if (range1EndTime.isAfter(range2EndTime) ||
-            range1EndTime.isAtSameMomentAs(range2EndTime)) {
-          print("Condition 2");
-        } else if (range1EndTime.isBefore(range2EndTime)) {
-          print("Condition 3");
-        }
-      }
-    }
-
-    print("Returning result: $noReservation");
     return noReservation;
   } catch (e) {
-    print("Error in timeRangesOverlap: $e");
     return false;
   }
 }
@@ -171,7 +118,6 @@ class AuthNotifyMe {
   Future<void> transferDataToNotificationTable(
       Map<dynamic, dynamic> data) async {
     try {
-      print("Transferring data to NotifyMeNotification table: $data");
       DatabaseReference notifyMeNotificationRef =
           _database.child("Notifications");
 
@@ -189,9 +135,7 @@ class AuthNotifyMe {
       };
 
       await notifyMeNotificationRef.child(uniqueName).set(notificationData);
-      print("Data successfully transferred to NotifyMeNotification table.");
     } catch (e) {
-      print("Error transferring data to NotifyMeNotification table: $e");
       throw Exception("Error transferring data to NotifyMeNotification table");
     }
   }
@@ -207,7 +151,6 @@ class AuthNotifyMe {
       DateTime parsedTime = DateFormat('HH:mm').parse(formattedTime);
       return DateFormat('HH:mm').format(parsedTime);
     } catch (e) {
-      print("Error formatting time: $e");
       return time;
     }
   }
