@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/ui_elements/buttons.dart';
 import 'package:core/ui_elements/colors';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/auth/user_model.dart' as usermod;
@@ -30,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
     statusActivity: '',
   );
   final UserRepository userRepository = UserRepository();
-  final notificationService = NotificationsService();
+  final notificationService = NotificationsService(FirebaseDatabase.instance);
   bool isLoading = false;
 
   @override
@@ -261,8 +262,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: () {
                       FirebaseAuth.instance.signOut();
                       notificationService.deleteToken();
-                      AuthLogin().updateOnlineStatus(
-                          FirebaseAuth.instance.currentUser?.uid, "offline");
+                      AuthLogin(
+                              FirebaseDatabase.instance, FirebaseAuth.instance)
+                          .updateOnlineStatus(
+                              FirebaseAuth.instance.currentUser?.uid,
+                              "offline");
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => LoginForm()),

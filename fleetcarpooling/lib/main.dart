@@ -1,6 +1,7 @@
 import 'package:core/ui_elements/colors';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
 import 'package:fleetcarpooling/pages/admin_home_page.dart';
@@ -39,7 +40,7 @@ Future<void> main() async {
   await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(_backgroundMessageHandler);
   await dotenv.load(fileName: ".env");
-  AuthLogin()
+  AuthLogin(FirebaseDatabase.instance, FirebaseAuth.instance)
       .updateOnlineStatus(FirebaseAuth.instance.currentUser?.uid, "online");
   User? user = FirebaseAuth.instance.currentUser;
   Widget initialScreen = user != null
@@ -73,7 +74,8 @@ class AppWrapper extends StatefulWidget {
 
 class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
   late final TextEditingController myController;
-  final AuthLogin _authLogin = AuthLogin();
+  final AuthLogin _authLogin =
+      AuthLogin(FirebaseDatabase.instance, FirebaseAuth.instance);
 
   @override
   void initState() {
@@ -88,16 +90,18 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
 
     switch (state) {
       case AppLifecycleState.resumed:
-        AuthLogin().updateOnlineStatus(
-            FirebaseAuth.instance.currentUser?.uid, "online");
+        AuthLogin(FirebaseDatabase.instance, FirebaseAuth.instance)
+            .updateOnlineStatus(
+                FirebaseAuth.instance.currentUser?.uid, "online");
         break;
 
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
       case AppLifecycleState.hidden:
-        AuthLogin().updateOnlineStatus(
-            FirebaseAuth.instance.currentUser?.uid, "offline");
+        AuthLogin(FirebaseDatabase.instance, FirebaseAuth.instance)
+            .updateOnlineStatus(
+                FirebaseAuth.instance.currentUser?.uid, "offline");
         break;
     }
   }

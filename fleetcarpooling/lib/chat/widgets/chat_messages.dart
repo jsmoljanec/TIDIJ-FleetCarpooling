@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/chat/models/message.dart';
 import 'package:fleetcarpooling/chat/provider/firebase_provider.dart';
 import 'package:fleetcarpooling/chat/widgets/empty_widget.dart';
@@ -13,7 +15,8 @@ class ChatMessages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final firebaseProvider = FirebaseProvider();
+    final firebaseProvider =
+        FirebaseProvider(FirebaseFirestore.instance, FirebaseDatabase.instance);
     return StreamBuilder<List<Message>>(
       stream: firebaseProvider.getMessages(receiverId),
       builder: (context, snapshot) {

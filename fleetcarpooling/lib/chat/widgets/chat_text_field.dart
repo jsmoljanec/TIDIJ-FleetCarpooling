@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/chat/service/firebase_firestore_service.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:fleetcarpooling/chat/widgets/custom_text_form_field.dart';
@@ -17,7 +19,7 @@ class ChatTextField extends StatefulWidget {
 
 class _ChatTextFieldState extends State<ChatTextField> {
   final controller = TextEditingController();
-  final notification = NotificationsService();
+  final notification = NotificationsService(FirebaseDatabase.instance);
   Uint8List? file;
   @override
   void dispose() {
@@ -62,7 +64,9 @@ class _ChatTextFieldState extends State<ChatTextField> {
     if (controller.text.isNotEmpty) {
       String tekst = controller.text;
       controller.clear();
-      await FirebaseFirestoreService.addTextMessage(
+      await FirebaseFirestoreService(
+              FirebaseFirestore.instance, FirebaseAuth.instance, notification)
+          .addTextMessage(
         receiverId: widget.receiverId,
         content: tekst,
       );
@@ -79,7 +83,9 @@ class _ChatTextFieldState extends State<ChatTextField> {
     XFile? file =
         await imagePickerGallery.pickImage(source: ImageSource.gallery);
     if (file != null) {
-      await FirebaseFirestoreService.addImageMessage(
+      await FirebaseFirestoreService(
+              FirebaseFirestore.instance, FirebaseAuth.instance, notification)
+          .addImageMessage(
         receiverId: widget.receiverId,
         file: file,
       );

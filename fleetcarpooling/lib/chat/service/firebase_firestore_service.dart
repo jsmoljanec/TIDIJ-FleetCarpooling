@@ -8,9 +8,12 @@ import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FirebaseFirestoreService {
-  static final firestore = FirebaseFirestore.instance;
-  static final notificationService = NotificationsService();
-  static Future<void> addTextMessage({
+  FirebaseFirestoreService(
+      this.firestore, this.auth, this.notificationsService);
+  FirebaseFirestore firestore;
+  FirebaseAuth auth;
+  final NotificationsService notificationsService;
+  Future<void> addTextMessage({
     required String content,
     required String receiverId,
   }) async {
@@ -19,12 +22,12 @@ class FirebaseFirestoreService {
       sentTime: DateTime.now(),
       receiverId: receiverId,
       messageType: MessageType.text,
-      senderId: FirebaseAuth.instance.currentUser!.uid,
+      senderId: auth.currentUser!.uid,
     );
-    await _addMessageToChat(receiverId, message);
+    await addMessageToChat(receiverId, message);
   }
 
-  static Future<void> _addMessageToChat(
+  Future<void> addMessageToChat(
     String receiverId,
     Message message,
   ) async {
@@ -33,10 +36,10 @@ class FirebaseFirestoreService {
         .doc(receiverId)
         .collection('message')
         .add(message.toJson());
-    notificationService.getToken(receiverId);
+    notificationsService.getToken(receiverId);
   }
 
-  static Future<void> addImageMessage({
+  Future<void> addImageMessage({
     required String receiverId,
     required XFile file,
   }) async {
@@ -51,10 +54,10 @@ class FirebaseFirestoreService {
       messageType: MessageType.image,
       senderId: FirebaseAuth.instance.currentUser!.uid,
     );
-    await _addMessageToChat(receiverId, message);
+    await addMessageToChat(receiverId, message);
   }
 
-  static Future<String> addStorage(XFile file) async {
+  Future<String> addStorage(XFile file) async {
     String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
     Reference referenceRoot = FirebaseStorage.instance.ref();
     Reference referenceDirImages =

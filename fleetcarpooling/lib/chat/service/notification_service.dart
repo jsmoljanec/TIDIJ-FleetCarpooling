@@ -19,11 +19,13 @@ const channel = AndroidNotificationChannel(
 );
 
 class NotificationsService {
+  NotificationsService(this.database);
+  FirebaseDatabase database;
   static const key =
       'AAAA3qcR1dM:APA91bHXwf9Efc-9arDjVLTUnC6tIf7Ultk_uCkc6WVahtKx8xe-dEdcnICRPjoGBDNIlXrOM6TZ74wrus7bcLugZ-M3_-ttOu7iSD6FHGU6RT3GXYpDNbKpkrNo47wnbCG0X_w8WYJq';
   final navigatorKey = GlobalKey<NavigatorState>();
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  final DatabaseReference _database = FirebaseDatabase.instance.ref();
+
   void _initLocalNotification() {
     const androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -88,12 +90,12 @@ class NotificationsService {
 
   Future<void> getToken(String receiverId) async {
     final token = await FirebaseMessaging.instance.getToken();
-    _saveToken(token!, receiverId);
+    saveToken(token!, receiverId);
   }
 
-  Future<void> _saveToken(String token, String receiverId) async {
+  Future<void> saveToken(String token, String receiverId) async {
     DatabaseReference vehicleRef =
-        _database.child("Vehicles").child(receiverId).child("token");
+        database.ref().child("Vehicles").child(receiverId).child("token");
     vehicleRef.update({token: token});
   }
 
@@ -102,11 +104,8 @@ class NotificationsService {
   Future<void> getReceiverToken(String? receiverId) async {
     List<String> token = [];
     print(receiverId);
-    DatabaseReference ref = FirebaseDatabase.instance
-        .ref()
-        .child("Vehicles")
-        .child(receiverId!)
-        .child("token");
+    DatabaseReference ref =
+        database.ref().child("Vehicles").child(receiverId!).child("token");
     DatabaseEvent snapshot = await ref.once();
     Map<dynamic, dynamic>? values =
         snapshot.snapshot.value as Map<dynamic, dynamic>?;
