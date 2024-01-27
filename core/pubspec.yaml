@@ -36,6 +36,8 @@ dependencies:
   manuallyaddition:
     path: ../manuallyaddition
   fluttertoast: ^8.2.4
+  firebase_database: ^10.4.0
+  firebase_database_mocks: ^0.6.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

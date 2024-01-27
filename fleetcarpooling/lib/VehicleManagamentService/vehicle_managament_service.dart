@@ -1,52 +1,7 @@
 import 'dart:async';
-import 'package:core/event/vehicle_event.dart';
 import 'package:core/vehicle.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:fleetcarpooling/Models/vehicle_location_model.dart';
-import 'package:fleetcarpooling/services/vehicle_location_service.dart';
-
-abstract class VehicleRepository {
-  Future<void> addVehicle(AddVehicleEvent event);
-}
-
-class VehicleService implements VehicleRepository {
-  @override
-  Future<void> addVehicle(AddVehicleEvent event) async {
-    final databaseReference = FirebaseDatabase.instance.ref();
-
-    DatabaseReference carsRef = databaseReference.child("Vehicles");
-    DatabaseReference newCarRef = carsRef.child(event.vehicle.vin);
-    Vehicle vehicle = Vehicle(
-        vin: event.vehicle.vin,
-        model: event.vehicle.model,
-        brand: event.vehicle.brand,
-        capacity: event.vehicle.capacity,
-        transType: event.vehicle.transType,
-        fuelConsumption: event.vehicle.fuelConsumption,
-        registration: event.vehicle.registration,
-        year: event.vehicle.year,
-        active: event.vehicle.active,
-        imageUrl: event.vehicle.imageUrl,
-        distanceTraveled: event.vehicle.distanceTraveled,
-        latitude: event.vehicle.latitude,
-        longitude: event.vehicle.longitude,
-        locked: event.vehicle.locked,
-        token: {"1": "1"});
-
-    newCarRef.set(vehicle.toMap());
-
-     VehicleLocation newVehicleLocation = VehicleLocation(
-        vin: event.vehicle.vin,
-        model: event.vehicle.model,
-        brand: event.vehicle.brand,
-        latitude: event.vehicle.latitude,
-        longitude: event.vehicle.longitude,
-        locked: event.vehicle.locked);
-
-    final VehicleLocationService service = VehicleLocationService();
-    service.initializeVehicleLocation(newVehicleLocation);
-  }
-}
+import 'package:core/services/vehicle_location_service.dart';
 
 Stream<List<Vehicle>> getVehicles(FirebaseDatabase firebaseDatabaseVehicle) {
   DatabaseReference ref = firebaseDatabaseVehicle.ref("Vehicles");
@@ -143,8 +98,9 @@ Future<String?> getVehicleModelAndBrand(String vin) async {
   return vehicleModelAndBrand;
 }
 
-Future<void> disableCar(String vin, bool active) async {
-  DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles/${vin}");
+Future<void> disableCar(
+    String vin, bool active, FirebaseDatabase database) async {
+  DatabaseReference ref = database.ref("Vehicles/${vin}");
 
   await ref.update({
     if (active == true) "active": false,
@@ -157,7 +113,8 @@ Future<void> deleteCar(String vin) async {
 
   await ref.remove();
 
-  final VehicleLocationService service = VehicleLocationService();
+  final VehicleLocationService service =
+      VehicleLocationService(FirebaseDatabase.instance);
   service.deleteVehicleLocationRecord(vin);
 }
 

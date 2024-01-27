@@ -85,7 +85,7 @@ Widget buildDialog(
               GestureDetector(
                 onTap: () {
                   if (function == "disable") {
-                    disableCar(vin, active);
+                    disableCar(vin, active, FirebaseDatabase.instance);
                     Navigator.of(context).pop();
 
                     if (active) {
