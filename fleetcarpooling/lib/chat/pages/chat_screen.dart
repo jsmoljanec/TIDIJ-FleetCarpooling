@@ -40,7 +40,10 @@ class _ChatScreenState extends State<ChatScreen> {
           padding: const EdgeInsets.only(left: 8.0),
           child: CircularIconButton(
             onPressed: () {
-              Navigator.pop(context);
+              FocusManager.instance.primaryFocus?.unfocus();
+              Future.delayed(Duration(milliseconds: 50), () {
+                Navigator.pop(context);
+              });
             },
           ),
         ),
