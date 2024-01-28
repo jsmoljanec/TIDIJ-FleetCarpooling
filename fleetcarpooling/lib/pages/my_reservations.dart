@@ -5,6 +5,7 @@ import 'package:fleetcarpooling/Models/reservation_model.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
+import 'package:fleetcarpooling/utils/datetime_utils.dart';
 
 class MyReservationsPage extends StatefulWidget {
   const MyReservationsPage({super.key});
@@ -13,26 +14,6 @@ class MyReservationsPage extends StatefulWidget {
   State<MyReservationsPage> createState() => _MyReservationsPageState();
 }
 
-String getShortWeekday(DateTime dateTime) {
-  switch (dateTime.weekday) {
-    case DateTime.monday:
-      return 'Mon';
-    case DateTime.tuesday:
-      return 'Tue';
-    case DateTime.wednesday:
-      return 'Wed';
-    case DateTime.thursday:
-      return 'Thu';
-    case DateTime.friday:
-      return 'Fri';
-    case DateTime.saturday:
-      return 'Sat';
-    case DateTime.sunday:
-      return 'Sun';
-    default:
-      return '';
-  }
-}
 
 class _MyReservationsPageState extends State<MyReservationsPage> {
   late final ReservationService _service = ReservationService();
@@ -43,6 +24,8 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
   Widget build(BuildContext context) {
     _reservationsStream = _service.getUserReservations(user!.email!);
 
+
+    DateTimeUtils dateTimeUtils = DateTimeUtils();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 25),
@@ -140,7 +123,7 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
                                                 child: Row(
                                                   children: [
                                                     Text(
-                                                      "${getShortWeekday(snapshot.data![index].pickupDate)}, ${snapshot.data![index].pickupDate.day}. ${snapshot.data![index].pickupDate.month}",
+                                                      "${dateTimeUtils.getShortWeekday(snapshot.data![index].pickupDate)}, ${snapshot.data![index].pickupDate.day}. ${snapshot.data![index].pickupDate.month}",
                                                       style: const TextStyle(
                                                         color: AppColors
                                                             .mainTextColor,
@@ -154,7 +137,7 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
                                                       size: 16,
                                                     ),
                                                     Text(
-                                                      "${getShortWeekday(snapshot.data![index].returnDate)}, ${snapshot.data![index].returnDate.day}. ${snapshot.data![index].returnDate.month}",
+                                                      "${dateTimeUtils.getShortWeekday(snapshot.data![index].returnDate)}, ${snapshot.data![index].returnDate.day}. ${snapshot.data![index].returnDate.month}",
                                                       style: const TextStyle(
                                                         color: AppColors
                                                             .mainTextColor,

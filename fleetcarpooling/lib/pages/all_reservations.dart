@@ -7,6 +7,7 @@ import 'package:fleetcarpooling/pages/profile_form.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/Models/reservation_model.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
+import 'package:fleetcarpooling/utils/datetime_utils.dart';
 
 class AllReservations extends StatefulWidget {
   const AllReservations({Key? key}) : super(key: key);
@@ -23,6 +24,8 @@ class _AllReservationsState extends State<AllReservations> {
   Widget build(BuildContext context) {
     _reservationsStream = _service.getAllReservations();
 
+
+    DateTimeUtils dateTimeUtils = DateTimeUtils();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 25),
@@ -175,7 +178,7 @@ class _AllReservationsState extends State<AllReservations> {
                                                 Row(
                                                   children: [
                                                     Text(
-                                                      "${getShortWeekday(snapshot.data![index].pickupDate)}, ${snapshot.data![index].pickupDate.day}. ${snapshot.data![index].pickupDate.month}",
+                                                      "${dateTimeUtils.getShortWeekday(snapshot.data![index].pickupDate)}, ${snapshot.data![index].pickupDate.day}. ${snapshot.data![index].pickupDate.month}",
                                                       style: const TextStyle(
                                                         color: AppColors
                                                             .mainTextColor,
@@ -189,7 +192,7 @@ class _AllReservationsState extends State<AllReservations> {
                                                       size: 16,
                                                     ),
                                                     Text(
-                                                      "${getShortWeekday(snapshot.data![index].returnDate)}, ${snapshot.data![index].returnDate.day}. ${snapshot.data![index].returnDate.month}",
+                                                      "${dateTimeUtils.getShortWeekday(snapshot.data![index].returnDate)}, ${snapshot.data![index].returnDate.day}. ${snapshot.data![index].returnDate.month}",
                                                       style: const TextStyle(
                                                         color: AppColors
                                                             .mainTextColor,

@@ -6,6 +6,7 @@ import 'package:core/ui_elements/colors';
 import 'package:fleetcarpooling/pages/profile_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class DeleteDisableForm extends StatefulWidget {
   List<Vehicle> cars = List.empty();
@@ -22,12 +23,12 @@ class _DeleteDisableForm extends State<DeleteDisableForm> {
   @override
   void initState() {
     super.initState();
-    _vehiclesStream = getVehicles();
+    _vehiclesStream = getVehicles(FirebaseDatabase.instance);
   }
 
   void _handleSearch(String input) {
     setState(() {
-      _vehiclesStream = getVehicles().map((vehicles) => vehicles
+      _vehiclesStream = getVehicles(FirebaseDatabase.instance).map((vehicles) => vehicles
           .where((vehicle) =>
               vehicle.model.toLowerCase().contains(input.toLowerCase()) ||
               vehicle.brand.toLowerCase().contains(input.toLowerCase()))
