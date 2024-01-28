@@ -3,6 +3,7 @@ import 'package:core/ui_elements/colors';
 import 'package:core/ui_elements/custom_toast.dart';
 import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/auth/auth_notify_me.dart';
+import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
 import 'package:fleetcarpooling/pages/admin_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
@@ -183,14 +184,33 @@ class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
                               Navigator.pop(context);
                             },
                           ),
-                          Text(
-                            "${vehicle.brand} ${vehicle.model}",
-                            style: const TextStyle(
-                              fontSize: 24,
-                              color: AppColors.mainTextColor,
+                          Expanded(
+                            child: Text(
+                              "${vehicle.brand} ${vehicle.model}",
+                              style: const TextStyle(
+                                fontSize: 24,
+                                color: AppColors.mainTextColor,
+                              ),
                             ),
                           ),
-                          const Spacer(),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatScreen(
+                                      vin: vehicle.vin,
+                                      brand: vehicle.brand,
+                                      model: vehicle.model,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Image.asset("assets/icons/chat.png"),
+                            ),
+                          ),
                         ],
                       ),
                     ),
