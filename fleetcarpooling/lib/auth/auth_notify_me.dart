@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:intl/intl.dart';
 
 class AuthNotifyMe {
@@ -13,12 +14,8 @@ class AuthNotifyMe {
   Stream<List<Map<String, dynamic>>> get notifyMeNotificationStream =>
       _notifyMeNotificationStreamController.stream;
 
-  AuthNotifyMe() {
-    //_subscribeToNotifyMeNotificationChanges();
-  }
-
   Future<void> saveNotifyMeData(
-    String VinCar,
+    String vinCar,
     String pickupDate,
     String pickupTime,
     String returnDate,
@@ -28,10 +25,9 @@ class AuthNotifyMe {
       User? user = _auth.currentUser;
       if (user != null) {
         String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-        print("");
 
         Map<String, dynamic> notifyMeData = {
-          'VinCar': VinCar,
+          'VinCar': vinCar,
           'email': user.email,
           'pickupDate': _formatDate(pickupDate),
           'pickupTime': _formatTime(pickupTime),
@@ -51,77 +47,77 @@ class AuthNotifyMe {
   }
 
   Future<void> checkReservationDeletion(
-    String VinCar,
+    String vinCar,
     String reservationDateStart,
     String reservationDateEnd,
     String reservationTimeStart,
     String reservationTimeEnd,
   ) async {
-    print("checkReservationDeletion called!");
     try {
       DataSnapshot snapshot =
           (await _database.child("NotifyMe").once()).snapshot;
       Map<dynamic, dynamic>? data = snapshot.value as Map<dynamic, dynamic>?;
 
       if (data != null) {
-        print("Data is not null");
         for (var entry in data.entries) {
-          print("Checking entry: $entry");
 
-          String notifyMeStart = entry.value['pickupDate'];
-          String notifyMeEnd = entry.value['returnDate'];
+          String notifyMeStart = _formatDate(entry.value['pickupDate']);
+          String notifyMeEnd = _formatDate(entry.value['returnDate']);
+          String notifyMeTimeStart = entry.value['pickupTime'];
+          String notifyMeTimeEnd = entry.value['returnTime'];
 
-          print("vinCar: $VinCar");
-          print("reservationDateStart: $reservationDateStart");
-          print("reservationDateEnd: $reservationDateEnd");
-          print("notifyMeStart: $notifyMeStart");
-          print("notifyMeEnd: $notifyMeEnd");
-
-          if (entry.value['VinCar'] == VinCar &&
-              timeRangesOverlap(
-                reservationDateStart,
-                reservationDateEnd,
-                notifyMeStart,
-                notifyMeEnd,
-              )) {
-            print("Condition satisfied for entry: $entry");
+          if (entry.value['VinCar'] == vinCar &&
+              await timeRangesOverlap(
+                  reservationDateStart,
+                  reservationDateEnd,
+                  notifyMeStart,
+                  notifyMeEnd,
+                  reservationTimeStart,
+                  reservationTimeEnd,
+                  notifyMeTimeStart,
+                  notifyMeTimeEnd,
+                  vinCar)) {
             await transferDataToNotificationTable(entry.value);
             await _database.child("NotifyMe").child(entry.key).remove();
           } else {
-            print("Condition not satisfied for entry: $entry");
           }
         }
       }
     } catch (e) {
-      print("Error in checkReservationDeletion: $e");
       throw Exception("Error checking and notifying reservation deletion");
     }
   }
 
-  bool timeRangesOverlap(
-    String reservationDateStart,
-    String reservationDateEnd,
-    String notifyMeStart,
-    String notifyMeEnd,
-  ) {
-    try {
-      DateTime range1StartTime = DateTime.parse(reservationDateStart);
-      DateTime range1EndTime = DateTime.parse(reservationDateEnd);
-      DateTime range2StartTime = DateTime.parse(notifyMeStart);
-      DateTime range2EndTime = DateTime.parse(notifyMeEnd);
+  Future<bool> timeRangesOverlap(
+  String reservationDateStart,
+  String reservationDateEnd,
+  String notifyMeStart,
+  String notifyMeEnd,
+  String reservationTimeStart,
+  String reservationTimeEnd,
+  String notifyMeTimeStart,
+  String notifyMeTimeEnd,
+  String vinCar,
+) async {
+  try {
+    ReservationService reservationService = ReservationService();
+    bool? noReservation;
 
-      return range1EndTime.isAfter(range2StartTime) &&
-          range1StartTime.isBefore(range2EndTime);
-    } catch (e) {
-      print("Error parsing date: $e");
-      return false;
-    }
+    noReservation = await reservationService.checkReservationOverlap(
+      vinCar,
+      notifyMeEnd,
+      notifyMeTimeEnd,
+    );
+    return noReservation;
+  } catch (e) {
+    return false;
   }
+}
+
 
   Future<void> transferDataToNotificationTable(
       Map<dynamic, dynamic> data) async {
     try {
-      print("Transferring data to NotifyMeNotification table: $data");
       DatabaseReference notifyMeNotificationRef =
           _database.child("Notifications");
 
@@ -139,9 +135,7 @@ class AuthNotifyMe {
       };
 
       await notifyMeNotificationRef.child(uniqueName).set(notificationData);
-      print("Data successfully transferred to NotifyMeNotification table.");
     } catch (e) {
-      print("Error transferring data to NotifyMeNotification table: $e");
       throw Exception("Error transferring data to NotifyMeNotification table");
     }
   }
@@ -153,11 +147,11 @@ class AuthNotifyMe {
 
   String _formatTime(String time) {
     try {
-      DateTime parsedTime = DateFormat('HH:mm').parse(time);
+      String formattedTime = time.padLeft(5, '0');
+      DateTime parsedTime = DateFormat('HH:mm').parse(formattedTime);
       return DateFormat('HH:mm').format(parsedTime);
     } catch (e) {
-      print("Error formatting time: $e");
-      return time; 
+      return time;
     }
   }
 
