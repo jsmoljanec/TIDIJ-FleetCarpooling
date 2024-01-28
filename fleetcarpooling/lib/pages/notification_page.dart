@@ -1,16 +1,19 @@
 import 'package:core/ui_elements/colors';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/auth/notification.dart';
 
 class NotificationPage extends StatefulWidget {
-  const NotificationPage({Key? key}) : super(key: key);
+  final FirebaseDatabase database;
+  const NotificationPage({Key? key, required this.database}) : super(key: key);
 
   @override
   State<NotificationPage> createState() => _NotificationPageState();
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  AuthNotification authNotification = AuthNotification();
+  AuthNotification authNotification = AuthNotification(FirebaseAuth.instance, FirebaseDatabase.instance);
   String notificationMessage = '';
   late Stream<List<Map<String, dynamic>>> _notificationStream;
 
