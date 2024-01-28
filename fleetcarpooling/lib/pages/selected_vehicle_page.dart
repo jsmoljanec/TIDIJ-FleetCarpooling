@@ -3,6 +3,7 @@ import 'package:core/ui_elements/custom_toast.dart';
 import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:core/ui_elements/colors';
+import 'package:fleetcarpooling/pages/reservation_form.dart';
 import 'package:fleetcarpooling/ui_elements/calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -212,7 +213,14 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                 padding: const EdgeInsets.only(top: 20),
                 child: Center(
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ReservationScreen(),
+                        ),
+                      );
+                    },
                     child: const Text(
                       "Change date",
                       style: TextStyle(
@@ -238,60 +246,70 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 15),
-                child: MyElevatedButton(
-                  onPressed: () async {
-                    if (postoji) {
-                      service.checkAndDeleteReservation(widget.vin,
-                          widget.pickupTime, widget.returnTime, email);
-                      setState(() {
-                        widget.isFree = true;
-                        postoji = false;
-                      });
-                      CustomToast().showFlutterToast(
-                          "You succesfully canceled reservation.");
-                    } else {
-                      if (widget.isFree == true) {
-                        await service.addReservation(
-                          widget.vin,
-                          widget.pickupTime,
-                          widget.returnTime,
-                        );
-                        await service.confirmRegistration(
-                          email,
-                          widget.pickupTime,
-                          widget.returnTime,
-                        );
-                        await authReservationNotification
-                            .saveNotificationToDatabase({
-                          'vinCar': widget.vin,
-                          'pickupDate': widget.pickupTime.toLocal().toString(),
-                          'pickupTime': widget.pickupTime.toLocal().toString(),
-                          'returnDate': widget.returnTime.toLocal().toString(),
-                          'returnTime': widget.returnTime.toLocal().toString(),
-                        });
+                child: Visibility(
+                  visible: !(widget.pickupTime.day == widget.returnTime.day &&
+                      widget.pickupTime.month == widget.returnTime.month &&
+                      widget.pickupTime.year == widget.returnTime.year &&
+                      widget.pickupTime.hour == widget.returnTime.hour),
+                  child: MyElevatedButton(
+                    onPressed: () async {
+                      if (postoji) {
+                        service.checkAndDeleteReservation(widget.vin,
+                            widget.pickupTime, widget.returnTime, email);
                         setState(() {
-                          widget.isFree = false;
-                          postoji = true;
+                          widget.isFree = true;
+                          postoji = false;
                         });
                         CustomToast().showFlutterToast(
-                            "You succesfully reserved vehicle.");
+                            "You succesfully canceled reservation.");
                       } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NotifyMe(
-                              VinCar: widget.vin,
-                              pickupDateTime: widget.pickupTime.toLocal(),
-                              returnDateTime: widget.returnTime.toLocal(),
+                        if (widget.isFree == true) {
+                          await service.addReservation(
+                            widget.vin,
+                            widget.pickupTime,
+                            widget.returnTime,
+                          );
+                          await service.confirmRegistration(
+                            email,
+                            widget.pickupTime,
+                            widget.returnTime,
+                          );
+                          await authReservationNotification
+                              .saveNotificationToDatabase({
+                            'vinCar': widget.vin,
+                            'pickupDate':
+                                widget.pickupTime.toLocal().toString(),
+                            'pickupTime':
+                                widget.pickupTime.toLocal().toString(),
+                            'returnDate':
+                                widget.returnTime.toLocal().toString(),
+                            'returnTime':
+                                widget.returnTime.toLocal().toString(),
+                          });
+                          setState(() {
+                            widget.isFree = false;
+                            postoji = true;
+                          });
+                          CustomToast().showFlutterToast(
+                              "You succesfully reserved vehicle.");
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NotifyMe(
+                                VinCar: widget.vin,
+                                pickupDateTime: widget.pickupTime.toLocal(),
+                                returnDateTime: widget.returnTime.toLocal(),
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
                       }
-                    }
-                  },
-                  label: postoji
-                      ? "CANCEL RESERVATION"
-                      : (widget.isFree ? "MAKE A RESERVATION" : "NOTIFY ME"),
+                    },
+                    label: postoji
+                        ? "CANCEL RESERVATION"
+                        : (widget.isFree ? "MAKE A RESERVATION" : "NOTIFY ME"),
+                  ),
                 ),
               ),
             ),
