@@ -29,6 +29,7 @@ class AdminHomePage extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             GestureDetector(
+              key: const Key('profileIcon'),
               onTap: () {
                 Navigator.push(
                   context,
