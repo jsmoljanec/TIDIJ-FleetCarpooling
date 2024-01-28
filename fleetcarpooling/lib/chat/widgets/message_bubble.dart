@@ -4,7 +4,6 @@ import 'package:fleetcarpooling/chat/provider/firebase_provider.dart';
 import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:provider/provider.dart';
 
 class MessageBubble extends StatefulWidget {
   const MessageBubble({
@@ -24,6 +23,10 @@ class MessageBubble extends StatefulWidget {
 
 class _MessageBubbleState extends State<MessageBubble> {
   late String username = "";
+  late String email = "";
+  late String role = "";
+  late String name = "";
+  late String lastname = "";
   late String profileImage = "";
   late bool statusActivity = false;
   late Timer _timer;
@@ -40,12 +43,17 @@ class _MessageBubbleState extends State<MessageBubble> {
     FirebaseProvider().getUserData(widget.message.senderId).then((userData) {
       if (mounted) {
         setState(() {
+          name = userData['firstName'] ?? '';
+          role = userData['role'] ?? '';
+          email = userData['email'] ?? '';
+          lastname = userData['lastName'] ?? '';
           username = userData['username'] ?? '';
           profileImage = userData['profileImage'] ?? '';
-          if (userData['statusActivity'] == "online")
+          if (userData['statusActivity'] == "online") {
             statusActivity = true;
-          else
+          } else {
             statusActivity = false;
+          }
         });
       }
     }).catchError((error) {
@@ -57,6 +65,90 @@ class _MessageBubbleState extends State<MessageBubble> {
   void dispose() {
     _timer.cancel();
     super.dispose();
+  }
+
+  Widget buildDialog(BuildContext context) {
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.85,
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: AppColors.buttonColor, width: 2),
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Stack(
+                  children: [
+                    (profileImage != "" && profileImage != null)
+                        ? CircleAvatar(
+                            backgroundImage: NetworkImage(profileImage),
+                            radius: 30,
+                          )
+                        : CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Image.asset("assets/icons/profile.png"),
+                            radius: 30,
+                          ),
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: CircleAvatar(
+                        backgroundColor:
+                            statusActivity ? Colors.green : Colors.grey,
+                        radius: 7,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${name} ${lastname}',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: AppColors.mainTextColor)),
+                    const SizedBox(height: 5),
+                    Text(email,
+                        style: const TextStyle(
+                            fontSize: 13, color: AppColors.mainTextColor)),
+                    const SizedBox(height: 5),
+                    Text(role,
+                        style: const TextStyle(
+                            fontSize: 13, color: AppColors.mainTextColor)),
+                  ],
+                ),
+              ],
+            ),
+            const Divider(
+              height: 20,
+              color: AppColors.mainTextColor,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: const Padding(
+                padding: EdgeInsets.only(bottom: 1),
+                child: Text(
+                  'Close',
+                  style: TextStyle(
+                    color: AppColors.mainTextColor,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -84,26 +176,40 @@ class _MessageBubbleState extends State<MessageBubble> {
         mainAxisAlignment:
             widget.isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              if (!widget.isMe)
-                (profileImage != "" && profileImage != null)
-                    ? CircleAvatar(
-                        backgroundImage: NetworkImage(profileImage),
-                        radius: 20,
-                      )
-                    : CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Image.asset("assets/icons/profile.png"),
-                        radius: 20,
-                      ),
-              if (!widget.isMe)
-                CircleAvatar(
-                  backgroundColor: statusActivity ? Colors.green : Colors.grey,
-                  radius: 5,
-                ),
-            ],
+          GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return buildDialog(context);
+                },
+              );
+            },
+            child: Stack(
+              children: [
+                if (!widget.isMe)
+                  (profileImage != "" && profileImage != null)
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(profileImage),
+                          radius: 20,
+                        )
+                      : CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Image.asset("assets/icons/profile.png"),
+                          radius: 20,
+                        ),
+                if (!widget.isMe)
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: CircleAvatar(
+                      backgroundColor:
+                          statusActivity ? Colors.green : Colors.grey,
+                      radius: 5,
+                    ),
+                  ),
+              ],
+            ),
           ),
           const SizedBox(width: 8),
           Container(
@@ -131,7 +237,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                   ? CrossAxisAlignment.end
                   : CrossAxisAlignment.start,
               children: [
-                if (!widget.isMe)
+                if (!widget.isMe && role == "Employee")
                   Text(
                     username,
                     style: const TextStyle(
@@ -170,7 +276,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                         constraints: BoxConstraints(maxWidth: 200),
                         child: Text(
                           widget.message.content,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: AppColors.mainTextColor,
                           ),
                           maxLines: 10,
