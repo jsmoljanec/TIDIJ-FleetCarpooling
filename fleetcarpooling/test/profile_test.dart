@@ -1,3 +1,4 @@
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:fleetcarpooling/pages/profile_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -38,12 +39,31 @@ void main() {
   });
 
   testWidgets('ProfilePage has a title', (WidgetTester tester) async {
-
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
       home: ProfilePage(),
     ));
 
     await tester.pumpAndSettle();
     expect(find.text('MY PROFILE'), findsOneWidget);
+  });
+
+  testWidgets('ProfilePage displays profile image if available',
+      (WidgetTester tester) async {
+    final user = MockUser(
+      isAnonymous: false,
+      uid: 'someuid',
+      email: 'john.doe@example.com',
+      displayName: 'John Doe',
+      photoURL: 'https://example.com/profile.jpg',
+    );
+    final auth = MockFirebaseAuth(mockUser: user);
+    await auth.signInWithEmailAndPassword(
+        email: "john.doe@example.com", password: "123");
+
+    await tester.pumpWidget(const MaterialApp(
+      home: ProfilePage(),
+    ));
+
+    expect(find.byType(CircleAvatar), findsOneWidget);
   });
 }
