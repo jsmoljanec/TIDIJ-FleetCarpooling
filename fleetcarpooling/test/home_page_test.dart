@@ -1,4 +1,3 @@
-
 import 'package:fleetcarpooling/utils/datetime_utils.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
@@ -6,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_database_mocks/firebase_database_mocks.dart';
 
 void main() {
-
   const fakeDataVehicle = {
     'Vehicles': {
       '12345678': {
@@ -40,20 +38,39 @@ void main() {
         'latitude': 37.7749,
         'longitude': 122.4194,
         'locked': false,
-      }
+      },
     }
   };
+
   FirebaseDatabase firebaseDatabaseVehicle = MockFirebaseDatabase.instance;
 
-setUp(() {
-      MockFirebaseDatabase.instance.ref().set(fakeDataVehicle);
-    });
-    test('getVehicles test', () async {
-      final vehiclesStream = getVehicles(firebaseDatabaseVehicle);
+  setUp(() {
+    MockFirebaseDatabase.instance.ref().set(fakeDataVehicle);
+  });
 
-      expectLater(vehiclesStream, emits(anyElement(isNotNull)));
-    });
+  test('getVehicles test', () async {
+    final vehiclesStream = getVehicles(firebaseDatabaseVehicle);
 
+    expectLater(vehiclesStream, emits(anyElement(isNotNull)));
+  });
+
+  test('getVehicles returns 2 vehicles - alternative', () async {
+    final vehiclesStream = getVehicles(firebaseDatabaseVehicle);
+
+    vehiclesStream.listen((vehicles) {
+      expect(vehicles.length, 2);
+    });
+  });
+
+  test('Check if the brand of the first vehicle is Tesla', () async {
+    final vehiclesStream = getVehicles(firebaseDatabaseVehicle);
+
+    vehiclesStream.listen((vehicles) {
+      if (vehicles.isNotEmpty) {
+        expect(vehicles.first.brand, 'Tesla');
+      }
+    });
+  });
 
   test('getShortWeekday returns correct value for each weekday', () {
     final dateTimeUtils = DateTimeUtils();
