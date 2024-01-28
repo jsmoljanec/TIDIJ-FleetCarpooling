@@ -28,11 +28,12 @@ class _DeleteDisableForm extends State<DeleteDisableForm> {
 
   void _handleSearch(String input) {
     setState(() {
-      _vehiclesStream = getVehicles(FirebaseDatabase.instance).map((vehicles) => vehicles
-          .where((vehicle) =>
-              vehicle.model.toLowerCase().contains(input.toLowerCase()) ||
-              vehicle.brand.toLowerCase().contains(input.toLowerCase()))
-          .toList());
+      _vehiclesStream = getVehicles(FirebaseDatabase.instance).map((vehicles) =>
+          vehicles
+              .where((vehicle) =>
+                  vehicle.model.toLowerCase().contains(input.toLowerCase()) ||
+                  vehicle.brand.toLowerCase().contains(input.toLowerCase()))
+              .toList());
     });
   }
 
@@ -65,67 +66,79 @@ class _DeleteDisableForm extends State<DeleteDisableForm> {
                     width: screenWidth,
                     child: Padding(
                       padding: EdgeInsets.only(
-                          top: padding2, bottom: padding2, left: 24, right: 24),
+                          top: padding2, bottom: padding2, right: 10),
                       child: Stack(
                         fit: StackFit.loose,
                         children: [
                           Row(
                             children: [
-                              CircularIconButton(
-                                onPressed: () {
-                                  FocusManager.instance.primaryFocus?.unfocus();
-                                  Future.delayed(Duration(milliseconds: 50),
-                                      () {
-                                    Navigator.pop(context);
-                                  });
-                                },
-                              ),
                               Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Column(
+                                  SizedBox(
+                                    width: 51.34,
+                                    height: 49.51,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: CircularIconButton(
+                                        onPressed: () {
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                          Future.delayed(
+                                              Duration(milliseconds: 50), () {
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10.0),
+                                  Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        "Here you can manage",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: AppColors.mainTextColor,
-                                          fontSize: 24,
-                                        ),
-                                      ),
-                                      Text(
-                                        "all cars",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: AppColors.mainTextColor,
-                                          fontSize: 24,
+                                      Container(
+                                        constraints: BoxConstraints(
+                                            maxWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.65),
+                                        child: const Text(
+                                          "Here you can manage all cars.",
+                                          style: TextStyle(
+                                            color: AppColors.mainTextColor,
+                                            fontSize: 24,
+                                          ),
+                                          maxLines: 10,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                     ],
                                   ),
+                                  const SizedBox(width: 10.0),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 10),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const ProfilePage(),
+                                          ),
+                                        );
+                                      },
+                                      child: Image.asset(
+                                        'assets/icons/profile.png',
+                                        height: 30,
+                                        width: 30,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: InkWell(
-                              onTap: () {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                Future.delayed(Duration(milliseconds: 50), () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const ProfilePage(),
-                                    ),
-                                  );
-                                });
-                              },
-                              child: SizedBox(
-                                child: Image.asset("assets/icons/profile.png"),
-                              ),
-                            ),
                           ),
                         ],
                       ),
