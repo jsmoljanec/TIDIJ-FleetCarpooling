@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleetcarpooling/auth/generate_username_and_password.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -5,8 +7,9 @@ import 'package:fleetcarpooling/auth/send_email.dart';
 import 'user_model.dart' as model;
 
 class AuthRegistrationService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final DatabaseReference _database = FirebaseDatabase.instance.ref();
+  AuthRegistrationService(this.firebaseDatabase, this.auth);
+  FirebaseDatabase firebaseDatabase;
+  FirebaseAuth auth;
 
   void writeDataToDatabase(String uid, String userName, String email,
       String firstName, String lastName, String role) {
@@ -20,7 +23,7 @@ class AuthRegistrationService {
         profileImage: profileImage,
         statusActivity: "offline");
 
-    DatabaseReference usersRef = _database.child("Users");
+    DatabaseReference usersRef = firebaseDatabase.ref().child("Users");
     DatabaseReference newUserRef = usersRef.child(uid);
 
     newUserRef.set(_user.toMap());
@@ -36,7 +39,7 @@ class AuthRegistrationService {
       String userId = userCredential.user!.uid;
       String username = await generateUsername(firstName, lastName);
       writeDataToDatabase(userId, username, email, firstName, lastName, role);
-      sendEmail(email, _auth, username, password);
+      sendEmail(email, auth, username, password);
     } on FirebaseAuthException catch (e) {
       if (e.message == "The email address is badly formatted.")
         throw FirebaseAuthException(code: 'wrong-format');
