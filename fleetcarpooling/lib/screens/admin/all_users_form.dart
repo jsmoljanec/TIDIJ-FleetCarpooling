@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:core/ui_elements/buttons.dart';
 import 'package:core/ui_elements/colors';
 import 'package:core/ui_elements/custom_toast.dart';

@@ -45,6 +45,13 @@ jobs:
             flutter pub get
             cd ..
           done
+          
+      - name: Run Tests for Fleetcarpooling
+        if: ${{ matrix.project == 'fleetcarpooling' }}
+        run: |
+          cd fleetcarpooling
+          flutter test
+          cd ..
 
       - name: Flutter Build APK --Release for Fleetcarpooling
         if: ${{ matrix.project == 'fleetcarpooling' }}

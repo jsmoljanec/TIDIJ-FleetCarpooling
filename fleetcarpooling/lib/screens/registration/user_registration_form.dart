@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:core/ui_elements/buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -23,8 +25,7 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
   final TextEditingController lastNameController = TextEditingController();
   UserType _selectedUserType = UserType.employee;
   final AuthRegistrationService _authRegistrationService =
-      AuthRegistrationService(
-          FirebaseDatabase.instance, FirebaseAuth.instance);
+      AuthRegistrationService(FirebaseDatabase.instance, FirebaseAuth.instance);
 
   @override
   Widget build(BuildContext context) {
