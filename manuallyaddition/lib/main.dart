@@ -2,7 +2,7 @@ import 'package:core/bloc/vehicle_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:manuallyaddition/add_vehicle_manually_form.dart';
+import 'package:manuallyaddition/screens/add_vehicle_manually_form.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

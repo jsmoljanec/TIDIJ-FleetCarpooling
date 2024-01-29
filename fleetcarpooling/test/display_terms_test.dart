@@ -1,5 +1,5 @@
 import 'package:fleetcarpooling/Models/terms_model.dart';
-import 'package:fleetcarpooling/ReservationService/terms_service.dart';
+import 'package:fleetcarpooling/services/terms_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

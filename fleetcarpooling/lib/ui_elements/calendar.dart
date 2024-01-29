@@ -1,7 +1,7 @@
 import 'package:core/ui_elements/colors';
 import 'package:fleetcarpooling/Models/terms_model.dart';
-import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
-import 'package:fleetcarpooling/ReservationService/terms_service.dart';
+import 'package:fleetcarpooling/services/reservation_service.dart';
+import 'package:fleetcarpooling/services/terms_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';

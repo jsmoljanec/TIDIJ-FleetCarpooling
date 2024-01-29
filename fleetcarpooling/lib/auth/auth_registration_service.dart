@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fleetcarpooling/auth/generate_username_and_password.dart';
+import 'package:fleetcarpooling/utils/generate_username_and_password.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:fleetcarpooling/auth/send_email.dart';
+import 'package:fleetcarpooling/utils/send_email.dart';
 import 'package:fleetcarpooling/secure/secure_storage.dart';
-import 'user_model.dart' as model;
+import '../models/user_model.dart' as model;
 
 class AuthRegistrationService {
   AuthRegistrationService(this.firebaseDatabase, this.auth);

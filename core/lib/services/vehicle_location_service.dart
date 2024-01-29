@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:core/vehicle_location_model.dart';
+import 'package:core/models/vehicle_location_model.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 abstract class VehicleLocationRepository {

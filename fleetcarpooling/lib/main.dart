@@ -4,9 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
-import 'package:fleetcarpooling/pages/admin_home_page.dart';
-import 'package:fleetcarpooling/pages/login_form.dart';
-import 'package:fleetcarpooling/pages/navigation.dart';
+import 'package:fleetcarpooling/screens/admin/admin_home_page.dart';
+import 'package:fleetcarpooling/screens/login/login_form.dart';
+import 'package:fleetcarpooling/ui_elements/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 

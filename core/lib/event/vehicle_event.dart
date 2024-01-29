@@ -1,4 +1,4 @@
-import 'package:core/vehicle.dart';
+import 'package:core/models/vehicle.dart';
 
 abstract class VehicleEvent {}
 

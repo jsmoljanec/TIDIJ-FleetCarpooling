@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:core/vehicle.dart';
-import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
+import 'package:core/models/vehicle.dart';
+import 'package:fleetcarpooling/services/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
-import 'package:fleetcarpooling/pages/navigation.dart';
+import 'package:fleetcarpooling/ui_elements/navigation.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
