@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fleetcarpooling/Models/vehicle_location_model.dart';
+import 'package:core/vehicle_location_model.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/pages/map_functionality/udp_manager.dart';
 import 'package:core/ui_elements/custom_toast.dart';
 import 'package:fleetcarpooling/pages/map_functionality/udp_message_handler.dart';
-import 'package:fleetcarpooling/services/vehicle_location_service.dart';
+import 'package:core/services/vehicle_location_service.dart';
 import 'package:fleetcarpooling/ui_elements/vehicle_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -116,7 +117,8 @@ class _MapPageState extends State<MapPage> {
       icon: icon,
       markerId: MarkerId(vehicleLocation.vin),
       position: LatLng(vehicleLocation.latitude, vehicleLocation.longitude),
-      infoWindow: InfoWindow(title: "${vehicleLocation.brand} ${vehicleLocation.model}"),
+      infoWindow: InfoWindow(
+          title: "${vehicleLocation.brand} ${vehicleLocation.model}"),
       onTap: () async {
         setState(() {
           reservationCheckFuture = ReservationService()
@@ -140,10 +142,10 @@ class _MapPageState extends State<MapPage> {
   }
 
   void updateMapWithVehicleMarkers() {
-    VehicleLocationService().getVehicleLocations().listen((vehicleLocations) {
-      final newMarkers = vehicleLocations
-          .map(createVehicleMarker)
-          .toSet();
+    VehicleLocationService(FirebaseDatabase.instance)
+        .getVehicleLocations()
+        .listen((vehicleLocations) {
+      final newMarkers = vehicleLocations.map(createVehicleMarker).toSet();
 
       if (newMarkers.isNotEmpty) {
         if (mounted) {

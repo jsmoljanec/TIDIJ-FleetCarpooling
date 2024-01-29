@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'package:core/event/vehicle_event.dart';
-import 'package:core/vehicle.dart';
+import 'package:core/vehicle_location_model.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:fleetcarpooling/Models/vehicle_location_model.dart';
 
 abstract class VehicleLocationRepository {
   Future<void> initializeVehicleLocation(VehicleLocation vehicleLocation);
@@ -10,12 +8,13 @@ abstract class VehicleLocationRepository {
 }
 
 class VehicleLocationService implements VehicleLocationRepository {
-  final databaseReference = FirebaseDatabase.instance.ref();
+  VehicleLocationService(this.database);
+  FirebaseDatabase database;
   @override
   Future<void> initializeVehicleLocation(
       VehicleLocation vehicleLocation) async {
     DatabaseReference vehicleLocationRef =
-        databaseReference.child("VehicleLocations");
+        database.ref().child("VehicleLocations");
     DatabaseReference newVehicleLocationLocationRef =
         vehicleLocationRef.child(vehicleLocation.vin);
     VehicleLocation newVehicleLocation = VehicleLocation(
@@ -31,7 +30,7 @@ class VehicleLocationService implements VehicleLocationRepository {
 
   @override
   Stream<List<VehicleLocation>> getVehicleLocations() {
-    DatabaseReference ref = databaseReference.child("VehicleLocations");
+    DatabaseReference ref = database.ref().child("VehicleLocations");
     final StreamController<List<VehicleLocation>> controller =
         StreamController<List<VehicleLocation>>();
     ref.onValue.listen((DatabaseEvent event) {
@@ -56,7 +55,7 @@ class VehicleLocationService implements VehicleLocationRepository {
   }
 
   Future<void> deleteVehicleLocationRecord(String vin) async {
-    DatabaseReference ref = databaseReference.child("VehicleLocations/$vin");
+    DatabaseReference ref = database.ref().child("VehicleLocations/$vin");
     await ref.remove();
   }
 }
