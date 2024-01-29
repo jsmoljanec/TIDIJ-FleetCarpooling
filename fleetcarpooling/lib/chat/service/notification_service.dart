@@ -25,7 +25,7 @@ class NotificationsService {
       'AAAA3qcR1dM:APA91bHXwf9Efc-9arDjVLTUnC6tIf7Ultk_uCkc6WVahtKx8xe-dEdcnICRPjoGBDNIlXrOM6TZ74wrus7bcLugZ-M3_-ttOu7iSD6FHGU6RT3GXYpDNbKpkrNo47wnbCG0X_w8WYJq';
   final navigatorKey = GlobalKey<NavigatorState>();
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
+  
   void _initLocalNotification() {
     const androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
