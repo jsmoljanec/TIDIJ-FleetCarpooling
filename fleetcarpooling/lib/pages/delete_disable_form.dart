@@ -1,13 +1,14 @@
 import 'package:core/ui_elements/buttons.dart';
 import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
+import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:fleetcarpooling/pages/admin_selected_vehicle_page.dart';
 import 'package:core/ui_elements/colors';
 import 'package:fleetcarpooling/pages/profile_form.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+// ignore: must_be_immutable
 class DeleteDisableForm extends StatefulWidget {
   List<Vehicle> cars = List.empty();
 
@@ -17,12 +18,14 @@ class DeleteDisableForm extends StatefulWidget {
 }
 
 class _DeleteDisableForm extends State<DeleteDisableForm> {
+  final notification = NotificationsService(FirebaseDatabase.instance);
   late Stream<List<Vehicle>> _vehiclesStream;
   final TextEditingController _searchController = TextEditingController();
   String vinCar = "";
   @override
   void initState() {
     super.initState();
+    notification.firebaseNotification(context);
     _vehiclesStream = getVehicles(FirebaseDatabase.instance);
   }
 
