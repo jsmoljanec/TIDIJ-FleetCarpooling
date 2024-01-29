@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:fleetcarpooling/models/reservation_model.dart';
+import 'package:fleetcarpooling/Models/reservation_model.dart';
 import 'package:fleetcarpooling/auth/auth_notify_me.dart';
 import 'package:fleetcarpooling/auth/auth_notification.dart';
 import 'package:fleetcarpooling/utils/send_email.dart';
-import 'package:fleetcarpooling/models/terms_model.dart';
+import 'package:fleetcarpooling/Models/terms_model.dart';
 import 'package:fleetcarpooling/services/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

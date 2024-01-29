@@ -4,7 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/services/reservation_service.dart';
 import 'package:fleetcarpooling/auth/auth_notify_me.dart';
 import 'package:fleetcarpooling/auth/auth_notification.dart';
-import 'package:fleetcarpooling/models/user_model.dart' as usermod;
+import 'package:fleetcarpooling/Models/user_model.dart' as usermod;
 
 class UserRepository {
   Future<usermod.User> fetchUserData() async {
@@ -100,7 +100,8 @@ class UserRepository {
 
   Future<bool> deleteUser(String email) async {
     late final ReservationService reservationService = ReservationService();
-    late final AuthNotification authNotification = AuthNotification(FirebaseAuth.instance, FirebaseDatabase.instance);
+    late final AuthNotification authNotification =
+        AuthNotification(FirebaseAuth.instance, FirebaseDatabase.instance);
     late final AuthNotifyMe authNotifyMe = AuthNotifyMe();
 
     DatabaseReference ref = FirebaseDatabase.instance.ref("Users");

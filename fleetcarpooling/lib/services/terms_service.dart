@@ -1,4 +1,4 @@
-import '../models/terms_model.dart';
+import '../Models/terms_model.dart';
 
 class TermsService {
   List<DateTime> createWorkHours(DateTime start, DateTime end) {

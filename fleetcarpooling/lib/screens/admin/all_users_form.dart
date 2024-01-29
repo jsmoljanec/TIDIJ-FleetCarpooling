@@ -4,7 +4,7 @@ import 'package:core/ui_elements/buttons.dart';
 import 'package:core/ui_elements/colors';
 import 'package:core/ui_elements/custom_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fleetcarpooling/models/user_model.dart' as usermod;
+import 'package:fleetcarpooling/Models/user_model.dart' as usermod;
 import 'package:fleetcarpooling/services/user_repository.dart';
 import 'package:flutter/material.dart';
 

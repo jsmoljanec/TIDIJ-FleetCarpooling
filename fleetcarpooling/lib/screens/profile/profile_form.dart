@@ -4,7 +4,7 @@ import 'package:core/ui_elements/colors';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
-import 'package:fleetcarpooling/models/user_model.dart' as usermod;
+import 'package:fleetcarpooling/Models/user_model.dart' as usermod;
 import 'package:fleetcarpooling/services/user_repository.dart';
 import 'package:fleetcarpooling/screens/profile/change_password_form.dart';
 import 'package:fleetcarpooling/screens/login/login_form.dart';
@@ -275,7 +275,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               "offline");
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => const LoginForm()),
+                        MaterialPageRoute(
+                            builder: (context) => const LoginForm()),
                         (route) => false,
                       );
                     },

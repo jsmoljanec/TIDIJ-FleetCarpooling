@@ -4,7 +4,7 @@ import 'package:core/ui_elements/custom_toast.dart';
 import 'package:fleetcarpooling/services/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/screens/profile/profile_form.dart';
 import 'package:flutter/material.dart';
-import 'package:fleetcarpooling/models/reservation_model.dart';
+import 'package:fleetcarpooling/Models/reservation_model.dart';
 import 'package:fleetcarpooling/services/reservation_service.dart';
 import 'package:fleetcarpooling/utils/datetime_utils.dart';
 
