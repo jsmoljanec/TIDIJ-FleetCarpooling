@@ -1,7 +1,64 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:intl/intl.dart'; 
+import 'package:intl/intl.dart';
+import 'package:core/vehicle.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
+import 'package:firebase_database_mocks/firebase_database_mocks.dart';
 
 void main() {
+  
+const fakeDataVehicle = {
+    'Vehicles': {
+      '12345678': {
+        'vin': '1HGCM82633A123456',
+        'model': 'Model S',
+        'brand': 'Tesla',
+        'capacity': 5,
+        'transtype': 'Automatic',
+        'fuelConsumption': 10,
+        'registration': '2022-01-01',
+        'year': 2022,
+        'active': true,
+        'imageUrl': 'https://example.com/image.jpg',
+        'distanceTraveled': 1000,
+        'latitude': 37.7749,
+        'longitude': 122.4194,
+        'locked': false,
+      },
+      '11223344': {
+        'vin': '1HGCM82788A123456',
+        'model': 'M1',
+        'brand': 'B1',
+        'capacity': 5,
+        'transtype': 'Automatic',
+        'fuelConsumption': 10,
+        'registration': '2022-01-01',
+        'year': 2022,
+        'active': true,
+        'imageUrl': 'https://example.com/image.jpg',
+        'distanceTraveled': 1000,
+        'latitude': 37.7749,
+        'longitude': 122.4194,
+        'locked': false,
+      }
+    }
+  };
+  FirebaseDatabase firebaseDatabaseVehicle = MockFirebaseDatabase.instance;
+
+setUp(() {
+      MockFirebaseDatabase.instance.ref().set(fakeDataVehicle);
+    });
+    test('getVehicle test', () async {
+  Stream<Vehicle?> vehicle = getVehicle('1HGCM82788A123456', firebaseDatabaseVehicle);
+
+  expectLater(vehicle, emits(isInstanceOf<Vehicle>()));
+});
+
+    test('getVehicle test', () async {
+  Stream<Vehicle?> vehicle = getVehicle('1HGCM82788A123456', firebaseDatabaseVehicle);
+
+  expectLater(vehicle, emits(isInstanceOf<Vehicle>()));
+});
 
   test('_formatDate test', () {
     expect(_formatDate('2022-01-15'), '2022-01-15');

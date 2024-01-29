@@ -2,6 +2,7 @@ import 'package:core/ui_elements/buttons.dart';
 import 'package:core/ui_elements/colors';
 import 'package:core/ui_elements/custom_toast.dart';
 import 'package:core/vehicle.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/auth/auth_notify_me.dart';
 import 'package:fleetcarpooling/pages/admin_home_page.dart';
 import 'package:flutter/material.dart';
@@ -158,7 +159,7 @@ class _AdminSelectedVehiclePageState extends State<AdminSelectedVehiclePage> {
       body: Column(
         children: [
           StreamBuilder<Vehicle?>(
-            stream: getVehicle(widget.vin),
+            stream: getVehicle(widget.vin, FirebaseDatabase.instance),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
