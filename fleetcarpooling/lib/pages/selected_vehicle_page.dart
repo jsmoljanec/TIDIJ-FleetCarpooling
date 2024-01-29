@@ -60,7 +60,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
         child: Column(
           children: [
             StreamBuilder<Vehicle?>(
-              stream: getVehicle(widget.vin),
+              stream: getVehicle(widget.vin, FirebaseDatabase.instance),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());

@@ -36,8 +36,8 @@ Stream<List<Vehicle>> getVehicles(FirebaseDatabase firebaseDatabaseVehicle) {
   return controller.stream;
 }
 
-Stream<Vehicle?> getVehicle(String vin) {
-  DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles");
+Stream<Vehicle?> getVehicle(String vin, FirebaseDatabase firebaseDatabaseVehicle) {
+  DatabaseReference ref = firebaseDatabaseVehicle.ref("Vehicles");
   final StreamController<Vehicle?> controller = StreamController<Vehicle?>();
 
   ref.onValue.listen((DatabaseEvent event) {
