@@ -1,7 +1,7 @@
 import 'package:core/event/vehicle_event.dart';
 import 'package:core/services/vehicle_location_service.dart';
-import 'package:core/vehicle.dart';
-import 'package:core/vehicle_location_model.dart';
+import 'package:core/models/vehicle.dart';
+import 'package:core/models/vehicle_location_model.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 abstract class VehicleRepository {

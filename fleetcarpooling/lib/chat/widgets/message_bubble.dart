@@ -20,6 +20,7 @@ class MessageBubble extends StatefulWidget {
   final Message message;
 
   @override
+  // ignore: library_private_types_in_public_api
   _MessageBubbleState createState() => _MessageBubbleState();
 }
 
@@ -36,7 +37,7 @@ class _MessageBubbleState extends State<MessageBubble> {
   void initState() {
     super.initState();
     _fetchUserData();
-    _timer = Timer.periodic(Duration(seconds: 15), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 15), (Timer timer) {
       _fetchUserData();
     });
   }
@@ -61,6 +62,7 @@ class _MessageBubbleState extends State<MessageBubble> {
         });
       }
     }).catchError((error) {
+      // ignore: avoid_print
       print("Error fetching user data: $error");
     });
   }
@@ -88,15 +90,15 @@ class _MessageBubbleState extends State<MessageBubble> {
               children: [
                 Stack(
                   children: [
-                    (profileImage != "" && profileImage != null)
+                    (profileImage != "")
                         ? CircleAvatar(
                             backgroundImage: NetworkImage(profileImage),
                             radius: 30,
                           )
                         : CircleAvatar(
                             backgroundColor: Colors.white,
-                            child: Image.asset("assets/icons/profile.png"),
                             radius: 30,
+                            child: Image.asset("assets/icons/profile.png"),
                           ),
                     Positioned(
                       right: 0,
@@ -113,7 +115,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${name} ${lastname}',
+                    Text('$name $lastname',
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
@@ -192,15 +194,15 @@ class _MessageBubbleState extends State<MessageBubble> {
             child: Stack(
               children: [
                 if (!widget.isMe)
-                  (profileImage != "" && profileImage != null)
+                  (profileImage != "")
                       ? CircleAvatar(
                           backgroundImage: NetworkImage(profileImage),
                           radius: 20,
                         )
                       : CircleAvatar(
                           backgroundColor: Colors.white,
-                          child: Image.asset("assets/icons/profile.png"),
                           radius: 20,
+                          child: Image.asset("assets/icons/profile.png"),
                         ),
                 if (!widget.isMe)
                   Positioned(
@@ -295,7 +297,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                         ),
                       )
                     : Container(
-                        constraints: BoxConstraints(maxWidth: 200),
+                        constraints: const BoxConstraints(maxWidth: 200),
                         child: Text(
                           widget.message.content,
                           style: const TextStyle(

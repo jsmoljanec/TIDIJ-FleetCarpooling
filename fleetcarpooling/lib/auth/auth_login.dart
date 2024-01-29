@@ -2,15 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:fleetcarpooling/secure/secure_storage.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthLogin {
   AuthLogin(this.database, this._auth);
   FirebaseDatabase database;
-  FirebaseAuth _auth;
+  final FirebaseAuth _auth;
   final SecureStorage storage = SecureStorage();
   void updateOnlineStatus(String? uid, String state) async {
-    DatabaseReference ref = database.ref("Users/${uid}");
+    DatabaseReference ref = database.ref("Users/$uid");
     await ref.update({"statusActivity": state});
   }
 
@@ -51,12 +50,10 @@ class AuthLogin {
         password: password,
       );
       notificationService.requestPermission();
-      print("Login successful: ${userCredential.user?.email}");
       storage.addPasswordAndEmail(password, email);
       updateOnlineStatus(userCredential.user!.uid, "online");
       return true;
     } catch (e) {
-      print("Login failed: $e");
       return false;
     }
   }

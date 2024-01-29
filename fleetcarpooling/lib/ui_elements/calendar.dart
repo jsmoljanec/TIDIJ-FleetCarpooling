@@ -1,7 +1,7 @@
 import 'package:core/ui_elements/colors';
 import 'package:fleetcarpooling/Models/terms_model.dart';
-import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
-import 'package:fleetcarpooling/ReservationService/terms_service.dart';
+import 'package:fleetcarpooling/services/reservation_service.dart';
+import 'package:fleetcarpooling/services/terms_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -16,8 +16,8 @@ class MyCalendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TermsService _termsService = TermsService();
-    final ReservationService _service = ReservationService();
+    final TermsService termsService = TermsService();
+    final ReservationService service = ReservationService();
     late List<DateTime> busyTerms;
     late List<DateTime> freeTerms;
     DateTime initialFocusedDay = DateTime.now();
@@ -25,12 +25,12 @@ class MyCalendar extends StatelessWidget {
         DateTime(initialFocusedDay.year, initialFocusedDay.month, 1);
 
     return StreamBuilder<List<Terms>>(
-      stream: _service.getReservationStream(vin),
-      initialData: [],
+      stream: service.getReservationStream(vin),
+      initialData: const [],
       builder: (context, snapshot) {
-        List<DateTime> workHours = _termsService.createWorkHours(
+        List<DateTime> workHours = termsService.createWorkHours(
             DateTime.now(), DateTime.now().add(const Duration(days: 365)));
-        busyTerms = _termsService.extractReservedTerms(snapshot.data ?? []);
+        busyTerms = termsService.extractReservedTerms(snapshot.data ?? []);
 
         freeTerms =
             workHours.where((termin) => !busyTerms.contains(termin)).toList();
@@ -49,7 +49,6 @@ class MyCalendar extends StatelessWidget {
                   DateTime newFocusedDay =
                       DateTime(focusedDay.year, focusedDay.month, 1);
                   initialFocusedDay = newFocusedDay;
-                  print('New focused day: $newFocusedDay');
                 },
                 calendarStyle: const CalendarStyle(
                     outsideDaysVisible: false,
@@ -116,26 +115,24 @@ class MyCalendar extends StatelessWidget {
                 calendarBuilders: CalendarBuilders(
                   defaultBuilder: (context, day, focusedDay) {
                     if (freeTerms.any((termin) => isSameDay(termin, day))) {
-                      return Container(
-                        child: Center(
-                          child: Text(
-                            '${day.day}',
-                            style: TextStyle()
-                                .copyWith(color: AppColors.activeDays),
-                          ),
+                      return Center(
+                        child: Text(
+                          '${day.day}',
+                          style: const TextStyle()
+                              .copyWith(color: AppColors.activeDays),
                         ),
                       );
                     } else if (busyTerms
                         .any((termin) => isSameDay(termin, day))) {
                       return Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: AppColors.reservedInCalendar,
                           shape: BoxShape.circle,
                         ),
                         child: Center(
                           child: Text(
                             '${day.day}',
-                            style: TextStyle()
+                            style: const TextStyle()
                                 .copyWith(color: AppColors.mainTextColor),
                           ),
                         ),
@@ -171,13 +168,13 @@ class MyCalendar extends StatelessWidget {
               .copyWith(dialogBackgroundColor: AppColors.backgroundColor),
           child: AlertDialog(
             content: Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'Available Hours on ${DateFormat.yMMMd().format(selectedDay)}\n\nAvailable hours for pick up: $availableHoursString',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppColors.mainTextColor,
                       fontSize: 18,
                     ),
@@ -195,7 +192,7 @@ class MyCalendar extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           ),

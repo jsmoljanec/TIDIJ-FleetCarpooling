@@ -1,8 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database_mocks/firebase_database_mocks.dart';
 import 'package:fleetcarpooling/auth/auth_registration_service.dart';
-import 'package:fleetcarpooling/auth/generate_username_and_password.dart';
-import 'package:fleetcarpooling/auth/send_email.dart';
+import 'package:fleetcarpooling/utils/generate_username_and_password.dart';
+import 'package:fleetcarpooling/utils/send_email.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';

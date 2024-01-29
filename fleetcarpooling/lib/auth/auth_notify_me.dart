@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
+import 'package:fleetcarpooling/services/reservation_service.dart';
 import 'package:intl/intl.dart';
 
 class AuthNotifyMe {

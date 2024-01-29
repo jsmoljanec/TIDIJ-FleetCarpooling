@@ -18,6 +18,7 @@ class MyCustomSlider extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _MyCustomSliderState createState() => _MyCustomSliderState();
 }
 
@@ -68,6 +69,7 @@ class _MyCustomThumbShape extends SliderComponentShape {
   final String time;
   final double radius;
 
+  // ignore: unused_element
   _MyCustomThumbShape(this.time, {this.radius = 30.0});
 
   @override

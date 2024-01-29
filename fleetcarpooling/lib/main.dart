@@ -4,10 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fleetcarpooling/auth/auth_login.dart';
-import 'package:fleetcarpooling/pages/admin_home_page.dart';
-import 'package:fleetcarpooling/pages/login_form.dart';
-import 'package:fleetcarpooling/pages/navigation.dart';
+import 'package:fleetcarpooling/screens/admin/admin_home_page.dart';
+import 'package:fleetcarpooling/screens/login/login_form.dart';
+import 'package:fleetcarpooling/ui_elements/navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> _backgroundMessageHandler(RemoteMessage message) async {
@@ -26,6 +27,8 @@ Future<void> _backgroundMessageHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Firebase.initializeApp(
     options: const FirebaseOptions(
       apiKey: 'AIzaSyAiAzExpBKwIfaYhntOua3f7qNMJ5ecdA0',
@@ -45,7 +48,7 @@ Future<void> main() async {
   User? user = FirebaseAuth.instance.currentUser;
   Widget initialScreen = user != null
       ? NavigationPage(returnTime: DateTime.now(), pickupTime: DateTime.now())
-      : LoginForm();
+      : const LoginForm();
 
   runApp(MyApp(initialScreen: initialScreen));
 }
@@ -66,9 +69,10 @@ class MyApp extends StatelessWidget {
 class AppWrapper extends StatefulWidget {
   final Widget initialScreen;
 
-  AppWrapper({required this.initialScreen});
+  const AppWrapper({super.key, required this.initialScreen});
 
   @override
+  // ignore: library_private_types_in_public_api
   _AppWrapperState createState() => _AppWrapperState();
 }
 
@@ -81,7 +85,7 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     myController = TextEditingController();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -108,7 +112,7 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     myController.dispose();
     super.dispose();
   }

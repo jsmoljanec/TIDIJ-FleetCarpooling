@@ -1,9 +1,9 @@
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
-import 'package:fleetcarpooling/pages/profile_form.dart';
+import 'package:fleetcarpooling/screens/profile/profile_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fleetcarpooling/auth/user_model.dart';
-import 'package:fleetcarpooling/auth/user_repository.dart';
+import 'package:fleetcarpooling/models/user_model.dart';
+import 'package:fleetcarpooling/services/user_repository.dart';
 
 void main() {
   late UserRepository userRepository;

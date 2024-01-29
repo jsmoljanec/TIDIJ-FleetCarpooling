@@ -1,6 +1,6 @@
 import 'package:fleetcarpooling/utils/datetime_utils.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
+import 'package:fleetcarpooling/services/vehicle_managament_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_database_mocks/firebase_database_mocks.dart';
 
