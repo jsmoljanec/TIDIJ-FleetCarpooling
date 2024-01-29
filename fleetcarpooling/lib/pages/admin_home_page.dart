@@ -17,6 +17,7 @@ class AdminHomePage extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: 80,
         elevation: 0,
         backgroundColor: Colors.white,

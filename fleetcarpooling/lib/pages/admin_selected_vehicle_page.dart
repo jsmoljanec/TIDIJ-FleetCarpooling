@@ -7,6 +7,7 @@ import 'package:fleetcarpooling/auth/auth_notify_me.dart';
 import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:fleetcarpooling/pages/admin_home_page.dart';
+import 'package:fleetcarpooling/pages/delete_disable_form.dart';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/ReservationService/reservation_service.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
@@ -102,7 +103,7 @@ Widget buildDialog(
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AdminHomePage(),
+                        builder: (context) => DeleteDisableForm(),
                       ),
                     );
                     CustomToast()

@@ -2,6 +2,7 @@ import 'package:core/ui_elements/buttons.dart';
 import 'package:core/vehicle.dart';
 import 'package:fleetcarpooling/VehicleManagamentService/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
+import 'package:fleetcarpooling/pages/admin_home_page.dart';
 import 'package:fleetcarpooling/pages/admin_selected_vehicle_page.dart';
 import 'package:core/ui_elements/colors';
 import 'package:fleetcarpooling/pages/profile_form.dart';
@@ -90,7 +91,13 @@ class _DeleteDisableForm extends State<DeleteDisableForm> {
                                               ?.unfocus();
                                           Future.delayed(
                                               Duration(milliseconds: 50), () {
-                                            Navigator.pop(context);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AdminHomePage(),
+                                              ),
+                                            );
                                           });
                                         },
                                       ),
