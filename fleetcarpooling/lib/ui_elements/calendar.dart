@@ -1,5 +1,5 @@
 import 'package:core/ui_elements/colors';
-import 'package:fleetcarpooling/Models/terms_model.dart';
+import 'package:fleetcarpooling/models/terms_model.dart';
 import 'package:fleetcarpooling/services/reservation_service.dart';
 import 'package:fleetcarpooling/services/terms_service.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import '../Models/terms_model.dart';
+import '../models/terms_model.dart';
 
 class TermsService {
   List<DateTime> createWorkHours(DateTime start, DateTime end) {
@@ -20,8 +20,8 @@ class TermsService {
     for (var reservation in terms) {
       var currentDay = reservation.pickupDate;
 
-      while (
-          currentDay.isBefore(reservation.returnDate.add(const Duration(hours: 1)))) {
+      while (currentDay
+          .isBefore(reservation.returnDate.add(const Duration(hours: 1)))) {
         if (currentDay.hour >= start && currentDay.hour < end) {
           reservedTerms.add(currentDay);
         }
