@@ -8,6 +8,7 @@ import 'package:fleetcarpooling/screens/admin/admin_home_page.dart';
 import 'package:fleetcarpooling/screens/login/login_form.dart';
 import 'package:fleetcarpooling/ui_elements/navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> _backgroundMessageHandler(RemoteMessage message) async {
@@ -26,6 +27,8 @@ Future<void> _backgroundMessageHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Firebase.initializeApp(
     options: const FirebaseOptions(
       apiKey: 'AIzaSyAiAzExpBKwIfaYhntOua3f7qNMJ5ecdA0',
