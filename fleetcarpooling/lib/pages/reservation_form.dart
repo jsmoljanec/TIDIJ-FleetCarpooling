@@ -9,10 +9,10 @@ class ReservationScreen extends StatefulWidget {
   const ReservationScreen({Key? key}) : super(key: key);
 
   @override
-  _ReservationScreenState createState() => _ReservationScreenState();
+  ReservationScreenState createState() => ReservationScreenState();
 }
 
-class _ReservationScreenState extends State<ReservationScreen> {
+class ReservationScreenState extends State<ReservationScreen> {
   DateTimeRange? selectedDateRange;
   final CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
