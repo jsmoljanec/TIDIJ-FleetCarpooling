@@ -431,7 +431,7 @@ packages:
       sha256: "8568ad41f9312ab1f162f70c1e3e7cb7420b8bc8d07e4d543e575bb0cb41f8a5"
       url: "https://pub.dev"
     source: hosted
-    version: "10.3.4"
+    version: "10.4.0"
   firebase_database_mocks:
     dependency: "direct main"
     description:

@@ -418,15 +418,15 @@ packages:
     source: hosted
     version: "2.10.0"
   firebase_database:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_database
-      sha256: "80f67c961ed81341ac93120750120469ac3122baa8c0d3374a620f5834b5519f"
+      sha256: "8568ad41f9312ab1f162f70c1e3e7cb7420b8bc8d07e4d543e575bb0cb41f8a5"
       url: "https://pub.dev"
     source: hosted
-    version: "10.3.8"
+    version: "10.4.0"
   firebase_database_mocks:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_database_mocks
       sha256: f620612e43a45d9ff7dfec80b0230e08471657d2b56449ef2962e58effe5e2fa
