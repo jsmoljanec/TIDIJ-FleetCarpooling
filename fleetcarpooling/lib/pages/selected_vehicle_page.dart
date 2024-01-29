@@ -1,6 +1,7 @@
 import 'package:core/ui_elements/buttons.dart';
 import 'package:core/ui_elements/custom_toast.dart';
 import 'package:core/vehicle.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
 import 'package:core/ui_elements/colors';
 import 'package:fleetcarpooling/ui_elements/calendar.dart';
@@ -31,7 +32,7 @@ class SelectedVehiclePage extends StatefulWidget {
 }
 
 class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
-  final notification = NotificationsService();
+  final notification = NotificationsService(FirebaseDatabase.instance);
   final ReservationService service = ReservationService();
   final AuthReservationNotification authReservationNotification =
       AuthReservationNotification();

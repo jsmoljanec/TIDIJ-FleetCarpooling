@@ -3,11 +3,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/chat/service/notification_service.dart';
 
 class AuthLogin {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final notificationService = NotificationsService();
+  AuthLogin(this.database, this._auth);
+  FirebaseDatabase database;
+  FirebaseAuth _auth;
   void updateOnlineStatus(String? uid, String state) async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("Users/${uid}");
-
+    DatabaseReference ref = database.ref("Users/${uid}");
     await ref.update({"statusActivity": state});
   }
 
@@ -35,6 +35,7 @@ class AuthLogin {
   }
 
   Future<bool> login({required String email, required String password}) async {
+    final notificationService = NotificationsService(FirebaseDatabase.instance);
     if (email.contains('@')) {
       email = email;
     } else {

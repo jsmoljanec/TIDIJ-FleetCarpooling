@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/chat/models/message.dart';
 import 'package:fleetcarpooling/chat/provider/firebase_provider.dart';
 import 'package:core/ui_elements/colors';
@@ -40,7 +42,9 @@ class _MessageBubbleState extends State<MessageBubble> {
   }
 
   void _fetchUserData() {
-    FirebaseProvider().getUserData(widget.message.senderId).then((userData) {
+    FirebaseProvider(FirebaseFirestore.instance, FirebaseDatabase.instance)
+        .getUserData(widget.message.senderId)
+        .then((userData) {
       if (mounted) {
         setState(() {
           name = userData['firstName'] ?? '';

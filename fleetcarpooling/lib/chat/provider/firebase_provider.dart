@@ -5,12 +5,15 @@ import 'package:fleetcarpooling/chat/models/message.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseProvider extends ChangeNotifier {
+  FirebaseProvider(this.firestore, this.firebaseDatabase);
+  FirebaseFirestore firestore;
+  FirebaseDatabase firebaseDatabase;
   ScrollController scrollController = ScrollController();
   List<Message> messages = [];
 
   Future<Map<String, dynamic>> getUserData(String userId) async {
     try {
-      DatabaseReference ref = FirebaseDatabase.instance.ref("Users/$userId");
+      DatabaseReference ref = firebaseDatabase.ref("Users/$userId");
       DatabaseEvent event = await ref.once();
       Map<dynamic, dynamic>? userData =
           event.snapshot.value as Map<dynamic, dynamic>?;
@@ -22,7 +25,7 @@ class FirebaseProvider extends ChangeNotifier {
   }
 
   Stream<List<Message>> getMessages(String receiverId) {
-    return FirebaseFirestore.instance
+    return firestore
         .collection('chat')
         .doc(receiverId)
         .collection('message')
