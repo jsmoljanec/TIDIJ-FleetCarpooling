@@ -31,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
     statusActivity: '',
   );
   final UserRepository userRepository = UserRepository();
-  final notificationService = NotificationsService(FirebaseDatabase.instance);
+
   bool isLoading = false;
 
   @override
@@ -260,6 +260,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   MyElevatedButton(
                     onPressed: () {
+                      final notificationService =
+                          NotificationsService(FirebaseDatabase.instance);
                       FirebaseAuth.instance.signOut();
                       notificationService.deleteToken();
                       AuthLogin(
