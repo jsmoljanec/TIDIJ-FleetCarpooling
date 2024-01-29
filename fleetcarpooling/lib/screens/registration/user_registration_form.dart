@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, constant_identifier_names
 
 import 'package:core/ui_elements/buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,7 +9,7 @@ import 'package:core/ui_elements/colors';
 import 'package:core/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
 
-enum UserType { administrator, employee }
+enum UserType { Administrator, Employee }
 
 class UserRegistrationForm extends StatefulWidget {
   const UserRegistrationForm({super.key});
@@ -23,7 +23,7 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
-  UserType _selectedUserType = UserType.employee;
+  UserType _selectedUserType = UserType.Employee;
   final AuthRegistrationService _authRegistrationService =
       AuthRegistrationService(FirebaseDatabase.instance, FirebaseAuth.instance);
 
@@ -122,17 +122,17 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
-                                _selectedUserType = UserType.employee;
+                                _selectedUserType = UserType.Employee;
                               });
                             },
                             child: MyRadioButton(
                               title: "Employee",
                               onChanged: (value) {
                                 setState(() {
-                                  _selectedUserType = UserType.employee;
+                                  _selectedUserType = UserType.Employee;
                                 });
                               },
-                              value: _selectedUserType == UserType.employee,
+                              value: _selectedUserType == UserType.Employee,
                             ),
                           ),
                         ),
@@ -147,18 +147,18 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
-                                _selectedUserType = UserType.administrator;
+                                _selectedUserType = UserType.Administrator;
                               });
                             },
                             child: MyRadioButton(
                               title: "Admin",
                               onChanged: (value) {
                                 setState(() {
-                                  _selectedUserType = UserType.administrator;
+                                  _selectedUserType = UserType.Administrator;
                                 });
                               },
                               value:
-                                  _selectedUserType == UserType.administrator,
+                                  _selectedUserType == UserType.Administrator,
                             ),
                           ),
                         ),
