@@ -91,6 +91,7 @@ Future<String?> getVehicleModelAndBrand(String vin) async {
       });
     }
   } catch (e) {
+    // ignore: avoid_print
     print('Error getting vehicle data: $e');
     return null;
   }
@@ -100,7 +101,7 @@ Future<String?> getVehicleModelAndBrand(String vin) async {
 
 Future<void> disableCar(
     String vin, bool active, FirebaseDatabase database) async {
-  DatabaseReference ref = database.ref("Vehicles/${vin}");
+  DatabaseReference ref = database.ref("Vehicles/$vin");
 
   await ref.update({
     if (active == true) "active": false,
@@ -109,7 +110,7 @@ Future<void> disableCar(
 }
 
 Future<void> deleteCar(String vin) async {
-  DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles/${vin}");
+  DatabaseReference ref = FirebaseDatabase.instance.ref("Vehicles/$vin");
 
   await ref.remove();
 
@@ -120,7 +121,7 @@ Future<void> deleteCar(String vin) async {
 
 Future<void> deleteCarVehicleLocations(String vin) async {
   DatabaseReference ref =
-      FirebaseDatabase.instance.ref("VehicleLocations/${vin}");
+      FirebaseDatabase.instance.ref("VehicleLocations/$vin");
 
   await ref.remove();
 }
@@ -140,7 +141,7 @@ Stream<bool> getLockStateStream(String vinCar) {
 
 Future<Vehicle?> getVehicleByVin(String vin) async {
   final databaseReference = FirebaseDatabase.instance.ref();
-  var query = await databaseReference
+  var query = databaseReference
       .child("Vehicles")
       .orderByChild('vin')
       .equalTo(vin)

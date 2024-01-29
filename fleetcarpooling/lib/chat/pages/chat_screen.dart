@@ -28,10 +28,10 @@ class _ChatScreenState extends State<ChatScreen> {
         backgroundColor: AppColors.primaryColor,
         toolbarHeight: 70,
         title: Padding(
-          padding: EdgeInsets.only(top: 15.0),
+          padding: const EdgeInsets.only(top: 15.0),
           child: Text(
             '${widget.brand} ${widget.model} ',
-            style: TextStyle(
+            style: const TextStyle(
                 color: AppColors.mainTextColor, fontWeight: FontWeight.w400),
           ),
         ),
@@ -41,7 +41,7 @@ class _ChatScreenState extends State<ChatScreen> {
           child: CircularIconButton(
             onPressed: () {
               FocusManager.instance.primaryFocus?.unfocus();
-              Future.delayed(Duration(milliseconds: 50), () {
+              Future.delayed(const Duration(milliseconds: 50), () {
                 Navigator.pop(context);
               });
             },

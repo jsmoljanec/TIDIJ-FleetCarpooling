@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:core/models/vehicle.dart';
 import 'package:fleetcarpooling/services/vehicle_managament_service.dart';
-import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
-import 'package:fleetcarpooling/ui_elements/navigation.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +101,6 @@ class NotificationsService {
 
   Future<void> getReceiverToken(String? receiverId) async {
     List<String> token = [];
-    print(receiverId);
     DatabaseReference ref =
         database.ref().child("Vehicles").child(receiverId!).child("token");
     DatabaseEvent snapshot = await ref.once();
@@ -146,8 +143,6 @@ class NotificationsService {
               }
             }),
           );
-          print("poslan poruka na ${receiverToken[i]}");
-          print("OD na ${senderId}");
         } catch (e) {
           debugPrint(e.toString());
         }
@@ -160,26 +155,23 @@ class NotificationsService {
     final token = await FirebaseMessaging.instance.getToken();
     var query = await ref
         .child("Vehicles")
-        .orderByChild('token/${token}')
+        .orderByChild('token/$token')
         .equalTo(token)
         .once();
     DataSnapshot snapshot = query.snapshot;
     if (snapshot.value != null) {
       Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
-      if (values != null) {
-        values.forEach((key, value) {
-          print(key);
-          if (value is Map && value['token'][token] == token) {
-            ref
-                .child('Vehicles')
-                .child(key)
-                .child('token')
-                .child(token!)
-                .remove();
-          }
-        });
-      }
-    }
+      values.forEach((key, value) {
+        if (value is Map && value['token'][token] == token) {
+          ref
+              .child('Vehicles')
+              .child(key)
+              .child('token')
+              .child(token!)
+              .remove();
+        }
+      });
+        }
   }
 
   void firebaseNotification(BuildContext context) {

@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: BlocProvider(
         create: (context) => VehicleBloc(),
-        child: AddVehicleManuallyForm(),
+        child: const AddVehicleManuallyForm(),
       ),
     );
   }

@@ -5,7 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 Future<bool> checkUsernameExistence(String username) async {
   bool provjera = false;
   final databaseReference = FirebaseDatabase.instance.ref();
-  var query = await databaseReference
+  var query = databaseReference
       .child("Users")
       .orderByChild('username')
       .equalTo(username)

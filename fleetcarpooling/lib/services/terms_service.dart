@@ -21,12 +21,12 @@ class TermsService {
       var currentDay = reservation.pickupDate;
 
       while (
-          currentDay.isBefore(reservation.returnDate.add(Duration(hours: 1)))) {
+          currentDay.isBefore(reservation.returnDate.add(const Duration(hours: 1)))) {
         if (currentDay.hour >= start && currentDay.hour < end) {
           reservedTerms.add(currentDay);
         }
 
-        currentDay = currentDay.add(Duration(hours: 1));
+        currentDay = currentDay.add(const Duration(hours: 1));
       }
     }
 

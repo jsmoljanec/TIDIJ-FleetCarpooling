@@ -14,6 +14,7 @@ import 'package:fleetcarpooling/auth/auth_reservation_notification.dart';
 import 'package:fleetcarpooling/screens/notifications/notify_me_page.dart';
 import 'package:fleetcarpooling/chat/pages/chat_screen.dart';
 
+// ignore: must_be_immutable
 class SelectedVehiclePage extends StatefulWidget {
   final String vin;
   bool isFree;
@@ -298,7 +299,7 @@ class _SelectedVehiclePageState extends State<SelectedVehiclePage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => NotifyMe(
-                                VinCar: widget.vin,
+                                vinCar: widget.vin,
                                 pickupDateTime: widget.pickupTime.toLocal(),
                                 returnDateTime: widget.returnTime.toLocal(),
                               ),

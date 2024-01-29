@@ -8,13 +8,14 @@ class ChangePasswordForm extends StatefulWidget {
   const ChangePasswordForm({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ChangePasswordFormState createState() => _ChangePasswordFormState();
 }
 
 class _ChangePasswordFormState extends State<ChangePasswordForm> {
-  TextEditingController _currentPasswordController = TextEditingController();
-  TextEditingController _newPasswordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _currentPasswordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   final UserRepository _userRepository = UserRepository();
 
@@ -139,12 +140,16 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
       try {
         await _userRepository.changePassword(currentPassword, newPassword);
 
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Password changed successfully'),
         ));
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
       } catch (e) {
+        // ignore: avoid_print
         print("Error: $e");
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Error changing password: $e'),
         ));

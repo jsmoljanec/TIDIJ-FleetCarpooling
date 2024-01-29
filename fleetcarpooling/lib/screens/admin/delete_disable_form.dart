@@ -90,7 +90,7 @@ class _DeleteDisableForm extends State<DeleteDisableForm> {
                                           FocusManager.instance.primaryFocus
                                               ?.unfocus();
                                           Future.delayed(
-                                              Duration(milliseconds: 50), () {
+                                              const Duration(milliseconds: 50), () {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(

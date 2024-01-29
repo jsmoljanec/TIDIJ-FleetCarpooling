@@ -7,7 +7,7 @@ class AuthNotification {
   AuthNotification(this._auth, this.database) {
     _subscribeToNotificationChanges();
   }
-  FirebaseAuth _auth;
+  final FirebaseAuth _auth;
   FirebaseDatabase database;
   final StreamController<List<Map<String, dynamic>>>
       _notificationStreamController =
@@ -156,6 +156,7 @@ class AuthNotification {
         }
       }
     } catch (e) {
+      // ignore: avoid_print
       print('Error deleting notifications: $e');
       rethrow;
     }

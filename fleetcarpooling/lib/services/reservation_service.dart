@@ -81,6 +81,7 @@ class ReservationService implements ReservationRepository {
             returnTime: returnTime,
           ));
         } catch (e) {
+          // ignore: avoid_print
           print('Error processing reservation data: $e');
         }
       });
@@ -124,8 +125,8 @@ class ReservationService implements ReservationRepository {
         'pickupTime': pickupH,
         'returnTime': returnH,
       });
-      print('Reservation added successfully!');
     } catch (error) {
+      // ignore: avoid_print
       print("Error adding reservation: $error");
       rethrow;
     }
@@ -155,7 +156,7 @@ class ReservationService implements ReservationRepository {
     List<Terms> termini = [];
 
     final databaseReference = FirebaseDatabase.instance.ref();
-    var query = await databaseReference
+    var query = databaseReference
         .child("Reservation")
         .orderByChild('VinCar')
         .equalTo(vin);
@@ -175,8 +176,6 @@ class ReservationService implements ReservationRepository {
       });
     }
 
-    print(termini);
-
     if (pickupTime.isBefore(returnTime)) {
       bool isAvailable = true;
       for (int i = 0; i < termini.length; i++) {
@@ -189,14 +188,11 @@ class ReservationService implements ReservationRepository {
         }
       }
       if (isAvailable) {
-        print('Auto je dostupan!');
         return true;
       } else {
-        print('Automobil nije dostupan u odabranom vremenskom razdoblju.');
         return false;
       }
     } else {
-      print('Vrijeme povratka mora biti nakon vremena preuzimanja.');
       return false;
     }
   }
@@ -355,6 +351,7 @@ class ReservationService implements ReservationRepository {
 
       await ref.remove();
     } catch (error) {
+      // ignore: avoid_print
       print("Error deleting reservation: $error");
       rethrow;
     }
@@ -362,8 +359,8 @@ class ReservationService implements ReservationRepository {
 
   Future<void> deleteAllCarsReservation(String vin) async {
     try {
-      final DatabaseReference _database = FirebaseDatabase.instance.ref();
-      DatabaseEvent snapshot = await _database
+      final DatabaseReference database = FirebaseDatabase.instance.ref();
+      DatabaseEvent snapshot = await database
           .child("Reservation")
           .orderByChild('VinCar')
           .equalTo(vin)
@@ -375,7 +372,7 @@ class ReservationService implements ReservationRepository {
 
         if (notifications != null) {
           notifications.forEach((key, value) async {
-            await _database.child('Reservation').child(key).remove();
+            await database.child('Reservation').child(key).remove();
           });
         }
       }
@@ -455,6 +452,7 @@ class ReservationService implements ReservationRepository {
               name: name,
             ));
           } catch (e) {
+            // ignore: avoid_print
             print('Error processing reservation data: $e');
           }
         });

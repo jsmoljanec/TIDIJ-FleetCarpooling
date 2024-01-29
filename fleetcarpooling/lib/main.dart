@@ -45,7 +45,7 @@ Future<void> main() async {
   User? user = FirebaseAuth.instance.currentUser;
   Widget initialScreen = user != null
       ? NavigationPage(returnTime: DateTime.now(), pickupTime: DateTime.now())
-      : LoginForm();
+      : const LoginForm();
 
   runApp(MyApp(initialScreen: initialScreen));
 }
@@ -66,9 +66,10 @@ class MyApp extends StatelessWidget {
 class AppWrapper extends StatefulWidget {
   final Widget initialScreen;
 
-  AppWrapper({required this.initialScreen});
+  const AppWrapper({super.key, required this.initialScreen});
 
   @override
+  // ignore: library_private_types_in_public_api
   _AppWrapperState createState() => _AppWrapperState();
 }
 
@@ -81,7 +82,7 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     myController = TextEditingController();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -108,7 +109,7 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     myController.dispose();
     super.dispose();
   }

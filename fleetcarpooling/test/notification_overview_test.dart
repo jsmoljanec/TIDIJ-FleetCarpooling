@@ -1,9 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:fleetcarpooling/services/vehicle_managament_service.dart';
 import 'package:fleetcarpooling/auth/auth_notification.dart';
-import 'package:fleetcarpooling/screens/admin/delete_disable_form.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_database_mocks/firebase_database_mocks.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
@@ -20,8 +16,6 @@ void main() async {
     displayName: 'Bob',
   );
   final auth = MockFirebaseAuth(mockUser: user);
-  final result = await auth.signInWithEmailAndPassword(
-      email: "bob@somedomain.com", password: "123");
 
   const fakeData = {
     'Vehicles': {

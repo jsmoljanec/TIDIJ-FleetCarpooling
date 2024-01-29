@@ -12,6 +12,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:manuallyaddition/services/image_service.dart';
 
 class AddVehicleManuallyForm extends AddVehicleInteface {
+  const AddVehicleManuallyForm({super.key});
+
   @override
   State<StatefulWidget> createState() => _AddVehicleManuallyForm();
 
@@ -30,10 +32,10 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
   final TextEditingController fuelConsumptionController =
       TextEditingController();
   late String imageUrlCar = "";
-  List<String> years = new List.empty();
+  List<String> years = List.empty();
   bool isImageUploaded = false;
   final List<String> capacity = ['1', '2', '3', '4', '5', '6', '7'];
-  final UploadImage _repository = new UploadImage();
+  final UploadImage _repository = UploadImage();
   final List<String> transmissionType = ['Automatic', 'Manual'];
   String? selectedCapacity;
   String? selectedTransType;
@@ -69,7 +71,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('OK'),
+                    child: const Text('OK'),
                   ),
                 ],
               ),
@@ -87,7 +89,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('OK'),
+                    child: const Text('OK'),
                   ),
                 ],
               ),
@@ -146,7 +148,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                 ),
               ),
               const SizedBox(height: 3.0),
-              Container(
+              SizedBox(
                 height: 43,
                 child: MyTextField(
                     controller: vinController, regex: RegExp(r'^.{17}$')),
@@ -163,7 +165,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                 ),
               ),
               const SizedBox(height: 3.0),
-              Container(
+              SizedBox(
                 height: 43,
                 child: MyTextField(controller: modelController),
               ),
@@ -179,7 +181,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                 ),
               ),
               const SizedBox(height: 3.0),
-              Container(
+              SizedBox(
                 height: 43,
                 child: MyTextField(controller: brandController),
               ),
@@ -218,7 +220,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                   ),
                 ],
               ),
-              SizedBox(height: 3.0),
+              const SizedBox(height: 3.0),
               Row(
                 children: <Widget>[
                   Expanded(
@@ -226,7 +228,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                     child: FractionallySizedBox(
                       widthFactor: 1,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 24),
+                        padding: const EdgeInsets.only(left: 24),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
@@ -280,13 +282,13 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 40),
+                  const SizedBox(width: 40),
                   Expanded(
                     flex: 6,
                     child: FractionallySizedBox(
                       widthFactor: 1,
                       child: Padding(
-                        padding: EdgeInsets.only(right: 24),
+                        padding: const EdgeInsets.only(right: 24),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
@@ -350,7 +352,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                 ],
               ),
               const SizedBox(height: 20),
-              Row(
+              const Row(
                 children: <Widget>[
                   Expanded(
                     flex: 4,
@@ -360,18 +362,16 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                         padding: EdgeInsets.only(left: 24),
                         child: Align(
                           alignment: Alignment.centerLeft,
-                          child: Container(
-                            child: Text(
-                              "Year",
-                              style: TextStyle(color: AppColors.mainTextColor),
-                            ),
+                          child: Text(
+                            "Year",
+                            style: TextStyle(color: AppColors.mainTextColor),
                           ),
                         ),
                       ),
                     ),
                   ),
                   SizedBox(width: 40),
-                  const Expanded(
+                  Expanded(
                     flex: 6,
                     child: FractionallySizedBox(
                       widthFactor: 1,
@@ -386,7 +386,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                   ),
                 ],
               ),
-              SizedBox(height: 3.0),
+              const SizedBox(height: 3.0),
               Row(
                 children: <Widget>[
                   Expanded(
@@ -394,7 +394,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                     child: FractionallySizedBox(
                       widthFactor: 1,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 24),
+                        padding: const EdgeInsets.only(left: 24),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
@@ -448,14 +448,14 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     flex: 6,
                     child: FractionallySizedBox(
                       widthFactor: 1,
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Container(
+                        child: SizedBox(
                           height: 43,
                           child: MyTextField(
                               controller: fuelConsumptionController,
@@ -467,8 +467,8 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
-              Row(
+              const SizedBox(height: 20),
+              const Row(
                 children: <Widget>[
                   Expanded(
                     flex: 4,
@@ -478,11 +478,9 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                         padding: EdgeInsets.only(left: 24),
                         child: Align(
                           alignment: Alignment.centerLeft,
-                          child: Container(
-                            child: Text(
-                              "Registration",
-                              style: TextStyle(color: AppColors.mainTextColor),
-                            ),
+                          child: Text(
+                            "Registration",
+                            style: TextStyle(color: AppColors.mainTextColor),
                           ),
                         ),
                       ),
@@ -490,7 +488,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                   ),
                 ],
               ),
-              SizedBox(height: 3.0),
+              const SizedBox(height: 3.0),
               Row(
                 children: <Widget>[
                   Expanded(
@@ -498,10 +496,10 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                     child: FractionallySizedBox(
                       widthFactor: 1,
                       child: Padding(
-                        padding: EdgeInsets.only(right: 24),
+                        padding: const EdgeInsets.only(right: 24),
                         child: Align(
                           alignment: Alignment.centerLeft,
-                          child: Container(
+                          child: SizedBox(
                             height: 43,
                             child:
                                 MyTextField(controller: registrationController),
@@ -510,14 +508,14 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     flex: 4,
                     child: FractionallySizedBox(
                       widthFactor: 1,
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Container(
+                        child: SizedBox(
                           height: 43,
                           child: Row(
                             children: <Widget>[
@@ -535,7 +533,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                                   }
                                 },
                               ),
-                              SizedBox(width: 20),
+                              const SizedBox(width: 20),
                               IconButton(
                                 icon: Icon(Icons.upload,
                                     color:
@@ -558,7 +556,7 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                   ),
                 ],
               ),
-              SizedBox(height: 40.0),
+              const SizedBox(height: 40.0),
               MyElevatedButton(
                 onPressed: () {
                   bool isVinValid =
@@ -606,12 +604,12 @@ class _AddVehicleManuallyForm extends State<AddVehicleManuallyForm> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('Error'),
-                          content: Text(
+                          title: const Text('Error'),
+                          content: const Text(
                               'Incorrect entry, VIN must contain 17 characters and all data must be entered.'),
                           actions: <Widget>[
                             TextButton(
-                              child: Text('OK'),
+                              child: const Text('OK'),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },

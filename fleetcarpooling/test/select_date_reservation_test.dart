@@ -7,7 +7,7 @@ import 'package:table_calendar/table_calendar.dart';
 void main() {
   testWidgets('ReservationScreen is created successfully',
       (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
       home: ReservationScreen(),
     ));
 
@@ -15,7 +15,7 @@ void main() {
   });
 
   testWidgets('Initial UI test', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(home: ReservationScreen()));
+    await tester.pumpWidget(const MaterialApp(home: ReservationScreen()));
 
     expect(find.text('FLEET CARPOOLING'), findsOneWidget);
     expect(find.text('WHEN ARE YOU PLANNING TO TRAVEL?'), findsOneWidget);
@@ -27,12 +27,10 @@ void main() {
 
   testWidgets('Initial state of ReservationScreen is as expected',
       (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
       home: ReservationScreen(),
     ));
 
-    final ReservationScreen widget =
-        tester.firstWidget(find.byType(ReservationScreen));
     final ReservationScreenState state =
         tester.state(find.byType(ReservationScreen));
 
@@ -50,15 +48,15 @@ void main() {
 
   test('selects pickup time', () {
     var state = ReservationScreenState();
-    state.pickupTime = TimeOfDay(hour: 15, minute: 30);
+    state.pickupTime = const TimeOfDay(hour: 15, minute: 30);
     expect(state.pickupTime.hour, 15);
     expect(state.pickupTime.minute, 30);
   });
 
   test('navigates on submit with times', () {
     var state = ReservationScreenState();
-    state.pickupTime = TimeOfDay(hour: 8, minute: 15);
-    state.returnTime = TimeOfDay(hour: 17, minute: 0);
+    state.pickupTime = const TimeOfDay(hour: 8, minute: 15);
+    state.returnTime = const TimeOfDay(hour: 17, minute: 0);
     state.selectedDateRange =
         DateTimeRange(start: DateTime(2023, 2, 15), end: DateTime(2023, 2, 17));
     state.isDateSelected = true;

@@ -13,7 +13,7 @@ class AuthRegistrationService {
   void writeDataToDatabase(String uid, String userName, String email,
       String firstName, String lastName, String role) {
     String profileImage = "";
-    model.User _user = model.User(
+    model.User user = model.User(
         username: userName,
         email: email,
         firstName: firstName,
@@ -25,7 +25,7 @@ class AuthRegistrationService {
     DatabaseReference usersRef = firebaseDatabase.ref().child("Users");
     DatabaseReference newUserRef = usersRef.child(uid);
 
-    newUserRef.set(_user.toMap());
+    newUserRef.set(user.toMap());
   }
 
   Future<void> registerUser(
@@ -53,8 +53,10 @@ class AuthRegistrationService {
       }
     } on FirebaseAuthException catch (e) {
       if (e.message == "The email address is badly formatted.")
+        // ignore: curly_braces_in_flow_control_structures
         throw FirebaseAuthException(code: 'wrong-format');
       else
+        // ignore: curly_braces_in_flow_control_structures
         throw FirebaseAuthException(code: 'email-already-in-use');
     } catch (e) {
       throw FirebaseAuthException(code: 'user-not-added');

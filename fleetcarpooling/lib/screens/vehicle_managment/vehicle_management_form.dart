@@ -5,6 +5,8 @@ import 'package:fleetcarpooling/screens/admin/delete_disable_form.dart';
 import 'package:flutter/material.dart';
 
 class VehicleManagementForm extends StatelessWidget {
+  const VehicleManagementForm({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +38,7 @@ class VehicleManagementForm extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           MyElevatedButton(
               onPressed: () async {
                 Navigator.push(

@@ -7,10 +7,13 @@ import 'package:core/ui_elements/colors';
 import 'package:core/ui_elements/text_field.dart';
 import 'package:flutter/material.dart';
 
-enum UserType { Administrator, Employee }
+enum UserType { administrator, employee }
 
 class UserRegistrationForm extends StatefulWidget {
+  const UserRegistrationForm({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _UserRegistrationForm createState() => _UserRegistrationForm();
 }
 
@@ -18,9 +21,9 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
-  UserType _selectedUserType = UserType.Employee;
+  UserType _selectedUserType = UserType.employee;
   final AuthRegistrationService _authRegistrationService =
-      new AuthRegistrationService(
+      AuthRegistrationService(
           FirebaseDatabase.instance, FirebaseAuth.instance);
 
   @override
@@ -111,55 +114,55 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
+                    flex: 1,
                     child: Row(
                       children: [
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
-                                _selectedUserType = UserType.Employee;
+                                _selectedUserType = UserType.employee;
                               });
                             },
                             child: MyRadioButton(
                               title: "Employee",
                               onChanged: (value) {
                                 setState(() {
-                                  _selectedUserType = UserType.Employee;
+                                  _selectedUserType = UserType.employee;
                                 });
                               },
-                              value: _selectedUserType == UserType.Employee,
+                              value: _selectedUserType == UserType.employee,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    flex: 1,
                   ),
                   Expanded(
+                    flex: 1,
                     child: Row(
                       children: [
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
-                                _selectedUserType = UserType.Administrator;
+                                _selectedUserType = UserType.administrator;
                               });
                             },
                             child: MyRadioButton(
                               title: "Admin",
                               onChanged: (value) {
                                 setState(() {
-                                  _selectedUserType = UserType.Administrator;
+                                  _selectedUserType = UserType.administrator;
                                 });
                               },
                               value:
-                                  _selectedUserType == UserType.Administrator,
+                                  _selectedUserType == UserType.administrator,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    flex: 1,
                   ),
                 ],
               ),
@@ -173,25 +176,25 @@ class _UserRegistrationForm extends State<UserRegistrationForm> {
                             firstNameController.text,
                             lastNameController.text,
                             _selectedUserType.name.toString());
-                        ScaffoldMessenger.of(context as BuildContext)
+                        ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text('User added and message sent'),
                         ));
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'email-already-in-use') {
-                          ScaffoldMessenger.of(context as BuildContext)
+                          ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                             content:
                                 Text('User not added! Email already in use'),
                           ));
                         } else if (e.code == 'wrong-format') {
-                          ScaffoldMessenger.of(context as BuildContext)
+                          ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                             content:
                                 Text('User not added! Wrong email format!'),
                           ));
                         } else {
-                          ScaffoldMessenger.of(context as BuildContext)
+                          ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                             content: Text('User not added!'),
                           ));

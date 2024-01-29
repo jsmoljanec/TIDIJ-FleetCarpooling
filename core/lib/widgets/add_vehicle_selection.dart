@@ -9,9 +9,11 @@ import 'package:qraddition/screens/add_vehicle_QR_form.dart';
 
 class AddVehicleSelection extends StatelessWidget {
   final List<AddVehicleInteface> _vehicleAdditionForms = [
-    AddVehicleManuallyForm() as AddVehicleInteface,
-    AddVehicleQRForm() as AddVehicleInteface,
+    const AddVehicleManuallyForm(),
+    const AddVehicleQRForm(),
   ];
+
+  AddVehicleSelection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +63,7 @@ class AddVehicleSelection extends StatelessWidget {
                     label: vehicleAdditionForm.getName(),
                   ),
                 ),
-                SizedBox(height: 500),
+                const SizedBox(height: 500),
               ],
             ),
           ),

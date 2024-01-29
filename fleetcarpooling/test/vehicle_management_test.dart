@@ -1,14 +1,10 @@
-import 'package:core/services/vehicle_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/services/vehicle_managament_service.dart';
-import 'package:fleetcarpooling/screens/admin/delete_disable_form.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_database_mocks/firebase_database_mocks.dart';
 
 void main() {
   FirebaseDatabase firebaseDatabase;
-  VehicleService? vehicleService;
   const fakeData = {
     'Vehicles': {
       'vehicle1': {
@@ -47,7 +43,6 @@ void main() {
   firebaseDatabase = MockFirebaseDatabase.instance;
 
   setUp(() {
-    vehicleService = VehicleService(firebaseDatabase);
   });
   group("VehicleManagement", () {
     test('Should update car in active', () async {

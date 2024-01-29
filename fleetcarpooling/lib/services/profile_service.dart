@@ -36,9 +36,6 @@ class ProfileService {
         String uid = user.uid;
 
         FirebaseStorage.instance.refFromURL(url).delete();
-
-        print("Profile image deleted successfully");
-
         DatabaseReference ref = FirebaseDatabase.instance.ref("Users/$uid");
 
         await ref.update({
@@ -50,6 +47,7 @@ class ProfileService {
         throw Exception('User is null');
       }
     } catch (e) {
+      // ignore: avoid_print
       print("Error deleting profile image: $e");
       rethrow;
     }

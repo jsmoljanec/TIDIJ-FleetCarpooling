@@ -10,7 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/ui_elements/navigation.dart';
 
 class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _LoginFormState createState() => _LoginFormState();
 }
 
@@ -30,6 +33,7 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -116,6 +120,7 @@ class _LoginFormState extends State<LoginForm> {
                               FirebaseDatabase.instance, FirebaseAuth.instance)
                           .isAdmin();
                       if (adminIsLogged == true) {
+                        // ignore: use_build_context_synchronously
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -123,6 +128,7 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         );
                       } else {
+                        // ignore: use_build_context_synchronously
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -147,7 +153,7 @@ class _LoginFormState extends State<LoginForm> {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return ResetPasswordForm();
+                      return const ResetPasswordForm();
                     }));
                   },
                   child: const Text(
@@ -160,7 +166,7 @@ class _LoginFormState extends State<LoginForm> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       errorMessage!,
-                      style: TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red),
                     ),
                   ),
               ],

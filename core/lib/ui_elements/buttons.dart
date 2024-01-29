@@ -74,6 +74,7 @@ class MyRadioButton extends StatefulWidget {
       required this.value});
 
   @override
+  // ignore: library_private_types_in_public_api
   _MyRadioButtonState createState() => _MyRadioButtonState();
 }
 

@@ -72,7 +72,7 @@ class AdminHomePage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => UserRegistrationForm(),
+                      builder: (context) => const UserRegistrationForm(),
                     ),
                   );
                 },
@@ -116,7 +116,7 @@ class AdminHomePage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AllReservations(),
+                      builder: (context) => const AllReservations(),
                     ),
                   );
                 },

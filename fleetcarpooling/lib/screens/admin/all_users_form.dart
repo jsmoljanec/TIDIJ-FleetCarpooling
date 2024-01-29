@@ -109,6 +109,7 @@ class _AllUsersFormState extends State<AllUsersForm> {
   }
 }
 
+// ignore: must_be_immutable
 class UsersList extends StatelessWidget {
   final UserRepository _userRepository = UserRepository();
   final String searchQuery;
@@ -167,8 +168,7 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    final UserRepository _userRepository = UserRepository();
+    final UserRepository userRepository = UserRepository();
 
     return Card(
       color: Colors.white,
@@ -219,7 +219,7 @@ class CardWidget extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
               height: 1,
               color: AppColors.mainTextColor,
             ),
@@ -265,7 +265,7 @@ class CardWidget extends StatelessWidget {
                                       Navigator.of(context).pop();
                                       return;
                                     } else {
-                                      _userRepository
+                                      userRepository
                                           .deleteUser(user.email)
                                           .then((value) {
                                         Navigator.of(context).pop();

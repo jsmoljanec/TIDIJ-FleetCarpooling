@@ -5,7 +5,6 @@ import 'package:fleetcarpooling/services/reservation_service.dart';
 import 'package:fleetcarpooling/auth/auth_notify_me.dart';
 import 'package:fleetcarpooling/auth/auth_notification.dart';
 import 'package:fleetcarpooling/models/user_model.dart' as usermod;
-import 'package:flutter/widgets.dart';
 
 class UserRepository {
   Future<usermod.User> fetchUserData() async {
@@ -34,8 +33,9 @@ class UserRepository {
         throw Exception('User is null');
       }
     } catch (e) {
+      // ignore: avoid_print
       print("Error: $e");
-      throw e;
+      rethrow;
     }
   }
 
@@ -52,14 +52,13 @@ class UserRepository {
 
         await user.reauthenticateWithCredential(credential);
         await user.updatePassword(newPassword);
-
-        print("Password changed successfully");
       } else {
         throw Exception('User is null');
       }
     } catch (e) {
+      // ignore: avoid_print
       print("Error changing password: $e");
-      throw e;
+      rethrow;
     }
   }
 
@@ -67,8 +66,9 @@ class UserRepository {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email.trim());
     } on FirebaseAuthException catch (e) {
+      // ignore: avoid_print
       print(e);
-      throw e;
+      rethrow;
     }
   }
 
@@ -147,8 +147,9 @@ class UserRepository {
 
       return null;
     } catch (e) {
+      // ignore: avoid_print
       print("Error fetching full name: $e");
-      throw e;
+      rethrow;
     }
   }
 
@@ -164,14 +165,13 @@ class UserRepository {
         await ref.update({
           'profileImage': imageUrl,
         });
-
-        print("Profile image updated successfully");
       } else {
         throw Exception('User is null');
       }
     } catch (e) {
+      // ignore: avoid_print
       print("Error updating profile image: $e");
-      throw e;
+      rethrow;
     }
   }
 }

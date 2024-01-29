@@ -11,6 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
 
 class AddVehicleQRForm extends AddVehicleInteface {
+  const AddVehicleQRForm({super.key});
+
   @override
   State<StatefulWidget> createState() => _AddVehicleQRForm();
 
@@ -45,7 +47,7 @@ class _AddVehicleQRForm extends State<AddVehicleQRForm> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('OK'),
+                    child: const Text('OK'),
                   ),
                 ],
               ),
@@ -63,7 +65,7 @@ class _AddVehicleQRForm extends State<AddVehicleQRForm> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('OK'),
+                    child: const Text('OK'),
                   ),
                 ],
               ),
@@ -109,7 +111,7 @@ class _AddVehicleQRForm extends State<AddVehicleQRForm> {
               fit: BoxFit.cover,
               onError: (context, error) => Text(
                 error.toString(),
-                style: TextStyle(color: Colors.red),
+                style: const TextStyle(color: Colors.red),
               ),
               qrCodeCallback: (code) {
                 handleScannedData(code!);
@@ -122,7 +124,6 @@ class _AddVehicleQRForm extends State<AddVehicleQRForm> {
   }
 
   void handleScannedData(String scannedData) {
-    print("Scanned");
     Map<String, dynamic> decodedData = jsonDecode(scannedData);
     String vin = decodedData['vin'];
     String model = decodedData['model'];

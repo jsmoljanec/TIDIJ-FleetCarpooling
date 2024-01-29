@@ -71,11 +71,14 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
                 onPressed: () async {
                   try {
                     await UserRepository().passwordReset(emailController.text);
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Password reset email sent successfully'),
                     ));
                   } catch (e) {
+                    // ignore: avoid_print
                     print("Error sending password reset email: $e");
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text(
                           'Error sending password reset email. Please try again later.'),

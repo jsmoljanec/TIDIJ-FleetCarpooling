@@ -217,9 +217,6 @@ class ReservationScreenState extends State<ReservationScreen> {
                       ),
                       (route) => false,
                     );
-
-                    print(pickupDateTime);
-                    print(returnDateTime);
                   },
                   label: "CHECK",
                 ),

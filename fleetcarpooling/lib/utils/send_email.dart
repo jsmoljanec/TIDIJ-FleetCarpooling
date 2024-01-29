@@ -1,10 +1,12 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> sendEmail(String email, FirebaseAuth auth, String username_login,
-    String password_login) async {
+Future<void> sendEmail(String email, FirebaseAuth auth, String usernameLogin,
+    String passwordLogin) async {
   String username = dotenv.env['EMAIL_USERNAME']!;
   String password = dotenv.env['EMAIL_PASSWORD']!;
 
@@ -15,16 +17,16 @@ Future<void> sendEmail(String email, FirebaseAuth auth, String username_login,
     ..recipients.add(email)
     ..subject = 'Welcome to FleetCarpooling'
     ..html =
-        "<h3>Welcome to FleetCarpooling</h3>\n<p>You have been successfully added to the application.</p>\n<p>Your username is <b>${username_login}</b> and the password you can use to log in is <b>${password_login}</b>. Please change your password during your first login or using the password change link that will be active 1 hour after receiving it.</p>\n<p>In a few moments, you will receive a link where you can set your password.</p>\n\n<p>Best regards!</p>";
+        "<h3>Welcome to FleetCarpooling</h3>\n<p>You have been successfully added to the application.</p>\n<p>Your username is <b>$usernameLogin</b> and the password you can use to log in is <b>$passwordLogin</b>. Please change your password during your first login or using the password change link that will be active 1 hour after receiving it.</p>\n<p>In a few moments, you will receive a link where you can set your password.</p>\n\n<p>Best regards!</p>";
 
   try {
     final sendReport = await send(message, smtpServer);
-    print('Message sent: ' + sendReport.toString());
-    Future.delayed(Duration(minutes: 1), () {
+    print('Message sent: $sendReport');
+    Future.delayed(const Duration(minutes: 1), () {
       sendLinkForNewPassword(email, auth);
     });
   } catch (e) {
-    throw e;
+    rethrow;
   }
 }
 
@@ -54,7 +56,7 @@ Future<void> sendReservationEmail(String email, String datePickup,
 
   try {
     final sendReport = await send(message, smtpServer);
-    print('Message sent: ' + sendReport.toString());
+    print('Message sent: $sendReport');
   } on MailerException catch (e) {
     print('Message not sent.');
     for (var p in e.problems) {

@@ -30,9 +30,9 @@ class UploadImage implements ImageRepository {
     Reference referenceRoot = FirebaseStorage.instance.ref();
     Reference referenceDirImages = referenceRoot.child('images');
     Reference referenceImageToUpload = referenceDirImages.child(uniqueName);
-    referenceImageToUpload.putFile(File(file!.path));
+    referenceImageToUpload.putFile(File(file.path));
     try {
-      await referenceImageToUpload.putFile(File(file!.path));
+      await referenceImageToUpload.putFile(File(file.path));
       return await referenceImageToUpload.getDownloadURL();
     } catch (error) {
       return "error";

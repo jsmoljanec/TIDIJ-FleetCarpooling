@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class VehicleController extends StatefulWidget {
   final Function(String) onCommand;
+  // ignore: prefer_typing_uninitialized_variables
   final selectedMarkerId;
   final bool refreshUI;
 
@@ -15,6 +16,7 @@ class VehicleController extends StatefulWidget {
       required this.refreshUI});
 
   @override
+  // ignore: library_private_types_in_public_api
   _VehicleControllerState createState() => _VehicleControllerState();
 }
 

@@ -9,7 +9,6 @@ import 'package:fleetcarpooling/screens/reservations/reservation_form.dart';
 import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';
 import 'package:fleetcarpooling/utils/datetime_utils.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 class HomePage extends StatefulWidget {
   final DateTime pickupTime;
@@ -53,9 +52,6 @@ class _HomePageState extends State<HomePage> {
         widget.pickupTime.hour == widget.returnTime.hour) {
       isEqual = true;
     }
-    print(widget.pickupTime);
-    print(widget.returnTime);
-    print(isEqual);
   }
 
   @override
@@ -63,12 +59,6 @@ class _HomePageState extends State<HomePage> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double padding2 = screenHeight * 0.02;
-
-    String pickupDateTime =
-        '${widget.pickupTime.year}-${widget.pickupTime.month.toString().padLeft(2, '0')}-${widget.pickupTime.day.toString().padLeft(2, '0')} ${widget.pickupTime.hour.toString().padLeft(2, '0')}:${widget.pickupTime.minute}${widget.pickupTime.second}';
-
-    String returnDateTime =
-        '${widget.returnTime.year}-${widget.returnTime.month.toString().padLeft(2, '0')}-${widget.returnTime.day.toString().padLeft(2, '0')} ${widget.returnTime.hour.toString().padLeft(2, '0')}:${widget.returnTime.minute}${widget.returnTime.second}';
 
     DateTimeUtils dateTimeUtils = DateTimeUtils();
 
@@ -111,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                                       PageRouteBuilder(
                                         pageBuilder: (context, animation,
                                                 secondaryAnimation) =>
-                                            ReservationScreen(),
+                                            const ReservationScreen(),
                                         transitionsBuilder: (context, animation,
                                             secondaryAnimation, child) {
                                           const begin = Offset(0.0, 1.0);

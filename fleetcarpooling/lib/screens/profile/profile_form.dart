@@ -17,6 +17,7 @@ class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProfilePageState createState() => _ProfilePageState();
 }
 
@@ -47,6 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
         userProfile = user;
       });
     } catch (e) {
+      // ignore: avoid_print
       print("Error fetching user data: $e");
     }
   }
@@ -78,6 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
       await profileService.deleteProfileImage(userProfile.profileImage);
       await fetchUserData();
     } catch (e) {
+      // ignore: avoid_print
       print("Error deleting profile image: $e");
     }
   }
@@ -100,6 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
             TextButton(
               onPressed: () async {
                 await deleteProfileImage();
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
               child: const Text("Delete"),
@@ -271,7 +275,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               "offline");
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginForm()),
+                        MaterialPageRoute(builder: (context) => const LoginForm()),
                         (route) => false,
                       );
                     },

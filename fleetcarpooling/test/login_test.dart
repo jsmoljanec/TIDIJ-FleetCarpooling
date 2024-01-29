@@ -9,7 +9,7 @@ void main() {
   group('LoginForm Widget Tests', () {
     testWidgets('Renders correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(body: LoginForm()),
         ),
       );
