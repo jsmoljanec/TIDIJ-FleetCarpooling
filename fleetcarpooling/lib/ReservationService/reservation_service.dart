@@ -307,7 +307,7 @@ class ReservationService implements ReservationRepository {
                 value['pickupTime'],
                 value['returnTime']);
 
-            AuthNotification notifications = AuthNotification();
+            AuthNotification notifications = AuthNotification(FirebaseAuth.instance, FirebaseDatabase.instance);
             await notifications.deleteNotifications(
                 value['VinCar'],
                 value['returnDate'],

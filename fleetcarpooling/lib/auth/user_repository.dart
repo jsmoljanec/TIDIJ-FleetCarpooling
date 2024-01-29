@@ -100,7 +100,7 @@ class UserRepository {
 
   Future<bool> deleteUser(String email) async {
     late final ReservationService reservationService = ReservationService();
-    late final AuthNotification authNotification = AuthNotification();
+    late final AuthNotification authNotification = AuthNotification(FirebaseAuth.instance, FirebaseDatabase.instance);
     late final AuthNotifyMe authNotifyMe = AuthNotifyMe();
 
     DatabaseReference ref = FirebaseDatabase.instance.ref("Users");

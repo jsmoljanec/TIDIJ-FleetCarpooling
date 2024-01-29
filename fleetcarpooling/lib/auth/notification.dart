@@ -4,8 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class AuthNotification {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
+  AuthNotification(this._auth, this.database) {
+    _subscribeToNotificationChanges();
+  }
+  FirebaseAuth _auth;
+  FirebaseDatabase database;
   final StreamController<List<Map<String, dynamic>>>
       _notificationStreamController =
       StreamController<List<Map<String, dynamic>>>.broadcast();
@@ -17,12 +20,8 @@ class AuthNotification {
     return _auth.currentUser;
   }
 
-  AuthNotification() {
-    _subscribeToNotificationChanges();
-  }
-
   void _subscribeToNotificationChanges() {
-    _databaseReference.child('Notifications').onValue.listen((event) async {
+    database.ref().child('Notifications').onValue.listen((event) async {
       if (event.snapshot.value != null) {
         Map<dynamic, dynamic>? notifications =
             event.snapshot.value as Map<dynamic, dynamic>?;
@@ -76,47 +75,10 @@ class AuthNotification {
     });
   }
 
-  Future<List<Map<String, dynamic>>> getNotifications() async {
-    try {
-      DatabaseEvent snapshot =
-          await _databaseReference.child('Notifications').once();
-
-      // ignore: unnecessary_null_comparison
-      if (snapshot.snapshot != null) {
-        Map<dynamic, dynamic>? notifications =
-            snapshot.snapshot.value as Map<dynamic, dynamic>?;
-
-        if (notifications != null) {
-          User? currentUser = getCurrentUser();
-          List<Map<String, dynamic>> userNotifications = [];
-
-          notifications.forEach((key, value) {
-            if (value['email'] == currentUser?.email) {
-              userNotifications.add({
-                'key': key,
-                'message': value['message'],
-                'VinCar': value['VinCar'],
-                'pickupDate': value['pickupDate'],
-                'pickupTime': value['pickupTime'],
-                'returnDate': value['returnDate'],
-                'returnTime': value['returnTime'],
-              });
-            }
-          });
-
-          return userNotifications;
-        }
-      }
-
-      return [];
-    } catch (e) {
-      throw Exception('Error fetching notifications: $e');
-    }
-  }
-
   Future<void> deleteAllUserNotifications(String email) async {
     try {
-      DatabaseEvent snapshot = await _databaseReference
+      DatabaseEvent snapshot = await database
+          .ref()
           .child('Notifications')
           .orderByChild('email')
           .equalTo(email)
@@ -127,7 +89,7 @@ class AuthNotification {
             snapshot.snapshot.value as Map<dynamic, dynamic>?;
 
         notifications?.forEach((key, value) async {
-          await _databaseReference.child('Notifications').child(key).remove();
+          await database.ref().child('Notifications').child(key).remove();
         });
       }
     } catch (e) {
@@ -136,9 +98,13 @@ class AuthNotification {
   }
 
   Future<Map<String, dynamic>?> getCarDetails(String vinCar) async {
+    if (vinCar.isEmpty) {
+      throw Exception('vinCar cannot be null or empty');
+    }
+
     try {
       DatabaseEvent snapshot =
-          await _databaseReference.child('Vehicles').child(vinCar).once();
+          await database.ref().child('Vehicles').child(vinCar).once();
 
       // ignore: unnecessary_null_comparison
       if (snapshot.snapshot != null) {
@@ -152,7 +118,7 @@ class AuthNotification {
         }
       }
 
-      throw Exception('Car details not found');
+      return null;
     } catch (e) {
       throw Exception('Error fetching car details: $e');
     }

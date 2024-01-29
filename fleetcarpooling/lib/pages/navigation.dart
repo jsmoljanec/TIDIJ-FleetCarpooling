@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:fleetcarpooling/pages/reservation_form.dart';
 import 'package:flutter/material.dart';
 import 'package:core/ui_elements/colors';
@@ -31,7 +32,7 @@ class _NavigationPageState extends State<NavigationPage> {
         pickupTime: widget.pickupTime,
         returnTime: widget.returnTime,
       ),
-      const NotificationPage(),
+      NotificationPage(database: FirebaseDatabase.instance),
       const MapPage(),
       const MyReservationsPage(),
     ];
