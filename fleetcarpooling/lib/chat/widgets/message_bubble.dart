@@ -249,6 +249,24 @@ class _MessageBubbleState extends State<MessageBubble> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                if (!widget.isMe && role == "Administrator")
+                  Row(
+                    children: [
+                      Text(
+                        username,
+                        style: const TextStyle(
+                          color: AppColors.mainTextColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Text(
+                        " Admin",
+                        style: TextStyle(
+                          color: AppColors.mainTextColor,
+                        ),
+                      ),
+                    ],
+                  ),
                 const SizedBox(height: 5),
                 widget.isImage
                     ? GestureDetector(
