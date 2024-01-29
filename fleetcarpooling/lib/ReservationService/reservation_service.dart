@@ -307,7 +307,8 @@ class ReservationService implements ReservationRepository {
                 value['pickupTime'],
                 value['returnTime']);
 
-            AuthNotification notifications = AuthNotification(FirebaseAuth.instance, FirebaseDatabase.instance);
+            AuthNotification notifications = AuthNotification(
+                FirebaseAuth.instance, FirebaseDatabase.instance);
             await notifications.deleteNotifications(
                 value['VinCar'],
                 value['returnDate'],
@@ -342,7 +343,8 @@ class ReservationService implements ReservationRepository {
             reservationData['pickupTime'],
             reservationData['returnTime']);
 
-        AuthNotification notifications = AuthNotification();
+        AuthNotification notifications =
+            AuthNotification(FirebaseAuth.instance, FirebaseDatabase.instance);
         await notifications.deleteNotifications(
             reservationData['VinCar'],
             reservationData['returnDate'],
