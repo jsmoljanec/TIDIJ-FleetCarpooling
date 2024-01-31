@@ -1,5 +1,5 @@
 import 'package:core/models/add_vehicle_interface.dart';
-import 'package:core/bloc/vehicle_bloc.dart';
+import 'package:fleetcarpooling/bloc/vehicle_bloc.dart';
 import 'package:core/ui_elements/buttons.dart';
 import 'package:core/ui_elements/colors';
 import 'package:flutter/material.dart';

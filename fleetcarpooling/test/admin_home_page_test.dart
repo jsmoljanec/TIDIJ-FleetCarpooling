@@ -1,7 +1,7 @@
 import 'package:fleetcarpooling/screens/admin/admin_home_page.dart';
+import 'package:fleetcarpooling/widgets/add_vehicle_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:core/widgets/add_vehicle_selection.dart';
 import 'package:core/ui_elements/buttons.dart';
 
 void main() {

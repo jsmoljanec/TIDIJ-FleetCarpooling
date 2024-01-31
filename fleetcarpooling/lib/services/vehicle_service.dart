@@ -1,8 +1,8 @@
 import 'package:core/event/vehicle_event.dart';
-import 'package:core/services/vehicle_location_service.dart';
 import 'package:core/models/vehicle.dart';
-import 'package:core/models/vehicle_location_model.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:fleetcarpooling/Models/vehicle_location_model.dart';
+import 'package:fleetcarpooling/services/vehicle_location_service.dart';
 
 abstract class VehicleRepository {
   Future<void> addVehicle(AddVehicleEvent event);

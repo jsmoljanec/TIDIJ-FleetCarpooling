@@ -1,4 +1,3 @@
-import 'package:core/widgets/add_vehicle_selection.dart';
 import 'package:core/ui_elements/buttons.dart';
 import 'package:fleetcarpooling/screens/admin/all_reservations.dart';
 import 'package:fleetcarpooling/screens/admin/all_users_form.dart';
@@ -7,6 +6,7 @@ import 'package:fleetcarpooling/screens/profile/profile_form.dart';
 import 'package:fleetcarpooling/screens/registration/user_registration_form.dart';
 
 import 'package:core/ui_elements/colors';
+import 'package:fleetcarpooling/widgets/add_vehicle_selection.dart';
 import 'package:flutter/material.dart';
 
 // ignore: use_key_in_widget_constructors

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:core/models/vehicle.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:core/services/vehicle_location_service.dart';
+import 'package:fleetcarpooling/services/vehicle_location_service.dart';
 
 Stream<List<Vehicle>> getVehicles(FirebaseDatabase firebaseDatabaseVehicle) {
   DatabaseReference ref = firebaseDatabaseVehicle.ref("Vehicles");
@@ -36,7 +36,8 @@ Stream<List<Vehicle>> getVehicles(FirebaseDatabase firebaseDatabaseVehicle) {
   return controller.stream;
 }
 
-Stream<Vehicle?> getVehicle(String vin, FirebaseDatabase firebaseDatabaseVehicle) {
+Stream<Vehicle?> getVehicle(
+    String vin, FirebaseDatabase firebaseDatabaseVehicle) {
   DatabaseReference ref = firebaseDatabaseVehicle.ref("Vehicles");
   final StreamController<Vehicle?> controller = StreamController<Vehicle?>();
 

@@ -1,5 +1,5 @@
-import 'package:core/bloc/vehicle_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fleetcarpooling/bloc/vehicle_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qraddition/screens/add_vehicle_qr_form.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:core/models/vehicle_location_model.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:fleetcarpooling/Models/vehicle_location_model.dart';
 
 abstract class VehicleLocationRepository {
   Future<void> initializeVehicleLocation(VehicleLocation vehicleLocation);
